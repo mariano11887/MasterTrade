@@ -11,7 +11,6 @@ namespace MasterTrade.Controllers
         // GET: MyStrategies
         public ActionResult Index()
         {
-            // Comentario
             return View();
         }
     }
