@@ -1,0 +1,62 @@
+﻿@model MasterTrade.Models.NewStrategyModel
+@{
+    ViewBag.Title = "Nueva estrategia - Paso 2";
+}
+
+<style>
+    .border-right {
+        border-right: 1px solid #333;
+    }
+</style>
+
+<main aria-labelledby="title">
+    <h2 id="title">@ViewBag.Title</h2>
+    <h4>Agregue los indicadores de la estrategia</h4>
+    @using (Html.BeginForm("", "", FormMethod.Post, new { role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <hr />
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row">
+                    @Html.LabelFor(m => m.IndicatorId, new { @class = "col-md-3 col-form-label" })
+                    <div class="col-md-9">
+                        @Html.DropDownListFor(m => m.IndicatorId, Model.AllIndicators, new { @class = "form-control" })
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <h5>Configuración de la media móvil</h5>
+                </div>
+                <div class="row">
+                    @Html.LabelFor(m => m.MovingAverageLength, new { @class = "col-md-3 col-form-label" })
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.MovingAverageLength, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="offset-md-10 col-md-2">
+                        <input type="submit" value="Agregar" class="btn btn-outline-dark" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <h5>Indicadores agregados</h5>
+                </div>
+                <div class="col-md-12">
+                    <ul>
+                        <li>Media móvil (5) <a href="#">Quitar</a></li>
+                        <li>Media móvil (10) <a href="#">Quitar</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 0.5rem;">
+            <div class="offset-md-10 col-md-2">
+                <input type="submit" value="Siguiente" class="btn btn-outline-dark" />
+            </div>
+        </div>
+    }
+</main>
