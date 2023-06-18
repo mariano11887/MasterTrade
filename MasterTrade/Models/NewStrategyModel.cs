@@ -15,7 +15,25 @@ namespace MasterTrade.Models
         [DisplayName("Longitud")]
         public int MovingAverageLength { get; set; }
 
+        [DisplayName("Momento de ejecución")]
+        public int ExecutionMomentId { get; set; }
+
+        [DisplayName("Indicador 1")]
+        public int IndicatorId1 { get; set; }
+
+        [DisplayName("Elemento de la media móvil")]
+        public int MovingAverageValue { get; set; }
+
+        [DisplayName("Condición")]
+        public int ConditionId { get; set; }
+
+        [DisplayName("Indicador 2")]
+        public int IndicatorId2 { get; set; }
+
         public List<SelectListItem> AllIndicators { get; set; }
-        public List<string> AddedStrategies { get; set; }
+        public List<SelectListItem> AllExecutionMoments { get; set; }
+        public List<SelectListItem> StrategyIndicators { get; set; }
+        public List<SelectListItem> MovingAverageValues { get; set; }
+        public List<SelectListItem> AllConditions { get; set; }
     }
 }

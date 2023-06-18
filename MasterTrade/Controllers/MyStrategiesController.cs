@@ -1,8 +1,5 @@
 ﻿using MasterTrade.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace MasterTrade.Controllers
@@ -27,11 +24,35 @@ namespace MasterTrade.Controllers
                 AllIndicators = new List<SelectListItem>
                 {
                     new SelectListItem { Value = "1", Text = "Media móvil" }
-                },
-                AddedStrategies = new List<string>
+                }
+            };
+            return View(model);
+        }
+
+        public ActionResult NewStep3()
+        {
+            NewStrategyModel model = new NewStrategyModel()
+            {
+                AllExecutionMoments = new List<SelectListItem>
                 {
-                    "Media móvil (5)",
-                    "Media móvil (10)"
+                    new SelectListItem { Value = "1", Text = "Cierre de la vela" },
+                    new SelectListItem { Value = "2", Text = "Apertura de la vela" }
+                },
+                StrategyIndicators = new List<SelectListItem>
+                {
+                    new SelectListItem { Value = "1", Text = "Media móvil (5)" },
+                    new SelectListItem { Value = "2", Text = "Media móvil (10)" },
+                    new SelectListItem { Value = "3", Text = "Media móvil (20)" }
+                },
+                MovingAverageValues = new List<SelectListItem>
+                {
+                    new SelectListItem { Value = "1", Text = "Valor" }
+                },
+                AllConditions = new List<SelectListItem>
+                {
+                    new SelectListItem { Value = "1", Text = "mayor que" },
+                    new SelectListItem { Value = "2", Text = "igual a" },
+                    new SelectListItem { Value = "3", Text = "menor que" }
                 }
             };
             return View(model);

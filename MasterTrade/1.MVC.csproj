@@ -259,6 +259,7 @@
     <Content Include="Views\MyStrategies\Index.cshtml" />
     <Content Include="Views\MyStrategies\NewStep1.cshtml" />
     <Content Include="Views\MyStrategies\NewStep2.cshtml" />
+    <Content Include="Views\MyStrategies\NewStep3.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
