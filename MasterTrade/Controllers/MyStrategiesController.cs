@@ -100,5 +100,10 @@ namespace MasterTrade.Controllers
             };
             return View(model);
         }
+
+        public ActionResult NewConfirmation()
+        {
+            return View();
+        }
     }
 }

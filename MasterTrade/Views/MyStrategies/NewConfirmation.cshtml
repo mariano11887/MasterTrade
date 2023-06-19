@@ -1,0 +1,61 @@
+﻿@model MasterTrade.Models.NewStrategyModel
+@{
+    ViewBag.Title = "Nueva estrategia - Resumen";
+}
+
+<main aria-labelledby="title">
+    <h2 id="title">@ViewBag.Title</h2>
+    <h4>Resumen de la estrategia</h4>
+    <hr />
+    <div class="row">
+        <h5>Nombre</h5>
+    </div>
+    <div class="col-md-12">
+        <ul>
+            <li>Prueba</li>
+        </ul>
+    </div>
+    <div class="row">
+        <h5>Indicadores</h5>
+    </div>
+    <div class="col-md-12">
+        <ul>
+            <li>Media móvil (5)</li>
+            <li>Media móvil (10)</li>
+            <li>Media móvil (20)</li>
+        </ul>
+    </div>
+    <div class="row">
+        <h5>Condiciones para abrir una operación</h5>
+    </div>
+    <div class="col-md-12">
+        <ul>
+            <li>Valor de Media móvil (5) es mayor que Valor de Media móvil (10)</li>
+            <li>Valor de Media móvil (10) es mayor que Valor de Media móvil (20)</li>
+        </ul>
+    </div>
+    <div class="row">
+        <h5>Capital a invertir por cada operación</h5>
+    </div>
+    <div class="col-md-12">
+        <ul>
+            <li>Cantidad fija: 50 USD</li>
+        </ul>
+    </div>
+    <div class="row">
+        <h5>Condiciones para cerrar operación</h5>
+    </div>
+    <div class="col-md-12">
+        <ul>
+            <li>Valor de Media móvil (5) es menor que Valor de Media móvil (10)</li>
+            <li>Valor de Media móvil (10) es menor que Valor de Media móvil (20)</li>
+        </ul>
+    </div>
+    <div class="row" style="margin-top: 0.5rem;">
+        <div class="offset-md-8 col-md-4">
+            <input type="button" value="Cancelar" class="btn btn-outline-dark" />
+            <input type="button" value="Modificar" class="btn btn-outline-dark" />
+            <input type="button" value="Guardar" class="btn btn-outline-dark" />
+        </div>
+    </div>
+</main>
