@@ -1,0 +1,76 @@
+﻿@model MasterTrade.Models.NewStrategyModel
+@{
+    ViewBag.Title = "Nueva estrategia - Paso 5";
+}
+
+<main aria-labelledby="title">
+    <h2 id="title">@ViewBag.Title</h2>
+    <h4>Agregue las condiciones para cerrar la operación</h4>
+    @using (Html.BeginForm("", "", FormMethod.Post, new { role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <hr />
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row">
+                    @Html.LabelFor(m => m.ExecutionMomentId, new { @class = "col-md-3 col-form-label" })
+                    <div class="col-md-9">
+                        @Html.DropDownListFor(m => m.ExecutionMomentId, Model.AllExecutionMoments, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row">
+                    @Html.LabelFor(m => m.IndicatorId1, new { @class = "col-md-3 col-form-label" })
+                    <div class="col-md-9">
+                        @Html.DropDownListFor(m => m.IndicatorId1, Model.StrategyIndicators, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row">
+                    @Html.LabelFor(m => m.MovingAverageValue, new { @class = "col-md-3 col-form-label" })
+                    <div class="col-md-9">
+                        @Html.DropDownListFor(m => m.MovingAverageValue, Model.MovingAverageValues, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row">
+                    @Html.LabelFor(m => m.ConditionId, new { @class = "col-md-3 col-form-label" })
+                    <div class="col-md-9">
+                        @Html.DropDownListFor(m => m.ConditionId, Model.AllConditions, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row">
+                    @Html.LabelFor(m => m.IndicatorId2, new { @class = "col-md-3 col-form-label" })
+                    <div class="col-md-9">
+                        @Html.DropDownListFor(m => m.IndicatorId2, Model.StrategyIndicators, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row">
+                    @Html.LabelFor(m => m.MovingAverageValue, new { @class = "col-md-3 col-form-label" })
+                    <div class="col-md-9">
+                        @Html.DropDownListFor(m => m.MovingAverageValue, Model.MovingAverageValues, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="offset-md-10 col-md-2">
+                        <input type="submit" value="Agregar" class="btn btn-outline-dark" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <h5>Condiciones agregadas</h5>
+                </div>
+                <div class="col-md-12">
+                    <ul>
+                        <li>Valor de Media móvil (5) es menor que Valor de Media móvil (10) <a href="#">Quitar</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 0.5rem;">
+            <div class="offset-md-9 col-md-3">
+                <input type="button" value="Cancelar" class="btn btn-outline-dark" />
+                <input type="submit" value="Siguiente" class="btn btn-outline-dark" />
+            </div>
+        </div>
+    }
+</main>
