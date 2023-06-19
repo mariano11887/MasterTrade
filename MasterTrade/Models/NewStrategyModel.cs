@@ -30,10 +30,17 @@ namespace MasterTrade.Models
         [DisplayName("Indicador 2")]
         public int IndicatorId2 { get; set; }
 
+        [DisplayName("Modalidad")]
+        public int InvestOptionId { get; set; }
+
+        [DisplayName("Monto (USD)")]
+        public double InvestAmount { get; set; }
+
         public List<SelectListItem> AllIndicators { get; set; }
         public List<SelectListItem> AllExecutionMoments { get; set; }
         public List<SelectListItem> StrategyIndicators { get; set; }
         public List<SelectListItem> MovingAverageValues { get; set; }
         public List<SelectListItem> AllConditions { get; set; }
+        public List<SelectListItem> AllInvestOptions { get; set; }
     }
 }

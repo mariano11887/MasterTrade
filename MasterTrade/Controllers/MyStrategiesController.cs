@@ -1,4 +1,5 @@
 ﻿using MasterTrade.Models;
+using Microsoft.Ajax.Utilities;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
@@ -53,6 +54,19 @@ namespace MasterTrade.Controllers
                     new SelectListItem { Value = "1", Text = "mayor que" },
                     new SelectListItem { Value = "2", Text = "igual a" },
                     new SelectListItem { Value = "3", Text = "menor que" }
+                }
+            };
+            return View(model);
+        }
+
+        public ActionResult NewStep4()
+        {
+            NewStrategyModel model = new NewStrategyModel()
+            {
+                AllInvestOptions = new List<SelectListItem>
+                {
+                    new SelectListItem { Value = "1", Text = "Cantidad fija de dinero" },
+                    new SelectListItem { Value = "2", Text = "Porcentaje del portafolio" }
                 }
             };
             return View(model);

@@ -1,20 +1,26 @@
 ﻿@model MasterTrade.Models.NewStrategyModel
 @{
-    ViewBag.Title = "Nueva estrategia - Paso 1";
+    ViewBag.Title = "Nueva estrategia - Paso 4";
 }
 
 <main aria-labelledby="title">
     <h2 id="title">@ViewBag.Title</h2>
-
+    <h4>Indique el capital a invertir por cada operación</h4>
     @using (Html.BeginForm("", "", FormMethod.Post, new { role = "form" }))
     {
         @Html.AntiForgeryToken()
         <hr />
         @Html.ValidationSummary("", new { @class = "text-danger" })
         <div class="row">
-            @Html.LabelFor(m => m.Name, new { @class = "col-md-3 col-form-label" })
+            @Html.LabelFor(m => m.InvestOptionId, new { @class = "col-md-3 col-form-label" })
             <div class="col-md-9">
-                @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                @Html.DropDownListFor(m => m.InvestOptionId, Model.AllInvestOptions, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="row">
+            @Html.LabelFor(m => m.InvestAmount, new { @class = "col-md-3 col-form-label" })
+            <div class="col-md-9">
+                @Html.TextBoxFor(m => m.InvestAmount, new { @class = "form-control" })
             </div>
         </div>
         <div class="row" style="margin-top: 0.5rem;">
