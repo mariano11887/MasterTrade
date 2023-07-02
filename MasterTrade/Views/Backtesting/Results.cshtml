@@ -1,0 +1,132 @@
+﻿@{
+    ViewBag.Title = "Backtesting - Resultado";
+}
+
+<style>
+    table, thead, td {
+        border: 1px solid black;
+    }
+
+    thead td {
+        font-weight: bold;
+    }
+</style>
+
+<main aria-labelledby="title">
+    <h2 id="title">Backtesting</h2>
+    <h4>Resultados</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row">
+                <h5>Cantidad de operaciones realizadas</h5>
+            </div>
+            <div class="col-md-12">
+                <ul>
+                    <li>3</li>
+                </ul>
+            </div>
+            <div class="row">
+                <h5>Detalle de operaciones</h5>
+            </div>
+            <div class="col-md-12">
+                <table>
+                    <thead>
+                        <tr>
+                            <td>Número de operación</td>
+                            <td>Apertura</td>
+                            <td>Cierre</td>
+                            <td>Capital inicial</td>
+                            <td>Capital final</td>
+                            <td>Ganancia/pérdida</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>1/7/2023 4:55</td>
+                            <td>1/7/2023 6:00</td>
+                            <td>$1000</td>
+                            <td>$1026</td>
+                            <td style="color:green;">+$26</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>1/7/2023 8:10</td>
+                            <td>1/7/2023 11:35</td>
+                            <td>$1026</td>
+                            <td>$1069</td>
+                            <td style="color:green;">+$43</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>1/7/2023 17:30</td>
+                            <td>1/7/2023 19:05</td>
+                            <td>$1069</td>
+                            <td>$1055</td>
+                            <td style="color:red;">-$14</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <h5>Capital inicial</h5>
+            </div>
+            <div class="col-md-12">
+                <ul>
+                    <li>$1000</li>
+                </ul>
+            </div>
+            <div class="row">
+                <h5>Capital final</h5>
+            </div>
+            <div class="col-md-12">
+                <ul>
+                    <li>$1055</li>
+                </ul>
+            </div>
+            <div class="row">
+                <h5>Porcentaje de ganancias/pérdidas</h5>
+            </div>
+            <div class="col-md-12">
+                <ul>
+                    <li>+5.5%</li>
+                </ul>
+            </div>
+            <div class="row">
+                <h5>Máximo drawdown</h5>
+            </div>
+            <div class="col-md-12">
+                <ul>
+                    <li>-1.31%</li>
+                </ul>
+            </div>
+            <div class="row">
+                <h5>Tasa de acierto</h5>
+            </div>
+            <div class="col-md-12">
+                <ul>
+                    <li>33.33%</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <h5>Configuración del backtesting</h5>
+            </div>
+            <div class="col-md-12">
+                <ul>
+                    <li><b>Estrategia:</b> Prueba</li>
+                    <li><b>Par de criptomonedas:</b> BTC/USDT</li>
+                    <li><b>Rango de fechas:</b> 1/7/2023 00:00 - 2/7/2023 00:00</li>
+                    <li><b>Temporalidad:</b> 5 min</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 0.5rem;">
+            <div class="offset-md-8 col-md-4">
+                <input type="button" value="Volver" class="btn btn-outline-dark" />
+            </div>
+        </div>
+    </div>
+</main>

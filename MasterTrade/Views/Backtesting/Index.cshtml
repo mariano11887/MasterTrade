@@ -1,0 +1,48 @@
+﻿@model MasterTrade.Models.BacktestingModel
+@{
+    ViewBag.Title = "Backtesting";
+}
+
+<main aria-labelledby="title">
+    <h2 id="title">@ViewBag.Title</h2>
+    <h4>Indique la configuración del backtesting</h4>
+    @using (Html.BeginForm("", "", FormMethod.Post, new { role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <hr />
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+        <div class="row">
+            @Html.LabelFor(m => m.StrategyId, new { @class = "col-md-3 col-form-label" })
+            <div class="col-md-9">
+                @Html.DropDownListFor(m => m.StrategyId, Model.AllStrategies, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="row">
+            @Html.LabelFor(m => m.CryptoPairId, new { @class = "col-md-3 col-form-label" })
+            <div class="col-md-9">
+                @Html.DropDownListFor(m => m.CryptoPairId, Model.AllCryptoPairs, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="row">
+            @Html.LabelFor(m => m.DateFrom, new { @class = "col-md-3 col-form-label" })
+            <div class="col-md-3">
+                @Html.TextBoxFor(m => m.DateFrom, new { @class = "form-control" })
+            </div>
+            @Html.LabelFor(m => m.DateTo, new { @class = "col-md-3 col-form-label" })
+            <div class="col-md-3">
+                @Html.TextBoxFor(m => m.DateTo, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="row">
+            @Html.LabelFor(m => m.TemporalityId, new { @class = "col-md-3 col-form-label" })
+            <div class="col-md-9">
+                @Html.DropDownListFor(m => m.TemporalityId, Model.AllTemporalities, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="row" style="margin-top: 0.5rem;">
+            <div class="offset-md-9 col-md-3">
+                <input type="submit" value="Ejecutar" class="btn btn-outline-dark" />
+            </div>
+        </div>
+    }
+</main>
