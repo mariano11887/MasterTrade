@@ -1,0 +1,70 @@
+﻿@model MasterTrade.Models.BacktestingWithRangesModel
+@{
+    ViewBag.Title = "Paso 2";
+}
+
+<main aria-labelledby="title">
+    <h2 id="title">@ViewBag.Title</h2>
+    <h4>Indique los rangos</h4>
+    <hr />
+    <div class="row">
+        <h5>Media móvil (5): Longitud</h5>
+    </div>
+    <div class="row">
+        @Html.LabelFor(m => m.MinValue, new { @class = "col-md-2 col-form-label" })
+        <div class="col-md-2">
+            @Html.TextBoxFor(m => m.MinValue, new { @class = "form-control" })
+        </div>
+        @Html.LabelFor(m => m.MaxValue, new { @class = "col-md-2 col-form-label" })
+        <div class="col-md-2">
+            @Html.TextBoxFor(m => m.MaxValue, new { @class = "form-control" })
+        </div>
+        @Html.LabelFor(m => m.Increment, new { @class = "col-md-2 col-form-label" })
+        <div class="col-md-2">
+            @Html.TextBoxFor(m => m.Increment, new { @class = "form-control" })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <h5>Media móvil (10): Longitud</h5>
+    </div>
+    <div class="row">
+        @Html.LabelFor(m => m.MinValue, new { @class = "col-md-2 col-form-label" })
+        <div class="col-md-2">
+            @Html.TextBoxFor(m => m.MinValue, new { @class = "form-control" })
+        </div>
+        @Html.LabelFor(m => m.MaxValue, new { @class = "col-md-2 col-form-label" })
+        <div class="col-md-2">
+            @Html.TextBoxFor(m => m.MaxValue, new { @class = "form-control" })
+        </div>
+        @Html.LabelFor(m => m.Increment, new { @class = "col-md-2 col-form-label" })
+        <div class="col-md-2">
+            @Html.TextBoxFor(m => m.Increment, new { @class = "form-control" })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <h5>Media móvil (20): Longitud</h5>
+    </div>
+    <div class="row">
+        @Html.LabelFor(m => m.MinValue, new { @class = "col-md-2 col-form-label" })
+        <div class="col-md-2">
+            @Html.TextBoxFor(m => m.MinValue, new { @class = "form-control" })
+        </div>
+        @Html.LabelFor(m => m.MaxValue, new { @class = "col-md-2 col-form-label" })
+        <div class="col-md-2">
+            @Html.TextBoxFor(m => m.MaxValue, new { @class = "form-control" })
+        </div>
+        @Html.LabelFor(m => m.Increment, new { @class = "col-md-2 col-form-label" })
+        <div class="col-md-2">
+            @Html.TextBoxFor(m => m.Increment, new { @class = "form-control" })
+        </div>
+    </div>
+    <br />
+    <div class="row" style="margin-top: 0.5rem;">
+        <div class="offset-md-8 col-md-4">
+            <input type="button" value="Cancelar" class="btn btn-outline-dark" />
+            <input type="button" value="Siguiente" class="btn btn-outline-dark" />
+        </div>
+    </div>
+</main>
