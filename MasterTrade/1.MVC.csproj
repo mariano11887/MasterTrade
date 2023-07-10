@@ -171,6 +171,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BacktestingController.cs" />
     <Compile Include="Controllers\BacktestingWithRangesController.cs" />
+    <Compile Include="Controllers\CryptoPairController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MyStrategiesController.cs" />
@@ -180,6 +181,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BacktestingModel.cs" />
     <Compile Include="Models\BacktestingWithRangesModel.cs" />
+    <Compile Include="Models\CryptoPairModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\NewStrategyModel.cs" />
@@ -273,6 +275,8 @@
     <Content Include="Views\BacktestingWithRanges\Step2.cshtml" />
     <Content Include="Views\BacktestingWithRanges\Confirmation.cshtml" />
     <Content Include="Views\BacktestingWithRanges\Results.cshtml" />
+    <Content Include="Views\CryptoPair\Index.cshtml" />
+    <Content Include="Views\CryptoPair\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

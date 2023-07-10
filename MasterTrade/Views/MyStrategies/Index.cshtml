@@ -3,6 +3,17 @@
     ViewBag.Title = "Mis estrategias";
 }
 
-<h2>Página de mis estrategias</h2>
-
-@Html.ActionLink("Nueva estrategia", "NewStep1")
+<main aria-labelledby="title">
+    <h2 id="title">@ViewBag.Title</h2>
+<hr />
+    <div class="row">
+        <ul>
+            <li><b>Prueba</b> <a href="#">Modificar</a> <a href="#">Eliminar</a></li>
+        </ul>
+    </div>
+    <div class="row" style="margin-top: 0.5rem;">
+        <div class="offset-md-9 col-md-3">
+            <input type="button" value="Nueva estrategia" class="btn btn-outline-dark" />
+        </div>
+    </div>
+</main>
