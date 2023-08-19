@@ -2,29 +2,39 @@
     ViewBag.Title = "Inicio";
 }
 
+<style>
+    #title {
+        font-size: 3em;
+    }
+
+    .lead {
+        font-size: 1.5em;
+    }
+</style>
+
 <main>
     <section class="row" aria-labelledby="aspnetTitle">
-        <h1 id="title">Bienvenido a MasterTrade</h1>
+        <h1 id="title" class="greenText">Bienvenido a MasterTrade</h1>
         <p class="lead">La plataforma donde podrás incrementar tus ganancias haciendo trading.</p>
     </section>
 
     <div class="row">
         <section class="col-md-4" aria-labelledby="gettingStartedTitle">
-            <h2 id="gettingStartedTitle">Comenzando...</h2>
+            <h2 id="gettingStartedTitle" class="greenText">Comenzando</h2>
             <p>
                 Configura tus estrategias de trading en MasterTrade, con sus indicadores, sus reglas para entrar a una operación, sus reglas para salir de la operación y la configuración del riesgo que quieres asumir con cada una de ellas.
             </p>
-            <p><a class="btn btn-outline-dark" href="/MyStrategies">Mis estrategias &raquo;</a></p>
+            <p><a class="btn btn-outline-dark lightBrownBtn" href="/MyStrategies">Mis estrategias &raquo;</a></p>
         </section>
         <section class="col-md-4" aria-labelledby="librariesTitle">
-            <h2 id="librariesTitle">Realiza un backtesting</h2>
+            <h2 id="librariesTitle" class="greenText">Realiza un backtesting</h2>
             <p>Pon a prueba la rentabilidad real de tu estrategia de trading realizando un backtesting en el par de criptomonedas y la temporalidad que elijas, y conoce los resultados en pocos segundos.</p>
-            <p><a class="btn btn-outline-dark" href="/Backtesting">Backtesting &raquo;</a></p>
+            <p><a class="btn btn-outline-dark lightBrownBtn" href="/Backtesting">Backtesting &raquo;</a></p>
         </section>
         <section class="col-md-4" aria-labelledby="hostingTitle">
-            <h2 id="hostingTitle">Backtesting con rangos</h2>
+            <h2 id="hostingTitle" class="greenText">Backtesting con rangos</h2>
             <p>¿Piensas que tu estrategia de trading puede mejorar? Configura rangos para los valores de tus indicadores y deja que MasterTrade descubra por ti la configuración más rentable.</p>
-            <p><a class="btn btn-outline-dark" href="/BacktestingWithRanges/Step1">Backtesting con rangos &raquo;</a></p>
+            <p><a class="btn btn-outline-dark lightBrownBtn" href="/BacktestingWithRanges/Step1">Backtesting con rangos &raquo;</a></p>
         </section>
     </div>
 </main>

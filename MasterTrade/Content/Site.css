@@ -18,3 +18,23 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.navbar a {
+    font-size: 0.7em;
+}
+
+body {
+    font-family: Courier New, Courier, monospace;
+}
+
+.greenText {
+    color: #188e44 !important;
+}
+
+.lightBrownBtn {
+    background-color: #881b1b3d;
+}
+
+.lightBrownBtn:hover {
+    background-color: green;
+}
