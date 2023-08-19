@@ -27,7 +27,19 @@ namespace MasterTrade.Controllers
         // GET: CryptoPair/Create
         public ActionResult Create()
         {
-            return View();
+            CryptoPairModel model = new CryptoPairModel
+            {
+                AllSuppliers = new List<SelectListItem>
+                {
+                    new SelectListItem { Text = "TradingView", Value = "1" }
+                },
+                AllCryptoPairs = new List<SelectListItem>
+                {
+                    new SelectListItem { Text = "BTC/USDT", Value = "1" }
+                }
+            };
+
+            return View(model);
         }
 
         // POST: CryptoPair/Create

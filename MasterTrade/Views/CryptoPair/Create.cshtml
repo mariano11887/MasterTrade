@@ -7,19 +7,33 @@
 
 <h2>Pares de criptomonedas</h2>
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Nuevo</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            <div class="row">
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row">
+                @Html.LabelFor(m => m.SupplierId, new { @class = "col-md-2 col-form-label" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(m => m.SupplierId, Model.AllSuppliers, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="row">
+                @Html.LabelFor(m => m.CryptoPairId, new { @class = "col-md-2 col-form-label" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(m => m.CryptoPairId, Model.AllCryptoPairs, new { @class = "form-control" })
+                </div>
             </div>
         </div>
 

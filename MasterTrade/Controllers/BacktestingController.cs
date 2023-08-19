@@ -30,6 +30,12 @@ namespace MasterTrade.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        public ActionResult Index(BacktestingModel model)
+        {
+            return RedirectToAction("Results", "Backtesting");
+        }
+
         public ActionResult Results()
         {
             return View();

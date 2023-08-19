@@ -6,49 +6,52 @@
     <h2 id="title">@ViewBag.Title</h2>
     <h4>Revise si todo es correcto</h4>
     <hr />
-    <div class="row">
-        <h5>Configuración del backtesting</h5>
-    </div>
-    <div class="col-md-12">
-        <ul>
-            <li><b>Estrategia:</b> Prueba</li>
-            <li><b>Par de criptomonedas:</b> BTC/USDT</li>
-            <li><b>Rango de fechas:</b> 1/7/2023 00:00 - 2/7/2023 00:00</li>
-            <li><b>Temporalidad:</b> 5 min</li>
-        </ul>
-    </div>
-    <div class="row">
-        <h5>Media móvil (5): Longitud</h5>
-    </div>
-    <div class="col-md-12">
-        <ul>
-            <li><b>Rango</b>: 4 - 6</li>
-            <li><b>Incremento</b>: 1</li>
-        </ul>
-    </div>
-    <div class="row">
-        <h5>Media móvil (10): Longitud</h5>
-    </div>
-    <div class="col-md-12">
-        <ul>
-            <li><b>Rango</b>: 8 - 12</li>
-            <li><b>Incremento</b>: 1</li>
-        </ul>
-    </div>
-    <div class="row">
-        <h5>Media móvil (20): Longitud</h5>
-    </div>
-    <div class="col-md-12">
-        <ul>
-            <li><b>Rango</b>: 16 - 24</li>
-            <li><b>Incremento</b>: 1</li>
-        </ul>
-    </div>
-    <div class="row" style="margin-top: 0.5rem;">
-        <div class="offset-md-8 col-md-4">
-            <input type="button" value="Cancelar" class="btn btn-outline-dark" />
-            <input type="button" value="Modificar" class="btn btn-outline-dark" />
-            <input type="button" value="Ejecutar" class="btn btn-outline-dark" />
+    @using (Html.BeginForm("Confirmation", "BacktestingWithRanges", FormMethod.Post, new { role = "form" }))
+    {
+        <div class="row">
+            <h5>Configuración del backtesting</h5>
         </div>
-    </div>
+        <div class="col-md-12">
+            <ul>
+                <li><b>Estrategia:</b> Prueba</li>
+                <li><b>Par de criptomonedas:</b> BTC/USDT</li>
+                <li><b>Rango de fechas:</b> 1/7/2023 00:00 - 2/7/2023 00:00</li>
+                <li><b>Temporalidad:</b> 5 min</li>
+            </ul>
+        </div>
+        <div class="row">
+            <h5>Media móvil (5): Longitud</h5>
+        </div>
+        <div class="col-md-12">
+            <ul>
+                <li><b>Rango</b>: 4 - 6</li>
+                <li><b>Incremento</b>: 1</li>
+            </ul>
+        </div>
+        <div class="row">
+            <h5>Media móvil (10): Longitud</h5>
+        </div>
+        <div class="col-md-12">
+            <ul>
+                <li><b>Rango</b>: 8 - 12</li>
+                <li><b>Incremento</b>: 1</li>
+            </ul>
+        </div>
+        <div class="row">
+            <h5>Media móvil (20): Longitud</h5>
+        </div>
+        <div class="col-md-12">
+            <ul>
+                <li><b>Rango</b>: 16 - 24</li>
+                <li><b>Incremento</b>: 1</li>
+            </ul>
+        </div>
+        <div class="row" style="margin-top: 0.5rem;">
+            <div class="offset-md-8 col-md-4">
+                @Html.ActionLink("Cancelar", "Index", "Home", new { area = "" }, new { @class = "btn btn-outline-dark" })
+                @Html.ActionLink("Modificar", "Step1", "BacktestingWithRanges", new { area = "" }, new { @class = "btn btn-outline-dark" })
+                <input type="submit" value="Ejecutar" class="btn btn-outline-dark" />
+            </div>
+        </div>
+    }
 </main>

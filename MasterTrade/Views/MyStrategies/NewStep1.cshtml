@@ -6,7 +6,7 @@
 <main aria-labelledby="title">
     <h2 id="title">@ViewBag.Title</h2>
 
-    @using (Html.BeginForm("", "", FormMethod.Post, new { role = "form" }))
+    @using (Html.BeginForm("NewStep1", "MyStrategies", FormMethod.Post, new { role = "form" }))
     {
         @Html.AntiForgeryToken()
         <hr />
@@ -19,7 +19,7 @@
         </div>
         <div class="row" style="margin-top: 0.5rem;">
             <div class="offset-md-9 col-md-3">
-                <input type="button" value="Cancelar" class="btn btn-outline-dark" />
+                @Html.ActionLink("Cancelar", "Index", "MyStrategies", new { area = "" }, new { @class = "btn btn-outline-dark" })
                 <input type="submit" value="Siguiente" class="btn btn-outline-dark" />
             </div>
         </div>

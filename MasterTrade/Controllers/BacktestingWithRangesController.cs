@@ -29,14 +29,32 @@ namespace MasterTrade.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        public ActionResult Step1(BacktestingWithRangesModel model)
+        {
+            return RedirectToAction("Step2", "BacktestingWithRanges");
+        }
+
         public ActionResult Step2()
         {
             return View();
         }
 
+        [HttpPost]
+        public ActionResult Step2(BacktestingWithRangesModel model)
+        {
+            return RedirectToAction("Confirmation", "BacktestingWithRanges");
+        }
+
         public ActionResult Confirmation()
         {
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult Confirmation(BacktestingWithRangesModel model)
+        {
+            return RedirectToAction("Results", "BacktestingWithRanges");
         }
 
         public ActionResult Results()

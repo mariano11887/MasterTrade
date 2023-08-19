@@ -1,5 +1,4 @@
 ﻿using MasterTrade.Models;
-using Microsoft.Ajax.Utilities;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
@@ -18,6 +17,12 @@ namespace MasterTrade.Controllers
             return View();
         }
 
+        [HttpPost]
+        public ActionResult NewStep1(NewStrategyModel model)
+        {
+            return RedirectToAction("NewStep2", "MyStrategies");
+        }
+
         public ActionResult NewStep2()
         {
             NewStrategyModel model = new NewStrategyModel()
@@ -28,6 +33,12 @@ namespace MasterTrade.Controllers
                 }
             };
             return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult NewStep2(NewStrategyModel model)
+        {
+            return RedirectToAction("NewStep3", "MyStrategies");
         }
 
         public ActionResult NewStep3()
@@ -59,6 +70,12 @@ namespace MasterTrade.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        public ActionResult NewStep3(NewStrategyModel model)
+        {
+            return RedirectToAction("NewStep4", "MyStrategies");
+        }
+
         public ActionResult NewStep4()
         {
             NewStrategyModel model = new NewStrategyModel()
@@ -70,6 +87,12 @@ namespace MasterTrade.Controllers
                 }
             };
             return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult NewStep4(NewStrategyModel model)
+        {
+            return RedirectToAction("NewStep5", "MyStrategies");
         }
 
         public ActionResult NewStep5()
@@ -101,9 +124,21 @@ namespace MasterTrade.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        public ActionResult NewStep5(NewStrategyModel model)
+        {
+            return RedirectToAction("NewConfirmation", "MyStrategies");
+        }
+
         public ActionResult NewConfirmation()
         {
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult NewConfirmation(NewStrategyModel model)
+        {
+            return RedirectToAction("Index", "MyStrategies");
         }
     }
 }
