@@ -1,6 +1,6 @@
 ﻿@model MasterTrade.Models.RegisterViewModel
 @{
-    ViewBag.Title = "Register";
+    ViewBag.Title = "Registro";
 }
 
 <main aria-labelledby="title">
@@ -9,7 +9,7 @@
     @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { role = "form" }))
     {
         @Html.AntiForgeryToken()
-        <h4>Cree una cuenta nueva.</h4>
+        <h4>Nuevo usuario.</h4>
         <hr />
         @Html.ValidationSummary("", new { @class = "text-danger" })
         <div class="row">
