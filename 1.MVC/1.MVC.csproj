@@ -168,6 +168,11 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Authentication\CustomMembership.cs" />
+    <Compile Include="Authentication\CustomMembershipUser.cs" />
+    <Compile Include="Authentication\CustomPrincipal.cs" />
+    <Compile Include="Authentication\CustomRole.cs" />
+    <Compile Include="Authentication\CustomSerializeModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BacktestingController.cs" />
     <Compile Include="Controllers\BacktestingWithRangesController.cs" />
@@ -307,6 +312,16 @@
     <Content Include="Scripts\bootstrap.bundle.js.map" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\2.Service\2.Service.csproj">
+      <Project>{3F227535-F3C6-49BD-80CD-E55C612FF5FC}</Project>
+      <Name>2.Service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\4.DTO\4.DTO.csproj">
+      <Project>{22530C55-0282-4077-AAE4-4C5CEEBEEC02}</Project>
+      <Name>4.DTO</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

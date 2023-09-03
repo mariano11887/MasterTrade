@@ -15,5 +15,15 @@ namespace _3.Repository.Repository
         {
             return context.Set<TEntity>().AsQueryable();
         }
+
+        public void Insert(TEntity entity)
+        {
+            context.Set<TEntity>().Add(entity);
+        }
+
+        public void SaveChanges()
+        {
+            context.SaveChanges();
+        }
     }
 }

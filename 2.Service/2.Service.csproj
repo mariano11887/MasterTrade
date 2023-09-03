@@ -42,6 +42,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\ServiceUser.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\3.Repository\3.Repository.csproj">
+      <Project>{004ECE4B-F8A0-4438-9131-AE85B28FAF4A}</Project>
+      <Name>3.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\4.DTO\4.DTO.csproj">
+      <Project>{22530C55-0282-4077-AAE4-4C5CEEBEEC02}</Project>
+      <Name>4.DTO</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
