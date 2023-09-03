@@ -31,8 +31,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,7 +50,120 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Backtesting.cs">
+      <DependentUpon>MasterTradeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BacktestingBatch.cs">
+      <DependentUpon>MasterTradeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BacktestingOperation.cs">
+      <DependentUpon>MasterTradeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Candle.cs">
+      <DependentUpon>MasterTradeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Comparer.cs">
+      <DependentUpon>MasterTradeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CryptoPair.cs">
+      <DependentUpon>MasterTradeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Enums\Comparer.cs" />
+    <Compile Include="Enums\IndicatorMetaDataType.cs" />
+    <Compile Include="Enums\IndicatorType.cs" />
+    <Compile Include="Indicator.cs">
+      <DependentUpon>MasterTradeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IndicatorMeta.cs">
+      <DependentUpon>MasterTradeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IndicatorMetaDataType.cs">
+      <DependentUpon>MasterTradeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IndicatorType.cs">
+      <DependentUpon>MasterTradeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MasterTradeModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MasterTradeModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MasterTradeModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MasterTradeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MasterTradeModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MasterTradeModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Permission.cs">
+      <DependentUpon>MasterTradeModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\Repository.cs" />
+    <Compile Include="Repository\RepositoryBacktesting.cs" />
+    <Compile Include="Repository\RepositoryBacktestingBatch.cs" />
+    <Compile Include="Repository\RepositoryBacktestingOperation.cs" />
+    <Compile Include="Repository\RepositoryCandle.cs" />
+    <Compile Include="Repository\RepositoryCryptoPair.cs" />
+    <Compile Include="Repository\RepositoryIndicator.cs" />
+    <Compile Include="Repository\RepositoryIndicatorMeta.cs" />
+    <Compile Include="Repository\RepositoryPermission.cs" />
+    <Compile Include="Repository\RepositoryStrategy.cs" />
+    <Compile Include="Repository\RepositoryStrategyCondition.cs" />
+    <Compile Include="Repository\RepositorySupplier.cs" />
+    <Compile Include="Repository\RepositoryRole.cs" />
+    <Compile Include="Repository\RepositoryTemporality.cs" />
+    <Compile Include="Repository\RepositoryUser.cs" />
+    <Compile Include="Role.cs">
+      <DependentUpon>MasterTradeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Strategy.cs">
+      <DependentUpon>MasterTradeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StrategyCondition.cs">
+      <DependentUpon>MasterTradeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Supplier.cs">
+      <DependentUpon>MasterTradeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Temporality.cs">
+      <DependentUpon>MasterTradeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="User.cs">
+      <DependentUpon>MasterTradeModel.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="MasterTradeModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>MasterTradeModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="MasterTradeModel.edmx.diagram">
+      <DependentUpon>MasterTradeModel.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MasterTradeModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>MasterTradeModel.Context.cs</LastGenOutput>
+      <DependentUpon>MasterTradeModel.edmx</DependentUpon>
+    </Content>
+    <Content Include="MasterTradeModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>MasterTradeModel.edmx</DependentUpon>
+      <LastGenOutput>MasterTradeModel.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

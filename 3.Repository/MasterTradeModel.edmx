@@ -1,0 +1,1258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="MasterTradeModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Backtesting">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="BacktestingBatchId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BacktestingBatch">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="StrategyId" Type="int" Nullable="false" />
+          <Property Name="TemporalityId" Type="int" Nullable="false" />
+          <Property Name="DateFrom" Type="datetime" Nullable="false" />
+          <Property Name="DateTo" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BacktestingIndicator">
+          <Key>
+            <PropertyRef Name="BacktestingId" />
+            <PropertyRef Name="IndicatorId" />
+          </Key>
+          <Property Name="BacktestingId" Type="int" Nullable="false" />
+          <Property Name="IndicatorId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BacktestingOperation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BacktestingId" Type="int" Nullable="false" />
+          <Property Name="OpenDate" Type="datetime" Nullable="false" />
+          <Property Name="CloseDate" Type="datetime" Nullable="false" />
+          <Property Name="InitialCapital" Type="numeric" Precision="10" Scale="4" Nullable="false" />
+          <Property Name="Revenue" Type="numeric" Precision="10" Scale="4" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Candle">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CryptoPairId" Type="int" Nullable="false" />
+          <Property Name="StartDate" Type="datetime" Nullable="false" />
+          <Property Name="Open" Type="numeric" Precision="10" Scale="10" Nullable="false" />
+          <Property Name="Close" Type="numeric" Precision="10" Scale="10" Nullable="false" />
+          <Property Name="High" Type="numeric" Precision="10" Scale="10" Nullable="false" />
+          <Property Name="Low" Type="numeric" Precision="10" Scale="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Comparer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CryptoPair">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="SupplierId" Type="int" Nullable="false" />
+          <Property Name="SupplierPairName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Indicator">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StrategyId" Type="int" Nullable="false" />
+          <Property Name="TypeId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="IndicatorMeta">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IndicatorId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Value" Type="varchar" MaxLength="50" />
+          <Property Name="IndicatorMetaDataTypeId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="IndicatorMetaDataType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="IndicatorType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Permission">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RolePermission">
+          <Key>
+            <PropertyRef Name="RoleId" />
+            <PropertyRef Name="PermissionId" />
+          </Key>
+          <Property Name="RoleId" Type="int" Nullable="false" />
+          <Property Name="PermissionId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Strategy">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="InvestmentAmount" Type="numeric" Precision="10" Scale="4" />
+          <Property Name="InvestmentPercentage" Type="numeric" Precision="3" Scale="2" />
+        </EntityType>
+        <EntityType Name="StrategyCondition">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StrategyId" Type="int" Nullable="false" />
+          <Property Name="FirstIndicatorMetaId" Type="int" Nullable="false" />
+          <Property Name="SecondIndicatorMetaId" Type="int" Nullable="false" />
+          <Property Name="ComparerId" Type="int" Nullable="false" />
+          <Property Name="IsOpenCondition" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Supplier">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Url" Type="varchar" MaxLength="300" />
+        </EntityType>
+        <EntityType Name="Temporality">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CryptoPairId" Type="int" Nullable="false" />
+          <Property Name="Minutes" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="RoleId" Type="int" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_Backtesting_BacktestingBatch">
+          <End Role="BacktestingBatch" Type="Self.BacktestingBatch" Multiplicity="1" />
+          <End Role="Backtesting" Type="Self.Backtesting" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BacktestingBatch">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Backtesting">
+              <PropertyRef Name="BacktestingBatchId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BacktestingBatch_Strategy">
+          <End Role="Strategy" Type="Self.Strategy" Multiplicity="1" />
+          <End Role="BacktestingBatch" Type="Self.BacktestingBatch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Strategy">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BacktestingBatch">
+              <PropertyRef Name="StrategyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BacktestingBatch_Temporality">
+          <End Role="Temporality" Type="Self.Temporality" Multiplicity="1" />
+          <End Role="BacktestingBatch" Type="Self.BacktestingBatch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Temporality">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BacktestingBatch">
+              <PropertyRef Name="TemporalityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BacktestingIndicator_Backtesting">
+          <End Role="Backtesting" Type="Self.Backtesting" Multiplicity="1" />
+          <End Role="BacktestingIndicator" Type="Self.BacktestingIndicator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Backtesting">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BacktestingIndicator">
+              <PropertyRef Name="BacktestingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BacktestingIndicator_Indicator">
+          <End Role="Indicator" Type="Self.Indicator" Multiplicity="1" />
+          <End Role="BacktestingIndicator" Type="Self.BacktestingIndicator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Indicator">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BacktestingIndicator">
+              <PropertyRef Name="IndicatorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BacktestingOperation_Backtesting">
+          <End Role="Backtesting" Type="Self.Backtesting" Multiplicity="1" />
+          <End Role="BacktestingOperation" Type="Self.BacktestingOperation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Backtesting">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BacktestingOperation">
+              <PropertyRef Name="BacktestingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Candle_CryptoPair">
+          <End Role="CryptoPair" Type="Self.CryptoPair" Multiplicity="1" />
+          <End Role="Candle" Type="Self.Candle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CryptoPair">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Candle">
+              <PropertyRef Name="CryptoPairId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CryptoPair_Supplier">
+          <End Role="Supplier" Type="Self.Supplier" Multiplicity="1" />
+          <End Role="CryptoPair" Type="Self.CryptoPair" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Supplier">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CryptoPair">
+              <PropertyRef Name="SupplierId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Indicator_IndicatorType">
+          <End Role="IndicatorType" Type="Self.IndicatorType" Multiplicity="1" />
+          <End Role="Indicator" Type="Self.Indicator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IndicatorType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Indicator">
+              <PropertyRef Name="TypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Indicator_Strategy">
+          <End Role="Strategy" Type="Self.Strategy" Multiplicity="1" />
+          <End Role="Indicator" Type="Self.Indicator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Strategy">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Indicator">
+              <PropertyRef Name="StrategyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IndicatorMeta_Indicator">
+          <End Role="Indicator" Type="Self.Indicator" Multiplicity="1" />
+          <End Role="IndicatorMeta" Type="Self.IndicatorMeta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Indicator">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="IndicatorMeta">
+              <PropertyRef Name="IndicatorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IndicatorMeta_IndicatorMetaDataType">
+          <End Role="IndicatorMetaDataType" Type="Self.IndicatorMetaDataType" Multiplicity="1" />
+          <End Role="IndicatorMeta" Type="Self.IndicatorMeta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IndicatorMetaDataType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="IndicatorMeta">
+              <PropertyRef Name="IndicatorMetaDataTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RolePermission_Permission">
+          <End Role="Permission" Type="Self.Permission" Multiplicity="1" />
+          <End Role="RolePermission" Type="Self.RolePermission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Permission">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RolePermission">
+              <PropertyRef Name="PermissionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RolePermission_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="1" />
+          <End Role="RolePermission" Type="Self.RolePermission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RolePermission">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Strategy_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Strategy" Type="Self.Strategy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Strategy">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StrategyCondition_Comparer">
+          <End Role="Comparer" Type="Self.Comparer" Multiplicity="1" />
+          <End Role="StrategyCondition" Type="Self.StrategyCondition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Comparer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StrategyCondition">
+              <PropertyRef Name="ComparerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StrategyCondition_IndicatorMeta">
+          <End Role="IndicatorMeta" Type="Self.IndicatorMeta" Multiplicity="1" />
+          <End Role="StrategyCondition" Type="Self.StrategyCondition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IndicatorMeta">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StrategyCondition">
+              <PropertyRef Name="FirstIndicatorMetaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StrategyCondition_IndicatorMeta1">
+          <End Role="IndicatorMeta" Type="Self.IndicatorMeta" Multiplicity="1" />
+          <End Role="StrategyCondition" Type="Self.StrategyCondition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IndicatorMeta">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StrategyCondition">
+              <PropertyRef Name="SecondIndicatorMetaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StrategyCondition_Strategy">
+          <End Role="Strategy" Type="Self.Strategy" Multiplicity="1" />
+          <End Role="StrategyCondition" Type="Self.StrategyCondition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Strategy">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StrategyCondition">
+              <PropertyRef Name="StrategyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Temporality_CryptoPair">
+          <End Role="CryptoPair" Type="Self.CryptoPair" Multiplicity="1" />
+          <End Role="Temporality" Type="Self.Temporality" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CryptoPair">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Temporality">
+              <PropertyRef Name="CryptoPairId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MasterTradeModelStoreContainer">
+          <EntitySet Name="Backtesting" EntityType="Self.Backtesting" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BacktestingBatch" EntityType="Self.BacktestingBatch" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BacktestingIndicator" EntityType="Self.BacktestingIndicator" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BacktestingOperation" EntityType="Self.BacktestingOperation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Candle" EntityType="Self.Candle" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Comparer" EntityType="Self.Comparer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CryptoPair" EntityType="Self.CryptoPair" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Indicator" EntityType="Self.Indicator" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IndicatorMeta" EntityType="Self.IndicatorMeta" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IndicatorMetaDataType" EntityType="Self.IndicatorMetaDataType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IndicatorType" EntityType="Self.IndicatorType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Permission" EntityType="Self.Permission" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RolePermission" EntityType="Self.RolePermission" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Strategy" EntityType="Self.Strategy" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StrategyCondition" EntityType="Self.StrategyCondition" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Supplier" EntityType="Self.Supplier" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Temporality" EntityType="Self.Temporality" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Backtesting_BacktestingBatch" Association="Self.FK_Backtesting_BacktestingBatch">
+            <End Role="BacktestingBatch" EntitySet="BacktestingBatch" />
+            <End Role="Backtesting" EntitySet="Backtesting" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BacktestingBatch_Strategy" Association="Self.FK_BacktestingBatch_Strategy">
+            <End Role="Strategy" EntitySet="Strategy" />
+            <End Role="BacktestingBatch" EntitySet="BacktestingBatch" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BacktestingBatch_Temporality" Association="Self.FK_BacktestingBatch_Temporality">
+            <End Role="Temporality" EntitySet="Temporality" />
+            <End Role="BacktestingBatch" EntitySet="BacktestingBatch" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BacktestingIndicator_Backtesting" Association="Self.FK_BacktestingIndicator_Backtesting">
+            <End Role="Backtesting" EntitySet="Backtesting" />
+            <End Role="BacktestingIndicator" EntitySet="BacktestingIndicator" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BacktestingIndicator_Indicator" Association="Self.FK_BacktestingIndicator_Indicator">
+            <End Role="Indicator" EntitySet="Indicator" />
+            <End Role="BacktestingIndicator" EntitySet="BacktestingIndicator" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BacktestingOperation_Backtesting" Association="Self.FK_BacktestingOperation_Backtesting">
+            <End Role="Backtesting" EntitySet="Backtesting" />
+            <End Role="BacktestingOperation" EntitySet="BacktestingOperation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Candle_CryptoPair" Association="Self.FK_Candle_CryptoPair">
+            <End Role="CryptoPair" EntitySet="CryptoPair" />
+            <End Role="Candle" EntitySet="Candle" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CryptoPair_Supplier" Association="Self.FK_CryptoPair_Supplier">
+            <End Role="Supplier" EntitySet="Supplier" />
+            <End Role="CryptoPair" EntitySet="CryptoPair" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Indicator_IndicatorType" Association="Self.FK_Indicator_IndicatorType">
+            <End Role="IndicatorType" EntitySet="IndicatorType" />
+            <End Role="Indicator" EntitySet="Indicator" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Indicator_Strategy" Association="Self.FK_Indicator_Strategy">
+            <End Role="Strategy" EntitySet="Strategy" />
+            <End Role="Indicator" EntitySet="Indicator" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IndicatorMeta_Indicator" Association="Self.FK_IndicatorMeta_Indicator">
+            <End Role="Indicator" EntitySet="Indicator" />
+            <End Role="IndicatorMeta" EntitySet="IndicatorMeta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IndicatorMeta_IndicatorMetaDataType" Association="Self.FK_IndicatorMeta_IndicatorMetaDataType">
+            <End Role="IndicatorMetaDataType" EntitySet="IndicatorMetaDataType" />
+            <End Role="IndicatorMeta" EntitySet="IndicatorMeta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RolePermission_Permission" Association="Self.FK_RolePermission_Permission">
+            <End Role="Permission" EntitySet="Permission" />
+            <End Role="RolePermission" EntitySet="RolePermission" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RolePermission_Role" Association="Self.FK_RolePermission_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="RolePermission" EntitySet="RolePermission" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Strategy_User" Association="Self.FK_Strategy_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Strategy" EntitySet="Strategy" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StrategyCondition_Comparer" Association="Self.FK_StrategyCondition_Comparer">
+            <End Role="Comparer" EntitySet="Comparer" />
+            <End Role="StrategyCondition" EntitySet="StrategyCondition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StrategyCondition_IndicatorMeta" Association="Self.FK_StrategyCondition_IndicatorMeta">
+            <End Role="IndicatorMeta" EntitySet="IndicatorMeta" />
+            <End Role="StrategyCondition" EntitySet="StrategyCondition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StrategyCondition_IndicatorMeta1" Association="Self.FK_StrategyCondition_IndicatorMeta1">
+            <End Role="IndicatorMeta" EntitySet="IndicatorMeta" />
+            <End Role="StrategyCondition" EntitySet="StrategyCondition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StrategyCondition_Strategy" Association="Self.FK_StrategyCondition_Strategy">
+            <End Role="Strategy" EntitySet="Strategy" />
+            <End Role="StrategyCondition" EntitySet="StrategyCondition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Temporality_CryptoPair" Association="Self.FK_Temporality_CryptoPair">
+            <End Role="CryptoPair" EntitySet="CryptoPair" />
+            <End Role="Temporality" EntitySet="Temporality" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Role" Association="Self.FK_User_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MasterTradeModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Backtesting">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="BacktestingBatchId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="BacktestingBatch" Relationship="Self.FK_Backtesting_BacktestingBatch" FromRole="Backtesting" ToRole="BacktestingBatch" />
+          <NavigationProperty Name="BacktestingOperations" Relationship="Self.FK_BacktestingOperation_Backtesting" FromRole="Backtesting" ToRole="BacktestingOperation" />
+          <NavigationProperty Name="Indicators" Relationship="Self.BacktestingIndicator" FromRole="Backtesting" ToRole="Indicator" />
+        </EntityType>
+        <EntityType Name="BacktestingBatch">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="StrategyId" Type="Int32" Nullable="false" />
+          <Property Name="TemporalityId" Type="Int32" Nullable="false" />
+          <Property Name="DateFrom" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateTo" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Backtestings" Relationship="Self.FK_Backtesting_BacktestingBatch" FromRole="BacktestingBatch" ToRole="Backtesting" />
+          <NavigationProperty Name="Strategy" Relationship="Self.FK_BacktestingBatch_Strategy" FromRole="BacktestingBatch" ToRole="Strategy" />
+          <NavigationProperty Name="Temporality" Relationship="Self.FK_BacktestingBatch_Temporality" FromRole="BacktestingBatch" ToRole="Temporality" />
+        </EntityType>
+        <EntityType Name="BacktestingOperation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BacktestingId" Type="Int32" Nullable="false" />
+          <Property Name="OpenDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CloseDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="InitialCapital" Type="Decimal" Precision="10" Scale="4" Nullable="false" />
+          <Property Name="Revenue" Type="Decimal" Precision="10" Scale="4" Nullable="false" />
+          <NavigationProperty Name="Backtesting" Relationship="Self.FK_BacktestingOperation_Backtesting" FromRole="BacktestingOperation" ToRole="Backtesting" />
+        </EntityType>
+        <EntityType Name="Candle">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CryptoPairId" Type="Int32" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Open" Type="Decimal" Precision="10" Scale="10" Nullable="false" />
+          <Property Name="Close" Type="Decimal" Precision="10" Scale="10" Nullable="false" />
+          <Property Name="High" Type="Decimal" Precision="10" Scale="10" Nullable="false" />
+          <Property Name="Low" Type="Decimal" Precision="10" Scale="10" Nullable="false" />
+          <NavigationProperty Name="CryptoPair" Relationship="Self.FK_Candle_CryptoPair" FromRole="Candle" ToRole="CryptoPair" />
+        </EntityType>
+        <EntityType Name="Comparer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="StrategyConditions" Relationship="Self.FK_StrategyCondition_Comparer" FromRole="Comparer" ToRole="StrategyCondition" />
+        </EntityType>
+        <EntityType Name="CryptoPair">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="SupplierId" Type="Int32" Nullable="false" />
+          <Property Name="SupplierPairName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Candles" Relationship="Self.FK_Candle_CryptoPair" FromRole="CryptoPair" ToRole="Candle" />
+          <NavigationProperty Name="Supplier" Relationship="Self.FK_CryptoPair_Supplier" FromRole="CryptoPair" ToRole="Supplier" />
+          <NavigationProperty Name="Temporalities" Relationship="Self.FK_Temporality_CryptoPair" FromRole="CryptoPair" ToRole="Temporality" />
+        </EntityType>
+        <EntityType Name="Indicator">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StrategyId" Type="Int32" Nullable="false" />
+          <Property Name="TypeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="IndicatorType" Relationship="Self.FK_Indicator_IndicatorType" FromRole="Indicator" ToRole="IndicatorType" />
+          <NavigationProperty Name="Strategy" Relationship="Self.FK_Indicator_Strategy" FromRole="Indicator" ToRole="Strategy" />
+          <NavigationProperty Name="IndicatorMetas" Relationship="Self.FK_IndicatorMeta_Indicator" FromRole="Indicator" ToRole="IndicatorMeta" />
+          <NavigationProperty Name="Backtestings" Relationship="Self.BacktestingIndicator" FromRole="Indicator" ToRole="Backtesting" />
+        </EntityType>
+        <EntityType Name="IndicatorMeta">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IndicatorId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Value" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IndicatorMetaDataTypeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Indicator" Relationship="Self.FK_IndicatorMeta_Indicator" FromRole="IndicatorMeta" ToRole="Indicator" />
+          <NavigationProperty Name="IndicatorMetaDataType" Relationship="Self.FK_IndicatorMeta_IndicatorMetaDataType" FromRole="IndicatorMeta" ToRole="IndicatorMetaDataType" />
+          <NavigationProperty Name="StrategyConditions" Relationship="Self.FK_StrategyCondition_IndicatorMeta" FromRole="IndicatorMeta" ToRole="StrategyCondition" />
+          <NavigationProperty Name="StrategyConditions1" Relationship="Self.FK_StrategyCondition_IndicatorMeta1" FromRole="IndicatorMeta" ToRole="StrategyCondition" />
+        </EntityType>
+        <EntityType Name="IndicatorMetaDataType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="IndicatorMetas" Relationship="Self.FK_IndicatorMeta_IndicatorMetaDataType" FromRole="IndicatorMetaDataType" ToRole="IndicatorMeta" />
+        </EntityType>
+        <EntityType Name="IndicatorType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Indicators" Relationship="Self.FK_Indicator_IndicatorType" FromRole="IndicatorType" ToRole="Indicator" />
+        </EntityType>
+        <EntityType Name="Permission">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Roles" Relationship="Self.RolePermission" FromRole="Permission" ToRole="Role" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_User_Role" FromRole="Role" ToRole="User" />
+          <NavigationProperty Name="Permissions" Relationship="Self.RolePermission" FromRole="Role" ToRole="Permission" />
+        </EntityType>
+        <EntityType Name="Strategy">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="InvestmentAmount" Type="Decimal" Precision="10" Scale="4" />
+          <Property Name="InvestmentPercentage" Type="Decimal" Precision="3" Scale="2" />
+          <NavigationProperty Name="BacktestingBatches" Relationship="Self.FK_BacktestingBatch_Strategy" FromRole="Strategy" ToRole="BacktestingBatch" />
+          <NavigationProperty Name="Indicators" Relationship="Self.FK_Indicator_Strategy" FromRole="Strategy" ToRole="Indicator" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Strategy_User" FromRole="Strategy" ToRole="User" />
+          <NavigationProperty Name="StrategyConditions" Relationship="Self.FK_StrategyCondition_Strategy" FromRole="Strategy" ToRole="StrategyCondition" />
+        </EntityType>
+        <EntityType Name="StrategyCondition">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StrategyId" Type="Int32" Nullable="false" />
+          <Property Name="FirstIndicatorMetaId" Type="Int32" Nullable="false" />
+          <Property Name="SecondIndicatorMetaId" Type="Int32" Nullable="false" />
+          <Property Name="ComparerId" Type="Int32" Nullable="false" />
+          <Property Name="IsOpenCondition" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Comparer" Relationship="Self.FK_StrategyCondition_Comparer" FromRole="StrategyCondition" ToRole="Comparer" />
+          <NavigationProperty Name="IndicatorMeta" Relationship="Self.FK_StrategyCondition_IndicatorMeta" FromRole="StrategyCondition" ToRole="IndicatorMeta" />
+          <NavigationProperty Name="IndicatorMeta1" Relationship="Self.FK_StrategyCondition_IndicatorMeta1" FromRole="StrategyCondition" ToRole="IndicatorMeta" />
+          <NavigationProperty Name="Strategy" Relationship="Self.FK_StrategyCondition_Strategy" FromRole="StrategyCondition" ToRole="Strategy" />
+        </EntityType>
+        <EntityType Name="Supplier">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Url" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="CryptoPairs" Relationship="Self.FK_CryptoPair_Supplier" FromRole="Supplier" ToRole="CryptoPair" />
+        </EntityType>
+        <EntityType Name="Temporality">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CryptoPairId" Type="Int32" Nullable="false" />
+          <Property Name="Minutes" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="BacktestingBatches" Relationship="Self.FK_BacktestingBatch_Temporality" FromRole="Temporality" ToRole="BacktestingBatch" />
+          <NavigationProperty Name="CryptoPair" Relationship="Self.FK_Temporality_CryptoPair" FromRole="Temporality" ToRole="CryptoPair" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RoleId" Type="Int32" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Role" Relationship="Self.FK_User_Role" FromRole="User" ToRole="Role" />
+          <NavigationProperty Name="Strategies" Relationship="Self.FK_Strategy_User" FromRole="User" ToRole="Strategy" />
+        </EntityType>
+        <Association Name="FK_Backtesting_BacktestingBatch">
+          <End Role="BacktestingBatch" Type="Self.BacktestingBatch" Multiplicity="1" />
+          <End Role="Backtesting" Type="Self.Backtesting" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BacktestingBatch">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Backtesting">
+              <PropertyRef Name="BacktestingBatchId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BacktestingOperation_Backtesting">
+          <End Role="Backtesting" Type="Self.Backtesting" Multiplicity="1" />
+          <End Role="BacktestingOperation" Type="Self.BacktestingOperation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Backtesting">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BacktestingOperation">
+              <PropertyRef Name="BacktestingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BacktestingBatch_Strategy">
+          <End Role="Strategy" Type="Self.Strategy" Multiplicity="1" />
+          <End Role="BacktestingBatch" Type="Self.BacktestingBatch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Strategy">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BacktestingBatch">
+              <PropertyRef Name="StrategyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BacktestingBatch_Temporality">
+          <End Role="Temporality" Type="Self.Temporality" Multiplicity="1" />
+          <End Role="BacktestingBatch" Type="Self.BacktestingBatch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Temporality">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BacktestingBatch">
+              <PropertyRef Name="TemporalityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Candle_CryptoPair">
+          <End Role="CryptoPair" Type="Self.CryptoPair" Multiplicity="1" />
+          <End Role="Candle" Type="Self.Candle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CryptoPair">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Candle">
+              <PropertyRef Name="CryptoPairId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StrategyCondition_Comparer">
+          <End Role="Comparer" Type="Self.Comparer" Multiplicity="1" />
+          <End Role="StrategyCondition" Type="Self.StrategyCondition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Comparer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StrategyCondition">
+              <PropertyRef Name="ComparerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CryptoPair_Supplier">
+          <End Role="Supplier" Type="Self.Supplier" Multiplicity="1" />
+          <End Role="CryptoPair" Type="Self.CryptoPair" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Supplier">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CryptoPair">
+              <PropertyRef Name="SupplierId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Temporality_CryptoPair">
+          <End Role="CryptoPair" Type="Self.CryptoPair" Multiplicity="1" />
+          <End Role="Temporality" Type="Self.Temporality" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CryptoPair">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Temporality">
+              <PropertyRef Name="CryptoPairId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Indicator_IndicatorType">
+          <End Role="IndicatorType" Type="Self.IndicatorType" Multiplicity="1" />
+          <End Role="Indicator" Type="Self.Indicator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IndicatorType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Indicator">
+              <PropertyRef Name="TypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Indicator_Strategy">
+          <End Role="Strategy" Type="Self.Strategy" Multiplicity="1" />
+          <End Role="Indicator" Type="Self.Indicator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Strategy">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Indicator">
+              <PropertyRef Name="StrategyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IndicatorMeta_Indicator">
+          <End Role="Indicator" Type="Self.Indicator" Multiplicity="1" />
+          <End Role="IndicatorMeta" Type="Self.IndicatorMeta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Indicator">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="IndicatorMeta">
+              <PropertyRef Name="IndicatorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IndicatorMeta_IndicatorMetaDataType">
+          <End Role="IndicatorMetaDataType" Type="Self.IndicatorMetaDataType" Multiplicity="1" />
+          <End Role="IndicatorMeta" Type="Self.IndicatorMeta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IndicatorMetaDataType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="IndicatorMeta">
+              <PropertyRef Name="IndicatorMetaDataTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StrategyCondition_IndicatorMeta">
+          <End Role="IndicatorMeta" Type="Self.IndicatorMeta" Multiplicity="1" />
+          <End Role="StrategyCondition" Type="Self.StrategyCondition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IndicatorMeta">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StrategyCondition">
+              <PropertyRef Name="FirstIndicatorMetaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StrategyCondition_IndicatorMeta1">
+          <End Role="IndicatorMeta" Type="Self.IndicatorMeta" Multiplicity="1" />
+          <End Role="StrategyCondition" Type="Self.StrategyCondition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IndicatorMeta">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StrategyCondition">
+              <PropertyRef Name="SecondIndicatorMetaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Strategy_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Strategy" Type="Self.Strategy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Strategy">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StrategyCondition_Strategy">
+          <End Role="Strategy" Type="Self.Strategy" Multiplicity="1" />
+          <End Role="StrategyCondition" Type="Self.StrategyCondition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Strategy">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StrategyCondition">
+              <PropertyRef Name="StrategyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="BacktestingIndicator">
+          <End Role="Backtesting" Type="Self.Backtesting" Multiplicity="*" />
+          <End Role="Indicator" Type="Self.Indicator" Multiplicity="*" />
+        </Association>
+        <Association Name="RolePermission">
+          <End Role="Permission" Type="Self.Permission" Multiplicity="*" />
+          <End Role="Role" Type="Self.Role" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="MasterTradeEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Backtestings" EntityType="Self.Backtesting" />
+          <EntitySet Name="BacktestingBatches" EntityType="Self.BacktestingBatch" />
+          <EntitySet Name="BacktestingOperations" EntityType="Self.BacktestingOperation" />
+          <EntitySet Name="Candles" EntityType="Self.Candle" />
+          <EntitySet Name="Comparers" EntityType="Self.Comparer" />
+          <EntitySet Name="CryptoPairs" EntityType="Self.CryptoPair" />
+          <EntitySet Name="Indicators" EntityType="Self.Indicator" />
+          <EntitySet Name="IndicatorMetas" EntityType="Self.IndicatorMeta" />
+          <EntitySet Name="IndicatorMetaDataTypes" EntityType="Self.IndicatorMetaDataType" />
+          <EntitySet Name="IndicatorTypes" EntityType="Self.IndicatorType" />
+          <EntitySet Name="Permissions" EntityType="Self.Permission" />
+          <EntitySet Name="Roles" EntityType="Self.Role" />
+          <EntitySet Name="Strategies" EntityType="Self.Strategy" />
+          <EntitySet Name="StrategyConditions" EntityType="Self.StrategyCondition" />
+          <EntitySet Name="Suppliers" EntityType="Self.Supplier" />
+          <EntitySet Name="Temporalities" EntityType="Self.Temporality" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK_Backtesting_BacktestingBatch" Association="Self.FK_Backtesting_BacktestingBatch">
+            <End Role="BacktestingBatch" EntitySet="BacktestingBatches" />
+            <End Role="Backtesting" EntitySet="Backtestings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BacktestingOperation_Backtesting" Association="Self.FK_BacktestingOperation_Backtesting">
+            <End Role="Backtesting" EntitySet="Backtestings" />
+            <End Role="BacktestingOperation" EntitySet="BacktestingOperations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BacktestingBatch_Strategy" Association="Self.FK_BacktestingBatch_Strategy">
+            <End Role="Strategy" EntitySet="Strategies" />
+            <End Role="BacktestingBatch" EntitySet="BacktestingBatches" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BacktestingBatch_Temporality" Association="Self.FK_BacktestingBatch_Temporality">
+            <End Role="Temporality" EntitySet="Temporalities" />
+            <End Role="BacktestingBatch" EntitySet="BacktestingBatches" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Candle_CryptoPair" Association="Self.FK_Candle_CryptoPair">
+            <End Role="CryptoPair" EntitySet="CryptoPairs" />
+            <End Role="Candle" EntitySet="Candles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StrategyCondition_Comparer" Association="Self.FK_StrategyCondition_Comparer">
+            <End Role="Comparer" EntitySet="Comparers" />
+            <End Role="StrategyCondition" EntitySet="StrategyConditions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CryptoPair_Supplier" Association="Self.FK_CryptoPair_Supplier">
+            <End Role="Supplier" EntitySet="Suppliers" />
+            <End Role="CryptoPair" EntitySet="CryptoPairs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Temporality_CryptoPair" Association="Self.FK_Temporality_CryptoPair">
+            <End Role="CryptoPair" EntitySet="CryptoPairs" />
+            <End Role="Temporality" EntitySet="Temporalities" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Indicator_IndicatorType" Association="Self.FK_Indicator_IndicatorType">
+            <End Role="IndicatorType" EntitySet="IndicatorTypes" />
+            <End Role="Indicator" EntitySet="Indicators" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Indicator_Strategy" Association="Self.FK_Indicator_Strategy">
+            <End Role="Strategy" EntitySet="Strategies" />
+            <End Role="Indicator" EntitySet="Indicators" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IndicatorMeta_Indicator" Association="Self.FK_IndicatorMeta_Indicator">
+            <End Role="Indicator" EntitySet="Indicators" />
+            <End Role="IndicatorMeta" EntitySet="IndicatorMetas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IndicatorMeta_IndicatorMetaDataType" Association="Self.FK_IndicatorMeta_IndicatorMetaDataType">
+            <End Role="IndicatorMetaDataType" EntitySet="IndicatorMetaDataTypes" />
+            <End Role="IndicatorMeta" EntitySet="IndicatorMetas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StrategyCondition_IndicatorMeta" Association="Self.FK_StrategyCondition_IndicatorMeta">
+            <End Role="IndicatorMeta" EntitySet="IndicatorMetas" />
+            <End Role="StrategyCondition" EntitySet="StrategyConditions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StrategyCondition_IndicatorMeta1" Association="Self.FK_StrategyCondition_IndicatorMeta1">
+            <End Role="IndicatorMeta" EntitySet="IndicatorMetas" />
+            <End Role="StrategyCondition" EntitySet="StrategyConditions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Role" Association="Self.FK_User_Role">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Strategy_User" Association="Self.FK_Strategy_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Strategy" EntitySet="Strategies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StrategyCondition_Strategy" Association="Self.FK_StrategyCondition_Strategy">
+            <End Role="Strategy" EntitySet="Strategies" />
+            <End Role="StrategyCondition" EntitySet="StrategyConditions" />
+          </AssociationSet>
+          <AssociationSet Name="BacktestingIndicator" Association="Self.BacktestingIndicator">
+            <End Role="Backtesting" EntitySet="Backtestings" />
+            <End Role="Indicator" EntitySet="Indicators" />
+          </AssociationSet>
+          <AssociationSet Name="RolePermission" Association="Self.RolePermission">
+            <End Role="Permission" EntitySet="Permissions" />
+            <End Role="Role" EntitySet="Roles" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MasterTradeModelStoreContainer" CdmEntityContainer="MasterTradeEntities">
+          <EntitySetMapping Name="Backtestings">
+            <EntityTypeMapping TypeName="MasterTradeModel.Backtesting">
+              <MappingFragment StoreEntitySet="Backtesting">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="BacktestingBatchId" ColumnName="BacktestingBatchId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BacktestingBatches">
+            <EntityTypeMapping TypeName="MasterTradeModel.BacktestingBatch">
+              <MappingFragment StoreEntitySet="BacktestingBatch">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
+                <ScalarProperty Name="TemporalityId" ColumnName="TemporalityId" />
+                <ScalarProperty Name="DateFrom" ColumnName="DateFrom" />
+                <ScalarProperty Name="DateTo" ColumnName="DateTo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BacktestingOperations">
+            <EntityTypeMapping TypeName="MasterTradeModel.BacktestingOperation">
+              <MappingFragment StoreEntitySet="BacktestingOperation">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="BacktestingId" ColumnName="BacktestingId" />
+                <ScalarProperty Name="OpenDate" ColumnName="OpenDate" />
+                <ScalarProperty Name="CloseDate" ColumnName="CloseDate" />
+                <ScalarProperty Name="InitialCapital" ColumnName="InitialCapital" />
+                <ScalarProperty Name="Revenue" ColumnName="Revenue" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Candles">
+            <EntityTypeMapping TypeName="MasterTradeModel.Candle">
+              <MappingFragment StoreEntitySet="Candle">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CryptoPairId" ColumnName="CryptoPairId" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="Open" ColumnName="Open" />
+                <ScalarProperty Name="Close" ColumnName="Close" />
+                <ScalarProperty Name="High" ColumnName="High" />
+                <ScalarProperty Name="Low" ColumnName="Low" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Comparers">
+            <EntityTypeMapping TypeName="MasterTradeModel.Comparer">
+              <MappingFragment StoreEntitySet="Comparer">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CryptoPairs">
+            <EntityTypeMapping TypeName="MasterTradeModel.CryptoPair">
+              <MappingFragment StoreEntitySet="CryptoPair">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
+                <ScalarProperty Name="SupplierPairName" ColumnName="SupplierPairName" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Indicators">
+            <EntityTypeMapping TypeName="MasterTradeModel.Indicator">
+              <MappingFragment StoreEntitySet="Indicator">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
+                <ScalarProperty Name="TypeId" ColumnName="TypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IndicatorMetas">
+            <EntityTypeMapping TypeName="MasterTradeModel.IndicatorMeta">
+              <MappingFragment StoreEntitySet="IndicatorMeta">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IndicatorId" ColumnName="IndicatorId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="IndicatorMetaDataTypeId" ColumnName="IndicatorMetaDataTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IndicatorMetaDataTypes">
+            <EntityTypeMapping TypeName="MasterTradeModel.IndicatorMetaDataType">
+              <MappingFragment StoreEntitySet="IndicatorMetaDataType">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IndicatorTypes">
+            <EntityTypeMapping TypeName="MasterTradeModel.IndicatorType">
+              <MappingFragment StoreEntitySet="IndicatorType">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Permissions">
+            <EntityTypeMapping TypeName="MasterTradeModel.Permission">
+              <MappingFragment StoreEntitySet="Permission">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="MasterTradeModel.Role">
+              <MappingFragment StoreEntitySet="Role">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Strategies">
+            <EntityTypeMapping TypeName="MasterTradeModel.Strategy">
+              <MappingFragment StoreEntitySet="Strategy">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="InvestmentAmount" ColumnName="InvestmentAmount" />
+                <ScalarProperty Name="InvestmentPercentage" ColumnName="InvestmentPercentage" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StrategyConditions">
+            <EntityTypeMapping TypeName="MasterTradeModel.StrategyCondition">
+              <MappingFragment StoreEntitySet="StrategyCondition">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
+                <ScalarProperty Name="FirstIndicatorMetaId" ColumnName="FirstIndicatorMetaId" />
+                <ScalarProperty Name="SecondIndicatorMetaId" ColumnName="SecondIndicatorMetaId" />
+                <ScalarProperty Name="ComparerId" ColumnName="ComparerId" />
+                <ScalarProperty Name="IsOpenCondition" ColumnName="IsOpenCondition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Suppliers">
+            <EntityTypeMapping TypeName="MasterTradeModel.Supplier">
+              <MappingFragment StoreEntitySet="Supplier">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Temporalities">
+            <EntityTypeMapping TypeName="MasterTradeModel.Temporality">
+              <MappingFragment StoreEntitySet="Temporality">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="CryptoPairId" ColumnName="CryptoPairId" />
+                <ScalarProperty Name="Minutes" ColumnName="Minutes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="MasterTradeModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="BacktestingIndicator" TypeName="MasterTradeModel.BacktestingIndicator" StoreEntitySet="BacktestingIndicator">
+            <EndProperty Name="Backtesting">
+              <ScalarProperty Name="Id" ColumnName="BacktestingId" />
+            </EndProperty>
+            <EndProperty Name="Indicator">
+              <ScalarProperty Name="Id" ColumnName="IndicatorId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="RolePermission" TypeName="MasterTradeModel.RolePermission" StoreEntitySet="RolePermission">
+            <EndProperty Name="Permission">
+              <ScalarProperty Name="Id" ColumnName="PermissionId" />
+            </EndProperty>
+            <EndProperty Name="Role">
+              <ScalarProperty Name="Id" ColumnName="RoleId" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
