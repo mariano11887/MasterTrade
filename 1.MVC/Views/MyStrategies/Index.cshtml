@@ -1,15 +1,27 @@
-﻿
+﻿@model MasterTrade.Models.MyStrategiesModel
+@using _4.DTO
 @{
     ViewBag.Title = "Mis estrategias";
 }
 
 <main aria-labelledby="title">
     <h2 id="title">@ViewBag.Title</h2>
-<hr />
+    <hr />
     <div class="row">
-        <ul>
-            <li><b>Prueba</b> <a href="#">Modificar</a> <a href="#">Eliminar</a></li>
-        </ul>
+        @if (Model.UserStrategies.Any())
+        {
+            <ul>
+                @foreach (DTOStrategy strategy in Model.UserStrategies)
+                {
+                    <li><b>@strategy.Name</b> <a href="#">Modificar</a> <a href="#">Eliminar</a></li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>¡Todavía no creaste ninguna estrategia!</p>
+        }
+
     </div>
     <div class="row" style="margin-top: 0.5rem;">
         <div class="offset-md-9 col-md-3">

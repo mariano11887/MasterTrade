@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 
 namespace MasterTrade.Models
@@ -7,6 +8,8 @@ namespace MasterTrade.Models
     public class NewStrategyModel
     {
         [DisplayName("Nombre de la estrategia")]
+        [Required]
+        [MaxLength(50)]
         public string Name { get; set; }
 
         [DisplayName("Indicador")]

@@ -1,4 +1,6 @@
 ﻿using MasterTrade.Authentication;
+using Microsoft.AspNet.Identity;
+using System;
 using System.Web.Mvc;
 using System.Web.Security;
 
@@ -21,6 +23,11 @@ namespace MasterTrade.Controllers.Base
             }
 
             base.OnActionExecuted(filterContext);
+        }
+
+        protected int GetUserId()
+        {
+            return Convert.ToInt32(User.Identity.GetUserId());
         }
     }
 }

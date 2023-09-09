@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DTORole.cs" />
+    <Compile Include="DTOStrategy.cs" />
     <Compile Include="DTOUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

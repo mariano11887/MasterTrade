@@ -1,4 +1,5 @@
-﻿using MasterTrade.Controllers.Base;
+﻿using _2.Service.Service;
+using MasterTrade.Controllers.Base;
 using MasterTrade.Models;
 using System.Collections.Generic;
 using System.Web.Mvc;
@@ -10,7 +11,11 @@ namespace MasterTrade.Controllers
         // GET: MyStrategies
         public ActionResult Index()
         {
-            return View();
+            MyStrategiesModel model = new MyStrategiesModel()
+            {
+                UserStrategies = new ServiceStrategy().GetUserStrategies(GetUserId())
+            };
+            return View(model);
         }
 
         public ActionResult NewStep1()
@@ -21,6 +26,13 @@ namespace MasterTrade.Controllers
         [HttpPost]
         public ActionResult NewStep1(NewStrategyModel model)
         {
+            bool isNameValid = new ServiceStrategy().CheckStrategyName(GetUserId(), model.Name);
+            if (!isNameValid)
+            {
+                ViewBag.ErrorMsg = "El nombre elegido ya existe.";
+                return View(model);
+            }
+
             return RedirectToAction("NewStep2", "MyStrategies");
         }
 
