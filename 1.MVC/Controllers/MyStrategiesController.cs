@@ -1,10 +1,11 @@
-﻿using MasterTrade.Models;
+﻿using MasterTrade.Controllers.Base;
+using MasterTrade.Models;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace MasterTrade.Controllers
 {
-    public class MyStrategiesController : Controller
+    public class MyStrategiesController : BaseController
     {
         // GET: MyStrategies
         public ActionResult Index()

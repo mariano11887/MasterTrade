@@ -14,11 +14,12 @@ using MasterTrade.Authentication;
 using Newtonsoft.Json;
 using _2.Service.Service;
 using _4.DTO;
+using MasterTrade.Controllers.Base;
 
 namespace MasterTrade.Controllers
 {
     [Authorize]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         public AccountController()
         {

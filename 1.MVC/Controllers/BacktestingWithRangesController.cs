@@ -1,10 +1,11 @@
-﻿using MasterTrade.Models;
+﻿using MasterTrade.Controllers.Base;
+using MasterTrade.Models;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace MasterTrade.Controllers
 {
-    public class BacktestingWithRangesController : Controller
+    public class BacktestingWithRangesController : BaseController
     {
         public ActionResult Step1()
         {

@@ -1,4 +1,5 @@
-﻿using MasterTrade.Models;
+﻿using MasterTrade.Controllers.Base;
+using MasterTrade.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Web.Mvc;
 
 namespace MasterTrade.Controllers
 {
-    public class CryptoPairController : Controller
+    public class CryptoPairController : BaseController
     {
         // GET: CryptoPair
         public ActionResult Index()
