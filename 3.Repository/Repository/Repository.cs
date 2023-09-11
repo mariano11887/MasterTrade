@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Data.Entity;
+using System.Linq;
 
 namespace _3.Repository.Repository
 {
@@ -11,9 +12,15 @@ namespace _3.Repository.Repository
             context = new MasterTradeEntities();
         }
 
-        public IQueryable<TEntity> GetQuery()
+        public IQueryable<TEntity> GetQuery(string includes = "")
         {
-            return context.Set<TEntity>().AsQueryable();
+            IQueryable<TEntity> query = context.Set<TEntity>().AsQueryable();
+            if (!string.IsNullOrEmpty(includes))
+            {
+                query = query.Include(includes);
+            }
+
+            return query;
         }
 
         public void Insert(TEntity entity)

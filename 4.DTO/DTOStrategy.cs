@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace _4.DTO
 {
@@ -10,5 +6,9 @@ namespace _4.DTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public int UserId { get; set; }
+        public bool IsComplete { get; set; }
+
+        public List<DTOIndicator> Indicators { get; set; } = new List<DTOIndicator>();
     }
 }

@@ -30,6 +30,10 @@
             </div>
         </div>
     </nav>
+    @if (ViewBag.ErrorMsg != null && !string.IsNullOrEmpty(ViewBag.ErrorMsg))
+    {
+        <div class="error-bar">@ViewBag.ErrorMsg</div>
+    }
     <div class="container body-content">
         @RenderBody()
         <hr />
@@ -41,27 +45,5 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
-<script>
-        @*$(function () {
-    Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: '@ViewBag.ErrorMsg'
-    });
-});
-
-        @if (ViewBag.ErrorMsg != null && !string.IsNullOrEmpty(ViewBag.ErrorMsg))
-            {
-            <text>
-        $(function () {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: '@ViewBag.ErrorMsg'
-            });
-        });
-        </text>
-            }*@
-</script>
 </body>
 </html>

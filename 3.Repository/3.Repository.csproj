@@ -68,10 +68,6 @@
     <Compile Include="CryptoPair.cs">
       <DependentUpon>MasterTradeModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Enums\Comparer.cs" />
-    <Compile Include="Enums\IndicatorMetaDataType.cs" />
-    <Compile Include="Enums\IndicatorType.cs" />
-    <Compile Include="Enums\Role.cs" />
     <Compile Include="Indicator.cs">
       <DependentUpon>MasterTradeModel.tt</DependentUpon>
     </Compile>

@@ -1,7 +1,11 @@
-﻿using _2.Service.Service;
+﻿using _2.Service.Indicator.Interface;
+using _2.Service.Service;
+using _4.DTO;
+using _4.DTO.Enums;
 using MasterTrade.Controllers.Base;
 using MasterTrade.Models;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace MasterTrade.Controllers
@@ -24,34 +28,89 @@ namespace MasterTrade.Controllers
         }
 
         [HttpPost]
-        public ActionResult NewStep1(NewStrategyModel model)
+        public ActionResult NewStep1(NewStrategyStep1Model model)
         {
-            bool isNameValid = new ServiceStrategy().CheckStrategyName(GetUserId(), model.Name);
+            ServiceStrategy service = new ServiceStrategy();
+            bool isNameValid = service.CheckStrategyName(GetUserId(), model.Name);
             if (!isNameValid)
             {
                 ViewBag.ErrorMsg = "El nombre elegido ya existe.";
                 return View(model);
             }
 
-            return RedirectToAction("NewStep2", "MyStrategies");
+            DTOStrategy dto = new DTOStrategy()
+            {
+                Name = model.Name,
+                UserId = GetUserId()
+            };
+            int strategyId = service.Save(dto);
+
+            return RedirectToAction("NewStep2", "MyStrategies", new { id = strategyId });
         }
 
-        public ActionResult NewStep2()
+        public ActionResult NewStep2(int id)
         {
-            NewStrategyModel model = new NewStrategyModel()
+            DTOStrategy strategy = new ServiceStrategy().GetById(id, GetUserId());
+            NewStrategyStep2Model model = new NewStrategyStep2Model
             {
-                AllIndicators = new List<SelectListItem>
-                {
-                    new SelectListItem { Value = "1", Text = "Media móvil" }
-                }
+                StrategyId = strategy.Id
             };
+
+            FillStep2Selects(model);
+
             return View(model);
         }
 
         [HttpPost]
-        public ActionResult NewStep2(NewStrategyModel model)
+        public ActionResult NewStep2(NewStrategyStep2Model model, bool indicatorAdded)
         {
+            if (model.IndicatorId > 0 && model.IndicatorId != model.PreviousIndicatorId)
+            {
+                model.IndicatorStructure = new ServiceIndicator().GetIndicator(model.IndicatorId);
+                ModelState.Remove("PreviousIndicatorId");
+                model.PreviousIndicatorId = model.IndicatorId;
+                FillStep2Selects(model);
+                return View(model);
+            }
+
+            if (indicatorAdded)
+            {
+                ServiceStrategy serviceStrategy = new ServiceStrategy();
+                DTOStrategy strategy = serviceStrategy.GetById(model.StrategyId, GetUserId());
+                DTOIndicator indicator = new DTOIndicator
+                {
+                    TypeId = model.IndicatorId
+                };
+                
+                model.IndicatorStructure = new ServiceIndicator().GetIndicator(model.IndicatorId);
+                foreach (var meta in model.IndicatorStructure.Meta)
+                {
+                    indicator.Metas.Add(new DTOIndicatorMeta
+                    {
+                        Name = meta.Name,
+                        Value = Request[meta.HtmlName],
+                        Type = meta.Type
+                    });
+                }
+
+                strategy.Indicators.Add(indicator);
+                model.StrategyId = serviceStrategy.Save(strategy);
+
+                FillStep2Selects(model);
+                return View(model);
+            }
+
             return RedirectToAction("NewStep3", "MyStrategies");
+        }
+
+        private void FillStep2Selects(NewStrategyStep2Model model)
+        {
+            List<DTOIndicatorType> indicatorTypes = new ServiceIndicator().GetIndicatorTypes();
+            model.AllIndicators = indicatorTypes.Select(it => new SelectListItem
+            {
+                Value = it.Id.ToString(),
+                Text = it.Description
+            }).ToList();
         }
 
         public ActionResult NewStep3()

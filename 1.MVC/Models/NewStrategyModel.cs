@@ -1,23 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using _2.Service.Indicator.Interface;
+using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 
 namespace MasterTrade.Models
 {
     public class NewStrategyModel
     {
-        [DisplayName("Nombre de la estrategia")]
-        [Required]
-        [MaxLength(50)]
-        public string Name { get; set; }
-
-        [DisplayName("Indicador")]
-        public int IndicatorId { get; set; }
-
-        [DisplayName("Longitud")]
-        public int MovingAverageLength { get; set; }
-
         [DisplayName("Momento de ejecución")]
         public int ExecutionMomentId { get; set; }
 
@@ -39,7 +28,7 @@ namespace MasterTrade.Models
         [DisplayName("Monto (USD)")]
         public double InvestAmount { get; set; }
 
-        public List<SelectListItem> AllIndicators { get; set; }
+        
         public List<SelectListItem> AllExecutionMoments { get; set; }
         public List<SelectListItem> StrategyIndicators { get; set; }
         public List<SelectListItem> MovingAverageValues { get; set; }

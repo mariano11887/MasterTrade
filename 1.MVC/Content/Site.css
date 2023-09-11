@@ -38,3 +38,9 @@ body {
 .lightBrownBtn:hover {
     background-color: green;
 }
+
+.error-bar {
+    background-color: red;
+    color: white;
+    text-align: center;
+}

@@ -27,6 +27,7 @@ namespace _3.Repository
         public int UserId { get; set; }
         public Nullable<decimal> InvestmentAmount { get; set; }
         public Nullable<decimal> InvestmentPercentage { get; set; }
+        public bool IsComplete { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BacktestingBatch> BacktestingBatches { get; set; }
