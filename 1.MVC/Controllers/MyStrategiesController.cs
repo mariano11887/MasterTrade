@@ -52,15 +52,30 @@ namespace MasterTrade.Controllers
         public ActionResult NewStep2(int id)
         {
             DTOStrategy strategy = new ServiceStrategy().GetById(id, GetUserId());
+            List<DTOIndicatorType> indicatorTypes = new ServiceIndicator().GetIndicatorTypes();
+
             NewStrategyStep2Model model = new NewStrategyStep2Model
             {
                 StrategyId = strategy.Id,
+                AllIndicators = indicatorTypes.Select(it => new SelectListItem
+                {
+                    Value = it.Id.ToString(),
+                    Text = it.Description
+                }).ToList(),
                 AddedIndicators = strategy.Indicators.Select(i => new Tuple<int, string>(i.Id, i.ToString())).ToList()
             };
 
-            FillStep2Selects(model, strategy);
-
             return View(model);
+        }
+
+        public ActionResult LoadIndicatorMeta(int? indicatorId)
+        {
+            NewStrategyStep2Model model = new NewStrategyStep2Model()
+            {
+                IndicatorStructure = indicatorId.HasValue ? new ServiceIndicator().GetIndicator(indicatorId.Value) : null
+            };
+
+            return PartialView("NewStep2IndicatorMeta", model);
         }
 
         [HttpPost]
@@ -69,32 +84,32 @@ namespace MasterTrade.Controllers
             ServiceStrategy serviceStrategy = new ServiceStrategy();
             DTOStrategy strategy = serviceStrategy.GetById(model.StrategyId, GetUserId());
 
-            if (model.IndicatorId.HasValue && model.IndicatorId != model.PreviousIndicatorId)
-            {
-                model.IndicatorStructure = new ServiceIndicator().GetIndicator(model.IndicatorId.Value);
-                ModelState.Remove("PreviousIndicatorId");
-                model.PreviousIndicatorId = model.IndicatorId.Value;
-                FillStep2Selects(model, strategy);
-                return View(model);
-            }
+            //if (model.IndicatorId > 0 && model.IndicatorId != model.PreviousIndicatorId)
+            //{
+            //    model.IndicatorStructure = new ServiceIndicator().GetIndicator(model.IndicatorId);
+            //    ModelState.Remove("PreviousIndicatorId");
+            //    model.PreviousIndicatorId = model.IndicatorId;
+            //    FillStep2Selects(model, strategy);
+            //    return View(model);
+            //}
 
             if (indicatorAdded)
             {
                 DTOIndicator indicator = new DTOIndicator
                 {
-                    TypeId = model.IndicatorId.Value
+                    TypeId = model.IndicatorId
                 };
                 
-                model.IndicatorStructure = new ServiceIndicator().GetIndicator(model.IndicatorId.Value);
-                foreach (var meta in model.IndicatorStructure.Meta)
-                {
-                    indicator.Metas.Add(new DTOIndicatorMeta
-                    {
-                        Name = meta.Name,
-                        Value = Request[meta.HtmlName],
-                        Type = meta.Type
-                    });
-                }
+                //model.IndicatorStructure = new ServiceIndicator().GetIndicator(model.IndicatorId);
+                //foreach (var meta in model.IndicatorStructure.Meta)
+                //{
+                //    indicator.Metas.Add(new DTOIndicatorMeta
+                //    {
+                //        Name = meta.Name,
+                //        Value = Request[meta.HtmlName],
+                //        Type = meta.Type
+                //    });
+                //}
 
                 strategy.Indicators.Add(indicator);
                 model.StrategyId = serviceStrategy.Save(strategy);

@@ -1,0 +1,25 @@
+﻿@model MasterTrade.Models.NewStrategyStep2Model
+@if (Model.IndicatorStructure != null)
+{
+    <hr />
+    <div class="row">
+        <h5>@Model.IndicatorStructure.ConfigurationTitle</h5>
+    </div>
+    foreach (var meta in Model.IndicatorStructure.Meta)
+    {
+        <div class="row">
+            @Html.Label(meta.Name, new { @class = "col-md-3 col-form-label" })
+            <div class="col-md-9">
+                @if (meta.Type == _4.DTO.Enums.IndicatorMetaDataType.Integer)
+                {
+                    @Html.TextBox(meta.HtmlName, 0, new { @class = "form-control", @type = "number" });
+                }
+            </div>
+        </div>
+    }
+    <div class="row">
+        <div class="offset-md-10 col-md-2">
+            <input type="button" value="Agregar" id="addIndicatorBtn" class="btn btn-outline-dark lightBrownBtn" />
+        </div>
+    </div>
+}

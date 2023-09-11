@@ -24,30 +24,9 @@
                         @Html.DropDownListFor(m => m.IndicatorId, Model.AllIndicators, "Seleccione...", new { @class = "form-control" })
                     </div>
                 </div>
-                @if (Model.IndicatorStructure != null)
-                {
-                    <hr />
-                    <div class="row">
-                        <h5>@Model.IndicatorStructure.ConfigurationTitle</h5>
-                    </div>
-                    foreach (var meta in Model.IndicatorStructure.Meta)
-                    {
-                        <div class="row">
-                            @Html.Label(meta.Name, new { @class = "col-md-3 col-form-label" })
-                            <div class="col-md-9">
-                                @if (meta.Type == IndicatorMetaDataType.Integer)
-                                {
-                                    @Html.TextBox(meta.HtmlName, 0, new { @class = "form-control", @type = "number" });
-                                }
-                            </div>
-                        </div>
-                    }
-                    <div class="row">
-                        <div class="offset-md-10 col-md-2">
-                            <input type="button" value="Agregar" id="addIndicatorBtn" class="btn btn-outline-dark lightBrownBtn" />
-                        </div>
-                    </div>
-                }
+                <div id="indicatorMetaSection">
+                    @Html.Partial("NewStep2IndicatorMeta")
+                </div>
             </div>
             <div class="col-md-6">
                 <div class="row">
@@ -82,7 +61,15 @@
 
         $(function () {
             $('#@Html.IdFor(m => m.IndicatorId)').change(function () {
-                $('#newStep2Form').submit();
+                $.ajax({
+                    url: '@Url.Action("LoadIndicatorMeta")',
+                    type: 'GET',
+                    data: {
+                        indicatorId: function () { return $('#@Html.IdFor(m => m.IndicatorId)').val(); }
+                    }
+                }).done(function (result) {
+                    $('#indicatorMetaSection').html(result);
+                });
             });
 
             $('#addIndicatorBtn').click(function () {

@@ -11,14 +11,19 @@ namespace MasterTrade.Models
         public int StrategyId { get; set; }
 
         [DisplayName("Indicador")]
-        public int? IndicatorId { get; set; }
-
-        public int PreviousIndicatorId { get; set; }
+        public int IndicatorId { get; set; }
 
         public IIndicator IndicatorStructure { get; set; }
+
+        public int PreviousIndicatorId { get; set; }
 
         public List<SelectListItem> AllIndicators { get; set; }
 
         public List<Tuple<int, string>> AddedIndicators { get; set; }
+    }
+
+    public class NewStrategyStep2IndicatorMetaModel
+    {
+        
     }
 }
