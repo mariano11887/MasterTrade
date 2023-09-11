@@ -9,10 +9,14 @@ namespace _2.Service.Service
     public class ServiceStrategy
     {
         private readonly RepositoryStrategy repositoryStrategy;
+        private readonly RepositoryIndicator repositoryIndicator;
+        private readonly RepositoryIndicatorMeta repositoryIndicatorMeta;
 
         public ServiceStrategy()
         {
             repositoryStrategy = new RepositoryStrategy();
+            repositoryIndicator = new RepositoryIndicator();
+            repositoryIndicatorMeta = new RepositoryIndicatorMeta();
         }
 
         public List<DTOStrategy> GetUserStrategies(int userId)
@@ -69,6 +73,13 @@ namespace _2.Service.Service
                         }).ToList()
                     });
                 }
+
+                foreach (DTOIndicator indicator in dto.Indicators.Where(i => i.Removed))
+                {
+                    _3.Repository.Indicator strategyIndicator = repositoryIndicator.GetQuery("IndicatorMetas").First(i => i.Id == indicator.Id);
+                    repositoryIndicator.Remove(strategyIndicator);
+                    repositoryIndicator.SaveChanges();
+                }
             }
 
             repositoryStrategy.SaveChanges();
@@ -78,12 +89,24 @@ namespace _2.Service.Service
 
         public DTOStrategy GetById(int id, int userId)
         {
-            DTOStrategy strategy = repositoryStrategy.GetQuery().Where(s => s.Id == id && s.UserId == userId).Select(s => new DTOStrategy
+            DTOStrategy strategy = repositoryStrategy.GetQuery("Indicators.IndicatorMetas").Where(s => s.Id == id && s.UserId == userId).Select(s => new DTOStrategy
             {
                 Id = s.Id,
                 UserId = s.UserId,
                 Name = s.Name,
-                IsComplete = s.IsComplete
+                IsComplete = s.IsComplete,
+                Indicators = s.Indicators.Select(i => new DTOIndicator
+                {
+                    Id = i.Id,
+                    Name = i.IndicatorType.Description,
+                    TypeId = i.TypeId,
+                    Metas = i.IndicatorMetas.Select(im => new DTOIndicatorMeta
+                    {
+                        Name = im.Name,
+                        Value = im.Value,
+                        Type = (_4.DTO.Enums.IndicatorMetaDataType)im.IndicatorMetaDataTypeId
+                    }).ToList()
+                }).ToList()
             }).FirstOrDefault();
             
             return strategy;

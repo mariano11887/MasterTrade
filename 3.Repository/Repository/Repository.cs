@@ -28,6 +28,11 @@ namespace _3.Repository.Repository
             context.Set<TEntity>().Add(entity);
         }
 
+        public void Remove(TEntity entity)
+        {
+            context.Set<TEntity>().Remove(entity);
+        }
+
         public void SaveChanges()
         {
             context.SaveChanges();

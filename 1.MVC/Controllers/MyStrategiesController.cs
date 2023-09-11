@@ -4,6 +4,7 @@ using _4.DTO;
 using _4.DTO.Enums;
 using MasterTrade.Controllers.Base;
 using MasterTrade.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -53,36 +54,38 @@ namespace MasterTrade.Controllers
             DTOStrategy strategy = new ServiceStrategy().GetById(id, GetUserId());
             NewStrategyStep2Model model = new NewStrategyStep2Model
             {
-                StrategyId = strategy.Id
+                StrategyId = strategy.Id,
+                AddedIndicators = strategy.Indicators.Select(i => new Tuple<int, string>(i.Id, i.ToString())).ToList()
             };
 
-            FillStep2Selects(model);
+            FillStep2Selects(model, strategy);
 
             return View(model);
         }
 
         [HttpPost]
-        public ActionResult NewStep2(NewStrategyStep2Model model, bool indicatorAdded)
+        public ActionResult NewStep2(NewStrategyStep2Model model, bool indicatorAdded, int removedIndicatorId)
         {
-            if (model.IndicatorId > 0 && model.IndicatorId != model.PreviousIndicatorId)
+            ServiceStrategy serviceStrategy = new ServiceStrategy();
+            DTOStrategy strategy = serviceStrategy.GetById(model.StrategyId, GetUserId());
+
+            if (model.IndicatorId.HasValue && model.IndicatorId != model.PreviousIndicatorId)
             {
-                model.IndicatorStructure = new ServiceIndicator().GetIndicator(model.IndicatorId);
+                model.IndicatorStructure = new ServiceIndicator().GetIndicator(model.IndicatorId.Value);
                 ModelState.Remove("PreviousIndicatorId");
-                model.PreviousIndicatorId = model.IndicatorId;
-                FillStep2Selects(model);
+                model.PreviousIndicatorId = model.IndicatorId.Value;
+                FillStep2Selects(model, strategy);
                 return View(model);
             }
 
             if (indicatorAdded)
             {
-                ServiceStrategy serviceStrategy = new ServiceStrategy();
-                DTOStrategy strategy = serviceStrategy.GetById(model.StrategyId, GetUserId());
                 DTOIndicator indicator = new DTOIndicator
                 {
-                    TypeId = model.IndicatorId
+                    TypeId = model.IndicatorId.Value
                 };
                 
-                model.IndicatorStructure = new ServiceIndicator().GetIndicator(model.IndicatorId);
+                model.IndicatorStructure = new ServiceIndicator().GetIndicator(model.IndicatorId.Value);
                 foreach (var meta in model.IndicatorStructure.Meta)
                 {
                     indicator.Metas.Add(new DTOIndicatorMeta
@@ -95,15 +98,26 @@ namespace MasterTrade.Controllers
 
                 strategy.Indicators.Add(indicator);
                 model.StrategyId = serviceStrategy.Save(strategy);
+                strategy = serviceStrategy.GetById(model.StrategyId, GetUserId());
 
-                FillStep2Selects(model);
+                FillStep2Selects(model, strategy);
+                return View(model);
+            }
+
+            if (removedIndicatorId > 0)
+            {
+                strategy.Indicators.FirstOrDefault(i => i.Id == removedIndicatorId).Removed = true;
+                model.StrategyId = serviceStrategy.Save(strategy);
+                strategy = serviceStrategy.GetById(model.StrategyId, GetUserId());
+
+                FillStep2Selects(model, strategy);
                 return View(model);
             }
 
             return RedirectToAction("NewStep3", "MyStrategies");
         }
 
-        private void FillStep2Selects(NewStrategyStep2Model model)
+        private void FillStep2Selects(NewStrategyStep2Model model, DTOStrategy strategy)
         {
             List<DTOIndicatorType> indicatorTypes = new ServiceIndicator().GetIndicatorTypes();
             model.AllIndicators = indicatorTypes.Select(it => new SelectListItem
@@ -111,6 +125,8 @@ namespace MasterTrade.Controllers
                 Value = it.Id.ToString(),
                 Text = it.Description
             }).ToList();
+            
+            model.AddedIndicators = strategy.Indicators.Select(i => new Tuple<int, string>(i.Id, i.ToString())).ToList();
         }
 
         public ActionResult NewStep3()

@@ -13,6 +13,7 @@
         @Html.HiddenFor(m => m.StrategyId)
         @Html.HiddenFor(m => m.PreviousIndicatorId)
         @Html.Hidden("indicatorAdded", false)
+        @Html.Hidden("removedIndicatorId", 0)
         <hr />
         @Html.ValidationSummary("", new { @class = "text-danger" })
         <div class="row">
@@ -54,8 +55,10 @@
                 </div>
                 <div class="col-md-12">
                     <ul>
-                        <li>Media móvil (5) <a href="#">Quitar</a></li>
-                        <li>Media móvil (10) <a href="#">Quitar</a></li>
+                        @foreach (var indicator in Model.AddedIndicators)
+                        {
+                            <li>@indicator.Item2 <a href="#" onclick="removeIndicator(@indicator.Item1)">Quitar</a></li>
+                        }
                     </ul>
                 </div>
             </div>
@@ -72,6 +75,11 @@
 @section Scripts
 {
     <script>
+        function removeIndicator(id) {
+            $('#removedIndicatorId').val(id);
+            $('#newStep2Form').submit();
+        }
+
         $(function () {
             $('#@Html.IdFor(m => m.IndicatorId)').change(function () {
                 $('#newStep2Form').submit();
