@@ -1,5 +1,4 @@
 ﻿@model MasterTrade.Models.NewStrategyStep2Model
-@using _4.DTO.Enums
 @{
     ViewBag.Title = "Nueva estrategia - Paso 2";
 }
@@ -12,7 +11,6 @@
         @Html.AntiForgeryToken()
         @Html.HiddenFor(m => m.StrategyId)
         @Html.HiddenFor(m => m.PreviousIndicatorId)
-        @Html.Hidden("indicatorAdded", false)
         @Html.Hidden("removedIndicatorId", 0)
         <hr />
         @Html.ValidationSummary("", new { @class = "text-danger" })
@@ -28,19 +26,7 @@
                     @Html.Partial("NewStep2IndicatorMeta")
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="row">
-                    <h5>Indicadores agregados</h5>
-                </div>
-                <div class="col-md-12">
-                    <ul>
-                        @foreach (var indicator in Model.AddedIndicators)
-                        {
-                            <li>@indicator.Item2 <a href="#" onclick="removeIndicator(@indicator.Item1)">Quitar</a></li>
-                        }
-                    </ul>
-                </div>
-            </div>
+            @Html.Partial("NewStep2AddedIndicators")
         </div>
         <div class="row" style="margin-top: 0.5rem;">
             <div class="offset-md-9 col-md-3">
@@ -70,11 +56,6 @@
                 }).done(function (result) {
                     $('#indicatorMetaSection').html(result);
                 });
-            });
-
-            $('#addIndicatorBtn').click(function () {
-                $('#indicatorAdded').val(true);
-                $('#newStep2Form').submit();
             });
         });
     </script>

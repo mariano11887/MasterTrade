@@ -289,6 +289,7 @@
     <Content Include="Views\CryptoPair\Index.cshtml" />
     <Content Include="Views\CryptoPair\Create.cshtml" />
     <Content Include="Views\MyStrategies\NewStep2IndicatorMeta.cshtml" />
+    <Content Include="Views\MyStrategies\NewStep2AddedIndicators.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

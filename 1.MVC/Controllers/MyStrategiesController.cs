@@ -79,57 +79,44 @@ namespace MasterTrade.Controllers
         }
 
         [HttpPost]
-        public ActionResult NewStep2(NewStrategyStep2Model model, bool indicatorAdded, int removedIndicatorId)
+        public ActionResult NewStep2(NewStrategyStep2Model model, int removedIndicatorId)
         {
             ServiceStrategy serviceStrategy = new ServiceStrategy();
             DTOStrategy strategy = serviceStrategy.GetById(model.StrategyId, GetUserId());
 
-            //if (model.IndicatorId > 0 && model.IndicatorId != model.PreviousIndicatorId)
+            DTOIndicator indicator = new DTOIndicator
+            {
+                TypeId = model.IndicatorId
+            };
+
+            model.IndicatorStructure = new ServiceIndicator().GetIndicator(model.IndicatorId);
+            foreach (var meta in model.IndicatorStructure.Meta)
+            {
+                indicator.Metas.Add(new DTOIndicatorMeta
+                {
+                    Name = meta.Name,
+                    Value = Request[meta.HtmlName],
+                    Type = meta.Type
+                });
+            }
+
+            strategy.Indicators.Add(indicator);
+            model.StrategyId = serviceStrategy.Save(strategy);
+
+            return RedirectToAction("NewStep2", "MyStrategies", new { id = model.StrategyId });
+
+
+            //if (removedIndicatorId > 0)
             //{
-            //    model.IndicatorStructure = new ServiceIndicator().GetIndicator(model.IndicatorId);
-            //    ModelState.Remove("PreviousIndicatorId");
-            //    model.PreviousIndicatorId = model.IndicatorId;
+            //    strategy.Indicators.FirstOrDefault(i => i.Id == removedIndicatorId).Removed = true;
+            //    model.StrategyId = serviceStrategy.Save(strategy);
+            //    strategy = serviceStrategy.GetById(model.StrategyId, GetUserId());
+
             //    FillStep2Selects(model, strategy);
             //    return View(model);
             //}
 
-            if (indicatorAdded)
-            {
-                DTOIndicator indicator = new DTOIndicator
-                {
-                    TypeId = model.IndicatorId
-                };
-                
-                //model.IndicatorStructure = new ServiceIndicator().GetIndicator(model.IndicatorId);
-                //foreach (var meta in model.IndicatorStructure.Meta)
-                //{
-                //    indicator.Metas.Add(new DTOIndicatorMeta
-                //    {
-                //        Name = meta.Name,
-                //        Value = Request[meta.HtmlName],
-                //        Type = meta.Type
-                //    });
-                //}
-
-                strategy.Indicators.Add(indicator);
-                model.StrategyId = serviceStrategy.Save(strategy);
-                strategy = serviceStrategy.GetById(model.StrategyId, GetUserId());
-
-                FillStep2Selects(model, strategy);
-                return View(model);
-            }
-
-            if (removedIndicatorId > 0)
-            {
-                strategy.Indicators.FirstOrDefault(i => i.Id == removedIndicatorId).Removed = true;
-                model.StrategyId = serviceStrategy.Save(strategy);
-                strategy = serviceStrategy.GetById(model.StrategyId, GetUserId());
-
-                FillStep2Selects(model, strategy);
-                return View(model);
-            }
-
-            return RedirectToAction("NewStep3", "MyStrategies");
+            //return RedirectToAction("NewStep3", "MyStrategies");
         }
 
         private void FillStep2Selects(NewStrategyStep2Model model, DTOStrategy strategy)
@@ -140,7 +127,7 @@ namespace MasterTrade.Controllers
                 Value = it.Id.ToString(),
                 Text = it.Description
             }).ToList();
-            
+
             model.AddedIndicators = strategy.Indicators.Select(i => new Tuple<int, string>(i.Id, i.ToString())).ToList();
         }
 
