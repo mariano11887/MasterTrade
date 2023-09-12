@@ -76,6 +76,13 @@ namespace _2.Service.Service
 
                 foreach (DTOIndicator indicator in dto.Indicators.Where(i => i.Removed))
                 {
+                    List<IndicatorMeta> indicatorMetas = repositoryIndicatorMeta.GetQuery().Where(im => im.IndicatorId == indicator.Id).ToList();
+                    foreach (IndicatorMeta indicatorMeta in indicatorMetas)
+                    {
+                        repositoryIndicatorMeta.Remove(indicatorMeta);
+                    }
+                    repositoryIndicatorMeta.SaveChanges();
+
                     _3.Repository.Indicator strategyIndicator = repositoryIndicator.GetQuery("IndicatorMetas").First(i => i.Id == indicator.Id);
                     repositoryIndicator.Remove(strategyIndicator);
                     repositoryIndicator.SaveChanges();

@@ -1,14 +1,12 @@
 ﻿@model MasterTrade.Models.NewStrategyStep2Model
-<div class="col-md-6">
-    <div class="row">
-        <h5>Indicadores agregados</h5>
-    </div>
-    <div class="col-md-12">
-        <ul>
-            @foreach (var indicator in Model.AddedIndicators)
-            {
-                <li>@indicator.Item2 <a href="#" onclick="removeIndicator(@indicator.Item1)">Quitar</a></li>
-            }
-        </ul>
-    </div>
+<div class="row">
+    <h5>Indicadores agregados</h5>
+</div>
+<div class="col-md-12">
+    <ul>
+        @foreach (var indicator in Model.AddedIndicators)
+        {
+            <li>@indicator.Item2 <a href="#" onclick="removeIndicator(@indicator.Item1)">Quitar</a></li>
+        }
+    </ul>
 </div>

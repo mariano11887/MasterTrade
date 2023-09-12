@@ -104,31 +104,24 @@ namespace MasterTrade.Controllers
             model.StrategyId = serviceStrategy.Save(strategy);
 
             return RedirectToAction("NewStep2", "MyStrategies", new { id = model.StrategyId });
-
-
-            //if (removedIndicatorId > 0)
-            //{
-            //    strategy.Indicators.FirstOrDefault(i => i.Id == removedIndicatorId).Removed = true;
-            //    model.StrategyId = serviceStrategy.Save(strategy);
-            //    strategy = serviceStrategy.GetById(model.StrategyId, GetUserId());
-
-            //    FillStep2Selects(model, strategy);
-            //    return View(model);
-            //}
-
-            //return RedirectToAction("NewStep3", "MyStrategies");
         }
 
-        private void FillStep2Selects(NewStrategyStep2Model model, DTOStrategy strategy)
+        [HttpPost]
+        public ActionResult RemoveIndicator(int strategyId, int indicatorId)
         {
-            List<DTOIndicatorType> indicatorTypes = new ServiceIndicator().GetIndicatorTypes();
-            model.AllIndicators = indicatorTypes.Select(it => new SelectListItem
-            {
-                Value = it.Id.ToString(),
-                Text = it.Description
-            }).ToList();
+            ServiceStrategy serviceStrategy = new ServiceStrategy();
+            DTOStrategy strategy = serviceStrategy.GetById(strategyId, GetUserId());
 
-            model.AddedIndicators = strategy.Indicators.Select(i => new Tuple<int, string>(i.Id, i.ToString())).ToList();
+            strategy.Indicators.FirstOrDefault(i => i.Id == indicatorId).Removed = true;
+            serviceStrategy.Save(strategy);
+
+            strategy = serviceStrategy.GetById(strategyId, GetUserId());
+            NewStrategyStep2Model model = new NewStrategyStep2Model()
+            {
+                AddedIndicators = strategy.Indicators.Select(i => new Tuple<int, string>(i.Id, i.ToString())).ToList()
+            };
+
+            return PartialView("NewStep2AddedIndicators", model);
         }
 
         public ActionResult NewStep3()
