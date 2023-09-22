@@ -1,7 +1,5 @@
-﻿using _2.Service.Indicator.Interface;
-using _2.Service.Service;
+﻿using _2.Service.Service;
 using _4.DTO;
-using _4.DTO.Enums;
 using MasterTrade.Controllers.Base;
 using MasterTrade.Models;
 using System;
@@ -11,6 +9,7 @@ using System.Web.Mvc;
 
 namespace MasterTrade.Controllers
 {
+    [Authorize]
     public class MyStrategiesController : BaseController
     {
         // GET: MyStrategies

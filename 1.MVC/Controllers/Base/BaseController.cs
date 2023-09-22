@@ -28,7 +28,7 @@ namespace MasterTrade.Controllers.Base
         protected int GetUserId()
         {
             CustomMembershipUser user = (CustomMembershipUser)Membership.GetUser(User.Identity.Name);
-            return user.UserId;
+            return user != null ? user.UserId : 0;
         }
     }
 }
