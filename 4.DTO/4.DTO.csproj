@@ -53,6 +53,7 @@
     <Compile Include="Enums\ExecutionMoment.cs" />
     <Compile Include="Enums\IndicatorMetaDataType.cs" />
     <Compile Include="Enums\IndicatorType.cs" />
+    <Compile Include="Enums\InvestmentOption.cs" />
     <Compile Include="Enums\Role.cs" />
     <Compile Include="Helpers\EnumsHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

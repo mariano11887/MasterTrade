@@ -47,7 +47,7 @@ namespace _2.Service.Service
                 {
                     Name = dto.Name,
                     UserId = dto.UserId,
-                    IsComplete = dto.IsComplete
+                    IsComplete = dto.IsComplete,
                 };
                 repositoryStrategy.Insert(strategy);
             }
@@ -60,6 +60,8 @@ namespace _2.Service.Service
                 }
 
                 strategy.Name = dto.Name;
+                strategy.InvestmentAmount = dto.InvestmentAmount;
+                strategy.InvestmentPercentage = dto.InvestmentPercentage;
                 strategy.IsComplete = dto.IsComplete;
 
                 foreach (DTOIndicator indicator in dto.Indicators.Where(i => i.Id == 0))
@@ -130,6 +132,8 @@ namespace _2.Service.Service
                 Id = s.Id,
                 UserId = s.UserId,
                 Name = s.Name,
+                InvestmentAmount = s.InvestmentAmount,
+                InvestmentPercentage = s.InvestmentPercentage,
                 IsComplete = s.IsComplete,
                 Indicators = s.Indicators.Select(i => new DTOIndicator
                 {

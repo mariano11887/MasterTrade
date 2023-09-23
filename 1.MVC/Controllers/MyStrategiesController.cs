@@ -263,23 +263,38 @@ namespace MasterTrade.Controllers
 
         #region Step 4
 
-        public ActionResult NewStep4()
+        public ActionResult NewStep4(int id)
         {
-            NewStrategyModel model = new NewStrategyModel()
+            NewStrategyStep4Model model = new NewStrategyStep4Model()
             {
+                StrategyId = id,
                 AllInvestOptions = new List<SelectListItem>
                 {
-                    new SelectListItem { Value = "1", Text = "Cantidad fija de dinero" },
-                    new SelectListItem { Value = "2", Text = "Porcentaje del portafolio" }
+                    new SelectListItem { Value = ((int)InvestmentOption.FixedAmount).ToString(), Text = "Cantidad fija de dinero" },
+                    new SelectListItem { Value = ((int)InvestmentOption.PortfolioPercentage).ToString(), Text = "Porcentaje del portafolio" }
                 }
             };
             return View(model);
         }
 
         [HttpPost]
-        public ActionResult NewStep4(NewStrategyModel model)
+        public ActionResult NewStep4(NewStrategyStep4Model model)
         {
-            return RedirectToAction("NewStep5", "MyStrategies");
+            ServiceStrategy serviceStrategy = new ServiceStrategy();
+            DTOStrategy strategy = serviceStrategy.GetById(model.StrategyId, GetUserId());
+
+            if (model.InvestOptionId == (int)InvestmentOption.FixedAmount)
+            {
+                strategy.InvestmentAmount = model.InvestAmount;
+            }
+            else if (model.InvestOptionId == (int)InvestmentOption.PortfolioPercentage)
+            {
+                strategy.InvestmentPercentage = model.InvestPercentage;
+            }
+
+            model.StrategyId = serviceStrategy.Save(strategy);
+
+            return RedirectToAction("NewStep5", "MyStrategies", new { id = model.StrategyId });
         }
 
         #endregion

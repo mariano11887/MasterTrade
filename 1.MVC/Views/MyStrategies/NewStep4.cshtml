@@ -1,4 +1,5 @@
-﻿@model MasterTrade.Models.NewStrategyModel
+﻿@model MasterTrade.Models.NewStrategyStep4Model
+@using _4.DTO.Enums
 @{
     ViewBag.Title = "Nueva estrategia - Paso 4";
 }
@@ -9,6 +10,7 @@
     @using (Html.BeginForm("NewStep4", "MyStrategies", FormMethod.Post, new { role = "form" }))
     {
         @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.StrategyId)
         <hr />
         @Html.ValidationSummary("", new { @class = "text-danger" })
         <div class="row">
@@ -17,10 +19,17 @@
                 @Html.DropDownListFor(m => m.InvestOptionId, Model.AllInvestOptions, new { @class = "form-control" })
             </div>
         </div>
-        <div class="row">
+        <div class="row" id="investmentAmountRow">
             @Html.LabelFor(m => m.InvestAmount, new { @class = "col-md-3 col-form-label" })
             <div class="col-md-9">
-                @Html.TextBoxFor(m => m.InvestAmount, new { @class = "form-control" })
+                @*@Html.TextBoxFor(m => m.InvestAmount, "{0:#.#}", new { @class = "form-control" })*@
+                @Html.EditorFor(m => m.InvestAmount)
+            </div>
+        </div>
+        <div class="row" id="investmentPercentageRow">
+            @Html.LabelFor(m => m.InvestPercentage, new { @class = "col-md-3 col-form-label" })
+            <div class="col-md-9">
+                @Html.TextBoxFor(m => m.InvestPercentage, "{0:#.#}", new { @class = "form-control" })
             </div>
         </div>
         <div class="row" style="margin-top: 0.5rem;">
@@ -31,3 +40,25 @@
         </div>
     }
 </main>
+@section Scripts
+{
+    <script>
+        function refreshFieldsVisibility() {
+            if ($('#@Html.IdFor(m => m.InvestOptionId)').val() == "@((int)InvestmentOption.FixedAmount)") {
+                $('#investmentAmountRow').show();
+                $('#investmentPercentageRow').hide();
+            } else {
+                $('#investmentAmountRow').hide();
+                $('#investmentPercentageRow').show();
+            }
+        }
+
+        $(function () {
+            refreshFieldsVisibility();
+
+            $('#@Html.IdFor(m => m.InvestOptionId)').change(function () {
+                refreshFieldsVisibility();
+            });
+        });
+    </script>
+}
