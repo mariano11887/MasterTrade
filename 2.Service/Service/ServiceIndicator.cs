@@ -1,13 +1,22 @@
 ﻿using _2.Service.Indicator;
 using _2.Service.Indicator.Interface;
+using _3.Repository.Repository;
 using _4.DTO;
 using _4.DTO.Enums;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace _2.Service.Service
 {
     public class ServiceIndicator
     {
+        private readonly RepositoryIndicator repositoryIndicator;
+
+        public ServiceIndicator()
+        {
+            repositoryIndicator = new RepositoryIndicator();
+        }
+
         public List<DTOIndicatorType> GetIndicatorTypes()
         {
             return new List<DTOIndicatorType>
@@ -39,6 +48,12 @@ namespace _2.Service.Service
             }
 
             return indicator;
+        }
+
+        public IIndicator GetIndicatorById(int indicatorId)
+        {
+            int indicatorTypeId = repositoryIndicator.GetQuery().Where(i => i.Id == indicatorId).Select(i => i.TypeId).FirstOrDefault();
+            return GetIndicator(indicatorTypeId);
         }
     }
 }

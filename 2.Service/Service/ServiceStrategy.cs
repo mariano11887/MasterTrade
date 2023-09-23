@@ -1,6 +1,7 @@
 ﻿using _3.Repository;
 using _3.Repository.Repository;
 using _4.DTO;
+using _4.DTO.Enums;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,13 +11,13 @@ namespace _2.Service.Service
     {
         private readonly RepositoryStrategy repositoryStrategy;
         private readonly RepositoryIndicator repositoryIndicator;
-        private readonly RepositoryIndicatorMeta repositoryIndicatorMeta;
+        private readonly RepositoryIndicatorConfiguration repositoryIndicatorConfiguration;
 
         public ServiceStrategy()
         {
             repositoryStrategy = new RepositoryStrategy();
             repositoryIndicator = new RepositoryIndicator();
-            repositoryIndicatorMeta = new RepositoryIndicatorMeta();
+            repositoryIndicatorConfiguration = new RepositoryIndicatorConfiguration();
         }
 
         public List<DTOStrategy> GetUserStrategies(int userId)
@@ -51,7 +52,7 @@ namespace _2.Service.Service
             }
             else
             {
-                strategy = repositoryStrategy.GetQuery("Indicators.IndicatorMetas").FirstOrDefault(s => s.Id == dto.Id && s.UserId == dto.UserId);
+                strategy = repositoryStrategy.GetQuery("Indicators.IndicatorConfigurations").FirstOrDefault(s => s.Id == dto.Id && s.UserId == dto.UserId);
                 if (strategy == null)
                 {
                     return 0;
@@ -65,27 +66,47 @@ namespace _2.Service.Service
                     strategy.Indicators.Add(new _3.Repository.Indicator
                     {
                         TypeId = indicator.TypeId,
-                        IndicatorMetas = indicator.Metas.Select(m => new IndicatorMeta
+                        IndicatorConfigurations = indicator.Configurations.Select(m => new IndicatorConfiguration
                         {
                             Name = m.Name,
                             Value = m.Value,
-                            IndicatorMetaDataTypeId = (int)m.Type
+                            DataTypeId = (int)m.Type
                         }).ToList()
                     });
                 }
 
                 foreach (DTOIndicator indicator in dto.Indicators.Where(i => i.Removed))
                 {
-                    List<IndicatorMeta> indicatorMetas = repositoryIndicatorMeta.GetQuery().Where(im => im.IndicatorId == indicator.Id).ToList();
-                    foreach (IndicatorMeta indicatorMeta in indicatorMetas)
+                    List<IndicatorConfiguration> indicatorConfigurations = repositoryIndicatorConfiguration.GetQuery().Where(im => im.IndicatorId == indicator.Id).ToList();
+                    foreach (IndicatorConfiguration indicatorConfiguration in indicatorConfigurations)
                     {
-                        repositoryIndicatorMeta.Remove(indicatorMeta);
+                        repositoryIndicatorConfiguration.Remove(indicatorConfiguration);
                     }
-                    repositoryIndicatorMeta.SaveChanges();
+                    repositoryIndicatorConfiguration.SaveChanges();
 
-                    _3.Repository.Indicator strategyIndicator = repositoryIndicator.GetQuery("IndicatorMetas").First(i => i.Id == indicator.Id);
+                    _3.Repository.Indicator strategyIndicator = repositoryIndicator.GetQuery("IndicatorConfigurations").First(i => i.Id == indicator.Id);
                     repositoryIndicator.Remove(strategyIndicator);
                     repositoryIndicator.SaveChanges();
+                }
+
+                foreach (DTOStrategyCondition condition in dto.Conditions)
+                {
+                    strategy.StrategyConditions.Add(new StrategyCondition
+                    {
+                        ExecutionMomentId = (int)condition.ExecutionMoment,
+                        FirstIndicatorMeta = new IndicatorMeta
+                        {
+                            IndicatorId = condition.FirstIndicatorMeta.IndicatorId,
+                            Name = condition.FirstIndicatorMeta.Name
+                        },
+                        SecondIndicatorMeta = new IndicatorMeta
+                        {
+                            IndicatorId = condition.SecondIndicatorMeta.IndicatorId,
+                            Name = condition.SecondIndicatorMeta.Name
+                        },
+                        ComparerId = (int)condition.Comparer,
+                        IsOpenCondition = condition.IsOpenCondition
+                    });
                 }
             }
 
@@ -96,7 +117,7 @@ namespace _2.Service.Service
 
         public DTOStrategy GetById(int id, int userId)
         {
-            DTOStrategy strategy = repositoryStrategy.GetQuery("Indicators.IndicatorMetas").Where(s => s.Id == id && s.UserId == userId).Select(s => new DTOStrategy
+            DTOStrategy strategy = repositoryStrategy.GetQuery("Indicators.IndicatorConfigurations").Where(s => s.Id == id && s.UserId == userId).Select(s => new DTOStrategy
             {
                 Id = s.Id,
                 UserId = s.UserId,
@@ -107,12 +128,27 @@ namespace _2.Service.Service
                     Id = i.Id,
                     Name = i.IndicatorType.Description,
                     TypeId = i.TypeId,
-                    Metas = i.IndicatorMetas.Select(im => new DTOIndicatorMeta
+                    Configurations = i.IndicatorConfigurations.Select(im => new DTOIndicatorConfiguration
                     {
                         Name = im.Name,
                         Value = im.Value,
-                        Type = (_4.DTO.Enums.IndicatorMetaDataType)im.IndicatorMetaDataTypeId
+                        Type = (_4.DTO.Enums.IndicatorMetaDataType)im.DataTypeId
                     }).ToList()
+                }).ToList(),
+                Conditions = s.StrategyConditions.Select(sc => new DTOStrategyCondition
+                {
+                    Id = sc.Id,
+                    ExecutionMoment = (_4.DTO.Enums.ExecutionMoment)sc.ExecutionMomentId,
+                    FirstIndicatorMeta = new DTOIndicatorMeta
+                    {
+                        Name = sc.FirstIndicatorMeta.Name
+                    },
+                    SecondIndicatorMeta = new DTOIndicatorMeta
+                    {
+                        Name = sc.SecondIndicatorMeta.Name
+                    },
+                    Comparer = (_4.DTO.Enums.Comparer)sc.ComparerId,
+                    IsOpenCondition = sc.IsOpenCondition
                 }).ToList()
             }).FirstOrDefault();
             

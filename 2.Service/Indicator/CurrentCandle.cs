@@ -1,4 +1,5 @@
 ﻿using _2.Service.Indicator.Interface;
+using _4.DTO.Enums;
 using System.Collections.Generic;
 
 namespace _2.Service.Indicator
@@ -17,7 +18,41 @@ namespace _2.Service.Indicator
         {
             get
             {
-                return new List<IndicatorMeta>();
+                return new List<IndicatorMeta>
+                {
+                    new IndicatorMeta
+                    {
+                        Name = "Apertura",
+                        HtmlName = "Open",
+                        Type = IndicatorMetaDataType.Double
+                    },
+                    new IndicatorMeta
+                    {
+                        Name = "Cierre",
+                        HtmlName = "Close",
+                        Type = IndicatorMetaDataType.Double
+                    },
+                    new IndicatorMeta
+                    {
+                        Name = "Máximo",
+                        HtmlName = "High",
+                        Type = IndicatorMetaDataType.Double
+                    },
+                    new IndicatorMeta
+                    {
+                        Name = "Mínimo",
+                        HtmlName = "Low",
+                        Type = IndicatorMetaDataType.Double
+                    }
+                };
+            }
+        }
+
+        public List<IndicatorConfiguration> Configuration
+        {
+            get
+            {
+                return new List<IndicatorConfiguration>();
             }
         }
     }

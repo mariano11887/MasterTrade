@@ -68,7 +68,13 @@
     <Compile Include="CryptoPair.cs">
       <DependentUpon>MasterTradeModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ExecutionMoment.cs">
+      <DependentUpon>MasterTradeModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Indicator.cs">
+      <DependentUpon>MasterTradeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IndicatorConfiguration.cs">
       <DependentUpon>MasterTradeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="IndicatorMeta.cs">
@@ -106,6 +112,7 @@
     <Compile Include="Repository\RepositoryCandle.cs" />
     <Compile Include="Repository\RepositoryCryptoPair.cs" />
     <Compile Include="Repository\RepositoryIndicator.cs" />
+    <Compile Include="Repository\RepositoryIndicatorConfiguration.cs" />
     <Compile Include="Repository\RepositoryIndicatorMeta.cs" />
     <Compile Include="Repository\RepositoryPermission.cs" />
     <Compile Include="Repository\RepositoryStrategy.cs" />

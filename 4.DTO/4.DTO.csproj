@@ -42,12 +42,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DTOIndicator.cs" />
+    <Compile Include="DTOIndicatorConfiguration.cs" />
     <Compile Include="DTOIndicatorMeta.cs" />
     <Compile Include="DTOIndicatorType.cs" />
     <Compile Include="DTORole.cs" />
     <Compile Include="DTOStrategy.cs" />
+    <Compile Include="DTOStrategyCondition.cs" />
     <Compile Include="DTOUser.cs" />
     <Compile Include="Enums\Comparer.cs" />
+    <Compile Include="Enums\ExecutionMoment.cs" />
     <Compile Include="Enums\IndicatorMetaDataType.cs" />
     <Compile Include="Enums\IndicatorType.cs" />
     <Compile Include="Enums\Role.cs" />

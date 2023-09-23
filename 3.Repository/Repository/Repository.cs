@@ -12,12 +12,12 @@ namespace _3.Repository.Repository
             context = new MasterTradeEntities();
         }
 
-        public IQueryable<TEntity> GetQuery(string includes = "")
+        public IQueryable<TEntity> GetQuery(params string[] includes)
         {
             IQueryable<TEntity> query = context.Set<TEntity>().AsQueryable();
-            if (!string.IsNullOrEmpty(includes))
+            foreach (string include in includes)
             {
-                query = query.Include(includes);
+                query = query.Include(include);
             }
 
             return query;

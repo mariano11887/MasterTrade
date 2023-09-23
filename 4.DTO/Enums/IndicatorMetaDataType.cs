@@ -2,6 +2,7 @@
 {
     public enum IndicatorMetaDataType
     {
-        Integer = 1
+        Integer = 1,
+        Double = 2
     }
 }

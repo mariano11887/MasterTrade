@@ -10,14 +10,15 @@ namespace _4.DTO
         public int TypeId { get; set; }
         public bool Removed { get; set; }
         public List<DTOIndicatorMeta> Metas { get; set; } = new List<DTOIndicatorMeta>();
+        public List<DTOIndicatorConfiguration> Configurations { get; set; } = new List<DTOIndicatorConfiguration>();
 
         public override string ToString()
         {
             string result = Name;
 
-            if (Metas.Any())
+            if (Configurations.Any())
             {
-                result += " (" + string.Join(", ", Metas.Select(m => m.Value)) + ")";
+                result += " (" + string.Join(", ", Configurations.Select(m => m.Value)) + ")";
             }
 
             return result;

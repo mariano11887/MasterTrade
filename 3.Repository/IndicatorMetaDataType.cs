@@ -17,12 +17,15 @@ namespace _3.Repository
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public IndicatorMetaDataType()
         {
+            this.IndicatorConfigurations = new HashSet<IndicatorConfiguration>();
             this.IndicatorMetas = new HashSet<IndicatorMeta>();
         }
     
         public int Id { get; set; }
         public string Description { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<IndicatorConfiguration> IndicatorConfigurations { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<IndicatorMeta> IndicatorMetas { get; set; }
     }

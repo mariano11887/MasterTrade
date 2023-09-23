@@ -10,5 +10,6 @@ namespace _4.DTO
         public bool IsComplete { get; set; }
 
         public List<DTOIndicator> Indicators { get; set; } = new List<DTOIndicator>();
+        public List<DTOStrategyCondition> Conditions { get; set; } = new List<DTOStrategyCondition>();
     }
 }

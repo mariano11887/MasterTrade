@@ -1,0 +1,15 @@
+﻿@model MasterTrade.Models.NewStrategyStep3Model
+@if (Model.Indicator2Elements != null)
+{
+    <div class="row">
+        @Html.LabelFor(m => m.Indicator2Element, new { @class = "col-md-3 col-form-label" })
+        <div class="col-md-9">
+            @Html.DropDownListFor(m => m.Indicator2Element, Model.Indicator2Elements, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="offset-md-10 col-md-2">
+            <input type="submit" value="Agregar" class="btn btn-outline-dark lightBrownBtn" />
+        </div>
+    </div>
+}

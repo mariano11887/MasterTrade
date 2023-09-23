@@ -20,10 +20,12 @@ namespace _3.Repository
         public int SecondIndicatorMetaId { get; set; }
         public int ComparerId { get; set; }
         public bool IsOpenCondition { get; set; }
+        public int ExecutionMomentId { get; set; }
     
         public virtual Comparer Comparer { get; set; }
-        public virtual IndicatorMeta IndicatorMeta { get; set; }
-        public virtual IndicatorMeta IndicatorMeta1 { get; set; }
         public virtual Strategy Strategy { get; set; }
+        public virtual ExecutionMoment ExecutionMoment { get; set; }
+        public virtual IndicatorMeta FirstIndicatorMeta { get; set; }
+        public virtual IndicatorMeta SecondIndicatorMeta { get; set; }
     }
 }

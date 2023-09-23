@@ -10,8 +10,6 @@
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(m => m.StrategyId)
-        @Html.HiddenFor(m => m.PreviousIndicatorId)
-        @Html.Hidden("removedIndicatorId", 0)
         <hr />
         @Html.ValidationSummary("", new { @class = "text-danger" })
         <div class="row">
@@ -47,7 +45,7 @@
                 url: '@Url.Action("RemoveIndicator")',
                 type: 'POST',
                 data: {
-                    strategyId: function () { return $('#@Html.IdFor(m => m.StrategyId)').val(); },
+                    strategyId: @Html.IdFor(m => m.StrategyId),
                     indicatorId: id
                 }
             }).done(function (result) {

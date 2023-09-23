@@ -12,26 +12,18 @@ namespace _3.Repository
     using System;
     using System.Collections.Generic;
     
-    public partial class IndicatorMeta
+    public partial class ExecutionMoment
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public IndicatorMeta()
+        public ExecutionMoment()
         {
             this.StrategyConditions = new HashSet<StrategyCondition>();
-            this.StrategyConditions1 = new HashSet<StrategyCondition>();
         }
     
         public int Id { get; set; }
-        public int IndicatorId { get; set; }
-        public string Name { get; set; }
-        public string Value { get; set; }
-        public Nullable<int> IndicatorMetaDataTypeId { get; set; }
+        public string Description { get; set; }
     
-        public virtual Indicator Indicator { get; set; }
-        public virtual IndicatorMetaDataType IndicatorMetaDataType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StrategyCondition> StrategyConditions { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<StrategyCondition> StrategyConditions1 { get; set; }
     }
 }

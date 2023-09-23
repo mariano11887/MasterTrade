@@ -1,4 +1,4 @@
-﻿@model MasterTrade.Models.NewStrategyModel
+﻿@model MasterTrade.Models.NewStrategyStep3Model
 @{
     ViewBag.Title = "Nueva estrategia - Paso 3";
 }
@@ -9,6 +9,7 @@
     @using (Html.BeginForm("NewStep3", "MyStrategies", FormMethod.Post, new { role = "form" }))
     {
         @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.StrategyId)
         <hr />
         @Html.ValidationSummary("", new { @class = "text-danger" })
         <div class="row">
@@ -22,37 +23,11 @@
                 <div class="row">
                     @Html.LabelFor(m => m.IndicatorId1, new { @class = "col-md-3 col-form-label" })
                     <div class="col-md-9">
-                        @Html.DropDownListFor(m => m.IndicatorId1, Model.StrategyIndicators, new { @class = "form-control" })
+                        @Html.DropDownListFor(m => m.IndicatorId1, Model.StrategyIndicators, "Seleccione...", new { @class = "form-control" })
                     </div>
                 </div>
-                <div class="row">
-                    @Html.LabelFor(m => m.MovingAverageValue, new { @class = "col-md-3 col-form-label" })
-                    <div class="col-md-9">
-                        @Html.DropDownListFor(m => m.MovingAverageValue, Model.MovingAverageValues, new { @class = "form-control" })
-                    </div>
-                </div>
-                <div class="row">
-                    @Html.LabelFor(m => m.ConditionId, new { @class = "col-md-3 col-form-label" })
-                    <div class="col-md-9">
-                        @Html.DropDownListFor(m => m.ConditionId, Model.AllConditions, new { @class = "form-control" })
-                    </div>
-                </div>
-                <div class="row">
-                    @Html.LabelFor(m => m.IndicatorId2, new { @class = "col-md-3 col-form-label" })
-                    <div class="col-md-9">
-                        @Html.DropDownListFor(m => m.IndicatorId2, Model.StrategyIndicators, new { @class = "form-control" })
-                    </div>
-                </div>
-                <div class="row">
-                    @Html.LabelFor(m => m.MovingAverageValue, new { @class = "col-md-3 col-form-label" })
-                    <div class="col-md-9">
-                        @Html.DropDownListFor(m => m.MovingAverageValue, Model.MovingAverageValues, new { @class = "form-control" })
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="offset-md-10 col-md-2">
-                        <input type="button" value="Agregar" class="btn btn-outline-dark lightBrownBtn" />
-                    </div>
+                <div id="conditionsSection">
+                    @Html.Partial("NewStep3Conditions")
                 </div>
             </div>
             <div class="col-md-6">
@@ -74,3 +49,37 @@
         </div>
     }
 </main>
+@section Scripts
+{
+    <script>
+        function assignIndicator2Change() {
+            $('#@Html.IdFor(m => m.IndicatorId2)').change(function () {
+                $.ajax({
+                    url: '@Url.Action("LoadIndicator2MetaStep3")',
+                    type: 'GET',
+                    data: {
+                        indicatorId: function () { return $('#@Html.IdFor(m => m.IndicatorId2)').val(); }
+                    }
+                }).done(function (result) {
+                    $('#conditions2Section').html(result);
+                });
+            });
+        }
+
+        $(function () {
+            $('#@Html.IdFor(m => m.IndicatorId1)').change(function () {
+                $.ajax({
+                    url: '@Url.Action("LoadIndicator1MetaStep3")',
+                    type: 'GET',
+                    data: {
+                        indicatorId: function () { return $('#@Html.IdFor(m => m.IndicatorId1)').val(); },
+                        strategyId: @Model.StrategyId
+                    }
+                }).done(function (result) {
+                    $('#conditionsSection').html(result);
+                    assignIndicator2Change();
+                });
+            });
+        });
+    </script>
+}

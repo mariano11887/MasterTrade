@@ -22,6 +22,22 @@ namespace _2.Service.Indicator
                 {
                     new IndicatorMeta
                     {
+                        Name = "Valor",
+                        HtmlName = "Value",
+                        Type = IndicatorMetaDataType.Double
+                    }
+                };
+            }
+        }
+
+        public List<IndicatorConfiguration> Configuration
+        {
+            get
+            {
+                return new List<IndicatorConfiguration>
+                {
+                    new IndicatorConfiguration
+                    {
                         Name = "Longitud",
                         HtmlName = "Length",
                         Type = IndicatorMetaDataType.Integer

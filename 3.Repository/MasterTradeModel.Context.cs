@@ -32,7 +32,6 @@ namespace _3.Repository
         public virtual DbSet<Comparer> Comparers { get; set; }
         public virtual DbSet<CryptoPair> CryptoPairs { get; set; }
         public virtual DbSet<Indicator> Indicators { get; set; }
-        public virtual DbSet<IndicatorMeta> IndicatorMetas { get; set; }
         public virtual DbSet<IndicatorMetaDataType> IndicatorMetaDataTypes { get; set; }
         public virtual DbSet<IndicatorType> IndicatorTypes { get; set; }
         public virtual DbSet<Permission> Permissions { get; set; }
@@ -42,5 +41,8 @@ namespace _3.Repository
         public virtual DbSet<Supplier> Suppliers { get; set; }
         public virtual DbSet<Temporality> Temporalities { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<IndicatorConfiguration> IndicatorConfigurations { get; set; }
+        public virtual DbSet<ExecutionMoment> ExecutionMoments { get; set; }
+        public virtual DbSet<IndicatorMeta> IndicatorMetas { get; set; }
     }
 }
