@@ -295,6 +295,7 @@
     <Content Include="Views\MyStrategies\NewStep2AddedIndicators.cshtml" />
     <Content Include="Views\MyStrategies\NewStep3Conditions.cshtml" />
     <Content Include="Views\MyStrategies\NewStep3Conditions2.cshtml" />
+    <Content Include="Views\MyStrategies\NewStep3AddedConditions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -30,21 +30,14 @@
                     @Html.Partial("NewStep3Conditions")
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="row">
-                    <h5>Condiciones agregadas</h5>
-                </div>
-                <div class="col-md-12">
-                    <ul>
-                        <li>Valor de Media móvil (5) es mayor que Valor de Media móvil (10) <a href="#">Quitar</a></li>
-                    </ul>
-                </div>
+            <div class="col-md-6" id="addedConditionsSection">
+                @Html.Partial("NewStep3AddedConditions")
             </div>
         </div>
         <div class="row" style="margin-top: 0.5rem;">
             <div class="offset-md-9 col-md-3">
                 @Html.ActionLink("Cancelar", "Index", "MyStrategies", new { area = "" }, new { @class = "btn btn-outline-dark" })
-                <input type="submit" value="Siguiente" class="btn btn-outline-dark lightBrownBtn" />
+                @Html.ActionLink("Siguiente", "NewStep4", "MyStrategies", new { area = "", id = Model.StrategyId }, new { @class = "btn btn-outline-dark lightBrownBtn" })
             </div>
         </div>
     }
@@ -63,6 +56,19 @@
                 }).done(function (result) {
                     $('#conditions2Section').html(result);
                 });
+            });
+        }
+
+        function removeCondition(id) {
+            $.ajax({
+                url: '@Url.Action("RemoveOpenCondition")',
+                type: 'POST',
+                data: {
+                    strategyId: @Model.StrategyId,
+                    conditionId: id
+                }
+            }).done(function (result) {
+                $('#addedConditionsSection').html(result);
             });
         }
 

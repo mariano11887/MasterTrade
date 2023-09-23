@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Web.Mvc;
 
@@ -25,6 +26,8 @@ namespace MasterTrade.Models
 
         [DisplayName("Elemento del indicador")]
         public string Indicator2Element { get; set; }
+
+        public List<Tuple<int, string>> AddedConditions { get; set; }
 
         public List<SelectListItem> AllExecutionMoments { get; set; }
         public List<SelectListItem> StrategyIndicators { get; set; }

@@ -4,7 +4,7 @@ namespace _4.DTO
 {
     public class DTOIndicatorMeta
     {
-        public int IndicatorId { get; set; }
+        public DTOIndicator Indicator { get; set; }
         public string Name { get; set; }
         public string Value { get; set; }
         public IndicatorMetaDataType Type { get; set; }

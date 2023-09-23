@@ -2,6 +2,7 @@
 using _2.Service.Service;
 using _4.DTO;
 using _4.DTO.Enums;
+using _4.DTO.Helpers;
 using MasterTrade.Controllers.Base;
 using MasterTrade.Models;
 using System;
@@ -152,7 +153,8 @@ namespace MasterTrade.Controllers
                 {
                     Value = i.Id.ToString(),
                     Text = i.ToString()
-                }).ToList()
+                }).ToList(),
+                AddedConditions = strategy.Conditions.Select(c => new Tuple<int, string>(c.Id, c.ToString())).ToList()
             };
             return View(model);
         }
@@ -165,11 +167,11 @@ namespace MasterTrade.Controllers
             {
                 AllConditions = new List<SelectListItem>
                 {
-                    new SelectListItem { Value = ((int)Comparer.Equal).ToString(), Text = "igual a" },
-                    new SelectListItem { Value = ((int)Comparer.Lower).ToString(), Text = "menor que" },
-                    new SelectListItem { Value = ((int)Comparer.LowerOrEqual).ToString(), Text = "menor o igual a" },
-                    new SelectListItem { Value = ((int)Comparer.Greater).ToString(), Text = "mayor que" },
-                    new SelectListItem { Value = ((int)Comparer.GreaterOrEqual).ToString(), Text = "mayor o igual a" }
+                    new SelectListItem { Value = ((int)Comparer.Equal).ToString(), Text = EnumsHelper.GetDescription(Comparer.Equal) },
+                    new SelectListItem { Value = ((int)Comparer.Lower).ToString(), Text = EnumsHelper.GetDescription(Comparer.Lower) },
+                    new SelectListItem { Value = ((int)Comparer.LowerOrEqual).ToString(), Text = EnumsHelper.GetDescription(Comparer.LowerOrEqual) },
+                    new SelectListItem { Value = ((int)Comparer.Greater).ToString(), Text = EnumsHelper.GetDescription(Comparer.Greater) },
+                    new SelectListItem { Value = ((int)Comparer.GreaterOrEqual).ToString(), Text = EnumsHelper.GetDescription(Comparer.GreaterOrEqual) }
                 },
                 StrategyIndicators = strategy.Indicators.Select(i => new SelectListItem
                 {
@@ -221,12 +223,12 @@ namespace MasterTrade.Controllers
                 ExecutionMoment = (ExecutionMoment)model.ExecutionMomentId,
                 FirstIndicatorMeta = new DTOIndicatorMeta
                 {
-                    IndicatorId = model.IndicatorId1,
+                    Indicator = new DTOIndicator { Id = model.IndicatorId1 },
                     Name = model.Indicator1Element
                 },
                 SecondIndicatorMeta = new DTOIndicatorMeta
                 {
-                    IndicatorId = model.IndicatorId2,
+                    Indicator = new DTOIndicator { Id = model.IndicatorId2 },
                     Name = model.Indicator2Element
                 },
                 Comparer = (Comparer)model.ConditionId,
@@ -237,6 +239,24 @@ namespace MasterTrade.Controllers
             model.StrategyId = serviceStrategy.Save(strategy);
 
             return RedirectToAction("NewStep3", "MyStrategies", new { id = model.StrategyId });
+        }
+
+        [HttpPost]
+        public ActionResult RemoveOpenCondition(int strategyId, int conditionId)
+        {
+            ServiceStrategy serviceStrategy = new ServiceStrategy();
+            DTOStrategy strategy = serviceStrategy.GetById(strategyId, GetUserId());
+
+            strategy.Conditions.FirstOrDefault(c => c.Id == conditionId).Removed = true;
+            serviceStrategy.Save(strategy);
+
+            strategy = serviceStrategy.GetById(strategyId, GetUserId());
+            NewStrategyStep3Model model = new NewStrategyStep3Model()
+            {
+                AddedConditions = strategy.Conditions.Select(c => new Tuple<int, string>(c.Id, c.ToString())).ToList()
+            };
+
+            return PartialView("NewStep3AddedConditions", model);
         }
 
         #endregion
