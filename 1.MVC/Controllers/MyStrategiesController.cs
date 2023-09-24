@@ -154,7 +154,7 @@ namespace MasterTrade.Controllers
                     Value = i.Id.ToString(),
                     Text = i.ToString()
                 }).ToList(),
-                AddedConditions = strategy.Conditions.Select(c => new Tuple<int, string>(c.Id, c.ToString())).ToList()
+                AddedConditions = strategy.Conditions.Where(c => c.IsOpenCondition).Select(c => new Tuple<int, string>(c.Id, c.ToString())).ToList()
             };
             return View(model);
         }
@@ -327,39 +327,127 @@ namespace MasterTrade.Controllers
 
         #region Step 5
 
-        public ActionResult NewStep5()
+        public ActionResult NewStep5(int id)
         {
-            NewStrategyStep3Model model = new NewStrategyStep3Model()
+            ServiceStrategy serviceStrategy = new ServiceStrategy();
+            DTOStrategy strategy = serviceStrategy.GetById(id, GetUserId());
+
+            NewStrategyStep5Model model = new NewStrategyStep5Model()
             {
+                StrategyId = id,
                 AllExecutionMoments = new List<SelectListItem>
                 {
-                    new SelectListItem { Value = "1", Text = "Cierre de la vela" },
-                    new SelectListItem { Value = "2", Text = "Apertura de la vela" }
+                    new SelectListItem { Value = ((int)ExecutionMoment.CandleClose).ToString(), Text = "Cierre de la vela" },
+                    new SelectListItem { Value = ((int)ExecutionMoment.CandleOpen).ToString(), Text = "Apertura de la vela" }
                 },
-                StrategyIndicators = new List<SelectListItem>
+                StrategyIndicators = strategy.Indicators.Select(i => new SelectListItem
                 {
-                    new SelectListItem { Value = "1", Text = "Media móvil (5)" },
-                    new SelectListItem { Value = "2", Text = "Media móvil (10)" },
-                    new SelectListItem { Value = "3", Text = "Media móvil (20)" }
-                },
-                Indicator1Elements = new List<SelectListItem>
-                {
-                    new SelectListItem { Value = "1", Text = "Valor" }
-                },
-                AllConditions = new List<SelectListItem>
-                {
-                    new SelectListItem { Value = "1", Text = "mayor que" },
-                    new SelectListItem { Value = "2", Text = "igual a" },
-                    new SelectListItem { Value = "3", Text = "menor que" }
-                }
+                    Value = i.Id.ToString(),
+                    Text = i.ToString()
+                }).ToList(),
+                AddedConditions = strategy.Conditions.Where(c => !c.IsOpenCondition).Select(c => new Tuple<int, string>(c.Id, c.ToString())).ToList()
             };
             return View(model);
         }
 
-        [HttpPost]
-        public ActionResult NewStep5(NewStrategyModel model)
+        public ActionResult LoadIndicator1MetaStep5(int? indicatorId, int strategyId)
         {
-            return RedirectToAction("NewConfirmation", "MyStrategies");
+            DTOStrategy strategy = new ServiceStrategy().GetById(strategyId, GetUserId());
+
+            NewStrategyStep5Model model = new NewStrategyStep5Model()
+            {
+                AllConditions = new List<SelectListItem>
+                {
+                    new SelectListItem { Value = ((int)Comparer.Equal).ToString(), Text = EnumsHelper.GetDescription(Comparer.Equal) },
+                    new SelectListItem { Value = ((int)Comparer.Lower).ToString(), Text = EnumsHelper.GetDescription(Comparer.Lower) },
+                    new SelectListItem { Value = ((int)Comparer.LowerOrEqual).ToString(), Text = EnumsHelper.GetDescription(Comparer.LowerOrEqual) },
+                    new SelectListItem { Value = ((int)Comparer.Greater).ToString(), Text = EnumsHelper.GetDescription(Comparer.Greater) },
+                    new SelectListItem { Value = ((int)Comparer.GreaterOrEqual).ToString(), Text = EnumsHelper.GetDescription(Comparer.GreaterOrEqual) }
+                },
+                StrategyIndicators = strategy.Indicators.Select(i => new SelectListItem
+                {
+                    Value = i.Id.ToString(),
+                    Text = i.ToString()
+                }).ToList()
+            };
+
+            if (indicatorId.HasValue)
+            {
+                IIndicator indicator = new ServiceIndicator().GetIndicatorById(indicatorId.Value);
+
+                model.Indicator1Elements = indicator.Meta.Select(im => new SelectListItem
+                {
+                    Value = im.Name,
+                    Text = im.Name
+                }).ToList();
+            }
+
+            return PartialView("NewStep5Conditions", model);
+        }
+
+        public ActionResult LoadIndicator2MetaStep5(int? indicatorId)
+        {
+            NewStrategyStep5Model model = new NewStrategyStep5Model();
+
+            if (indicatorId.HasValue)
+            {
+                IIndicator indicator = new ServiceIndicator().GetIndicatorById(indicatorId.Value);
+
+                model.Indicator2Elements = indicator.Meta.Select(im => new SelectListItem
+                {
+                    Value = im.Name,
+                    Text = im.Name
+                }).ToList();
+            }
+
+            return PartialView("NewStep5Conditions2", model);
+        }
+
+        [HttpPost]
+        public ActionResult NewStep5(NewStrategyStep5Model model)
+        {
+            ServiceStrategy serviceStrategy = new ServiceStrategy();
+            DTOStrategy strategy = serviceStrategy.GetById(model.StrategyId, GetUserId());
+
+            DTOStrategyCondition strategyCondition = new DTOStrategyCondition
+            {
+                ExecutionMoment = (ExecutionMoment)model.ExecutionMomentId,
+                FirstIndicatorMeta = new DTOIndicatorMeta
+                {
+                    Indicator = new DTOIndicator { Id = model.IndicatorId1 },
+                    Name = model.Indicator1Element
+                },
+                SecondIndicatorMeta = new DTOIndicatorMeta
+                {
+                    Indicator = new DTOIndicator { Id = model.IndicatorId2 },
+                    Name = model.Indicator2Element
+                },
+                Comparer = (Comparer)model.ConditionId,
+                IsOpenCondition = false
+            };
+
+            strategy.Conditions.Add(strategyCondition);
+            model.StrategyId = serviceStrategy.Save(strategy);
+
+            return RedirectToAction("NewStep5", "MyStrategies", new { id = model.StrategyId });
+        }
+
+        [HttpPost]
+        public ActionResult RemoveCloseCondition(int strategyId, int conditionId)
+        {
+            ServiceStrategy serviceStrategy = new ServiceStrategy();
+            DTOStrategy strategy = serviceStrategy.GetById(strategyId, GetUserId());
+
+            strategy.Conditions.FirstOrDefault(c => c.Id == conditionId).Removed = true;
+            serviceStrategy.Save(strategy);
+
+            strategy = serviceStrategy.GetById(strategyId, GetUserId());
+            NewStrategyStep5Model model = new NewStrategyStep5Model()
+            {
+                AddedConditions = strategy.Conditions.Select(c => new Tuple<int, string>(c.Id, c.ToString())).ToList()
+            };
+
+            return PartialView("NewStep5AddedConditions", model);
         }
 
         #endregion

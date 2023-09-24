@@ -1,0 +1,12 @@
+﻿@model MasterTrade.Models.NewStrategyStep5Model
+<div class="row">
+    <h5>Condiciones agregadas</h5>
+</div>
+<div class="col-md-12">
+    <ul>
+        @foreach (var condition in Model.AddedConditions)
+        {
+            <li>@condition.Item2 <a href="#" onclick="removeCondition(@condition.Item1)">Quitar</a></li>
+        }
+    </ul>
+</div>

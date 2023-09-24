@@ -1,0 +1,25 @@
+﻿@model MasterTrade.Models.NewStrategyStep5Model
+@if (Model.Indicator1Elements != null)
+{
+    <div class="row">
+        @Html.LabelFor(m => m.Indicator1Element, new { @class = "col-md-3 col-form-label" })
+        <div class="col-md-9">
+            @Html.DropDownListFor(m => m.Indicator1Element, Model.Indicator1Elements, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        @Html.LabelFor(m => m.ConditionId, new { @class = "col-md-3 col-form-label" })
+        <div class="col-md-9">
+            @Html.DropDownListFor(m => m.ConditionId, Model.AllConditions, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        @Html.LabelFor(m => m.IndicatorId2, new { @class = "col-md-3 col-form-label" })
+        <div class="col-md-9">
+            @Html.DropDownListFor(m => m.IndicatorId2, Model.StrategyIndicators, "Seleccione...", new { @class = "form-control" })
+        </div>
+    </div>
+    <div id="conditions2Section">
+        @Html.Partial("NewStep5Conditions2")
+    </div>
+}

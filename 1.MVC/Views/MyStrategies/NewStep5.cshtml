@@ -1,14 +1,15 @@
-﻿@model MasterTrade.Models.NewStrategyModel
+﻿@model MasterTrade.Models.NewStrategyStep5Model
 @{
     ViewBag.Title = "Nueva estrategia - Paso 5";
 }
 
 <main aria-labelledby="title">
     <h2 id="title">@ViewBag.Title</h2>
-    <h4>Agregue las condiciones para cerrar la operación</h4>
+    <h4>Agregue las condiciones para cerrar una operación</h4>
     @using (Html.BeginForm("NewStep5", "MyStrategies", FormMethod.Post, new { role = "form" }))
     {
         @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.StrategyId)
         <hr />
         @Html.ValidationSummary("", new { @class = "text-danger" })
         <div class="row">
@@ -22,55 +23,69 @@
                 <div class="row">
                     @Html.LabelFor(m => m.IndicatorId1, new { @class = "col-md-3 col-form-label" })
                     <div class="col-md-9">
-                        @Html.DropDownListFor(m => m.IndicatorId1, Model.StrategyIndicators, new { @class = "form-control" })
+                        @Html.DropDownListFor(m => m.IndicatorId1, Model.StrategyIndicators, "Seleccione...", new { @class = "form-control" })
                     </div>
                 </div>
-                <div class="row">
-                    @Html.LabelFor(m => m.MovingAverageValue, new { @class = "col-md-3 col-form-label" })
-                    <div class="col-md-9">
-                        @Html.DropDownListFor(m => m.MovingAverageValue, Model.MovingAverageValues, new { @class = "form-control" })
-                    </div>
-                </div>
-                <div class="row">
-                    @Html.LabelFor(m => m.ConditionId, new { @class = "col-md-3 col-form-label" })
-                    <div class="col-md-9">
-                        @Html.DropDownListFor(m => m.ConditionId, Model.AllConditions, new { @class = "form-control" })
-                    </div>
-                </div>
-                <div class="row">
-                    @Html.LabelFor(m => m.IndicatorId2, new { @class = "col-md-3 col-form-label" })
-                    <div class="col-md-9">
-                        @Html.DropDownListFor(m => m.IndicatorId2, Model.StrategyIndicators, new { @class = "form-control" })
-                    </div>
-                </div>
-                <div class="row">
-                    @Html.LabelFor(m => m.MovingAverageValue, new { @class = "col-md-3 col-form-label" })
-                    <div class="col-md-9">
-                        @Html.DropDownListFor(m => m.MovingAverageValue, Model.MovingAverageValues, new { @class = "form-control" })
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="offset-md-10 col-md-2">
-                        <input type="button" value="Agregar" class="btn btn-outline-dark lightBrownBtn" />
-                    </div>
+                <div id="conditionsSection">
+                    @Html.Partial("NewStep5Conditions")
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="row">
-                    <h5>Condiciones agregadas</h5>
-                </div>
-                <div class="col-md-12">
-                    <ul>
-                        <li>Valor de Media móvil (5) es menor que Valor de Media móvil (10) <a href="#">Quitar</a></li>
-                    </ul>
-                </div>
+            <div class="col-md-6" id="addedConditionsSection">
+                @Html.Partial("NewStep5AddedConditions")
             </div>
         </div>
         <div class="row" style="margin-top: 0.5rem;">
             <div class="offset-md-9 col-md-3">
                 @Html.ActionLink("Cancelar", "Index", "MyStrategies", new { area = "" }, new { @class = "btn btn-outline-dark" })
-                <input type="submit" value="Siguiente" class="btn btn-outline-dark lightBrownBtn" />
+                @Html.ActionLink("Siguiente", "NewConfirmation", "MyStrategies", new { area = "", id = Model.StrategyId }, new { @class = "btn btn-outline-dark lightBrownBtn" })
             </div>
         </div>
     }
 </main>
+@section Scripts
+{
+    <script>
+        function assignIndicator2Change() {
+            $('#@Html.IdFor(m => m.IndicatorId2)').change(function () {
+                $.ajax({
+                    url: '@Url.Action("LoadIndicator2MetaStep5")',
+                    type: 'GET',
+                    data: {
+                        indicatorId: function () { return $('#@Html.IdFor(m => m.IndicatorId2)').val(); }
+                    }
+                }).done(function (result) {
+                    $('#conditions2Section').html(result);
+                });
+            });
+        }
+
+        function removeCondition(id) {
+            $.ajax({
+                url: '@Url.Action("RemoveCloseCondition")',
+                type: 'POST',
+                data: {
+                    strategyId: @Model.StrategyId,
+                    conditionId: id
+                }
+            }).done(function (result) {
+                $('#addedConditionsSection').html(result);
+            });
+        }
+
+        $(function () {
+            $('#@Html.IdFor(m => m.IndicatorId1)').change(function () {
+                $.ajax({
+                    url: '@Url.Action("LoadIndicator1MetaStep5")',
+                    type: 'GET',
+                    data: {
+                        indicatorId: function () { return $('#@Html.IdFor(m => m.IndicatorId1)').val(); },
+                        strategyId: @Model.StrategyId
+                    }
+                }).done(function (result) {
+                    $('#conditionsSection').html(result);
+                    assignIndicator2Change();
+                });
+            });
+        });
+    </script>
+}
