@@ -268,11 +268,7 @@ namespace MasterTrade.Controllers
             NewStrategyStep4Model model = new NewStrategyStep4Model()
             {
                 StrategyId = id,
-                AllInvestOptions = new List<SelectListItem>
-                {
-                    new SelectListItem { Value = ((int)InvestmentOption.FixedAmount).ToString(), Text = "Cantidad fija de dinero" },
-                    new SelectListItem { Value = ((int)InvestmentOption.PortfolioPercentage).ToString(), Text = "Porcentaje del portafolio" }
-                }
+                AllInvestOptions = GetAllInvestOptions()
             };
             return View(model);
         }
@@ -280,21 +276,51 @@ namespace MasterTrade.Controllers
         [HttpPost]
         public ActionResult NewStep4(NewStrategyStep4Model model)
         {
-            ServiceStrategy serviceStrategy = new ServiceStrategy();
-            DTOStrategy strategy = serviceStrategy.GetById(model.StrategyId, GetUserId());
-
-            if (model.InvestOptionId == (int)InvestmentOption.FixedAmount)
+            if (model.InvestOptionId == (int)InvestmentOption.FixedAmount && (!model.InvestAmount.HasValue || model.InvestAmount.Value <= 0))
             {
-                strategy.InvestmentAmount = model.InvestAmount;
-            }
-            else if (model.InvestOptionId == (int)InvestmentOption.PortfolioPercentage)
-            {
-                strategy.InvestmentPercentage = model.InvestPercentage;
+                ModelState.AddModelError("InvestAmount", "El monto debe ser mayor a 0");
             }
 
-            model.StrategyId = serviceStrategy.Save(strategy);
+            if (model.InvestOptionId == (int)InvestmentOption.PortfolioPercentage
+                && (!model.InvestPercentage.HasValue || model.InvestPercentage.Value <= 0 || model.InvestPercentage.Value > 100))
+            {
+                ModelState.AddModelError("InvestPercentage", "El porcentaje debe ser entre 0.01 y 100");
+            }
 
-            return RedirectToAction("NewStep5", "MyStrategies", new { id = model.StrategyId });
+            if (ModelState.IsValid)
+            {
+                ServiceStrategy serviceStrategy = new ServiceStrategy();
+                DTOStrategy strategy = serviceStrategy.GetById(model.StrategyId, GetUserId());
+
+                if (model.InvestOptionId == (int)InvestmentOption.FixedAmount)
+                {
+                    strategy.InvestmentAmount = model.InvestAmount;
+                    strategy.InvestmentPercentage = null;
+                }
+                else if (model.InvestOptionId == (int)InvestmentOption.PortfolioPercentage)
+                {
+                    strategy.InvestmentAmount = null;
+                    strategy.InvestmentPercentage = model.InvestPercentage;
+                }
+
+                model.StrategyId = serviceStrategy.Save(strategy);
+
+                return RedirectToAction("NewStep5", "MyStrategies", new { id = model.StrategyId });
+            }
+            else
+            {
+                model.AllInvestOptions = GetAllInvestOptions();
+                return View(model);
+            }
+        }
+
+        private List<SelectListItem> GetAllInvestOptions()
+        {
+            return new List<SelectListItem>
+                {
+                    new SelectListItem { Value = ((int)InvestmentOption.FixedAmount).ToString(), Text = "Cantidad fija de dinero" },
+                    new SelectListItem { Value = ((int)InvestmentOption.PortfolioPercentage).ToString(), Text = "Porcentaje del portafolio" }
+                };
         }
 
         #endregion

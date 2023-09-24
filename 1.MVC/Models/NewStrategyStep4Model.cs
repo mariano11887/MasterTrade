@@ -14,10 +14,11 @@ namespace MasterTrade.Models
 
         [DisplayFormat(DataFormatString = "{0:n2}", ApplyFormatInEditMode = true)]
         [DisplayName("Monto (USD)")]
-        public decimal InvestAmount { get; set; }
+        public decimal? InvestAmount { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:n2}", ApplyFormatInEditMode = true)]
         [DisplayName("Porcentaje del portafolio")]
-        public decimal InvestPercentage { get; set; }
+        public decimal? InvestPercentage { get; set; }
 
         public List<SelectListItem> AllInvestOptions { get; set; }
     }

@@ -173,6 +173,7 @@
     <Compile Include="Authentication\CustomPrincipal.cs" />
     <Compile Include="Authentication\CustomRole.cs" />
     <Compile Include="Authentication\CustomSerializeModel.cs" />
+    <Compile Include="Common\DecimalModelBinder.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BacktestingController.cs" />
     <Compile Include="Controllers\BacktestingWithRangesController.cs" />

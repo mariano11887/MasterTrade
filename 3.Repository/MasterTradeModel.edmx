@@ -152,7 +152,7 @@
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="UserId" Type="int" Nullable="false" />
           <Property Name="InvestmentAmount" Type="numeric" Precision="10" Scale="4" />
-          <Property Name="InvestmentPercentage" Type="numeric" Precision="3" Scale="2" />
+          <Property Name="InvestmentPercentage" Type="numeric" Precision="5" Scale="2" />
           <Property Name="IsComplete" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="StrategyCondition">
@@ -733,7 +733,7 @@
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="UserId" Type="Int32" Nullable="false" />
           <Property Name="InvestmentAmount" Type="Decimal" Precision="10" Scale="4" />
-          <Property Name="InvestmentPercentage" Type="Decimal" Precision="3" Scale="2" />
+          <Property Name="InvestmentPercentage" Type="Decimal" Precision="5" Scale="2" />
           <NavigationProperty Name="BacktestingBatches" Relationship="Self.FK_BacktestingBatch_Strategy" FromRole="Strategy" ToRole="BacktestingBatch" />
           <NavigationProperty Name="Indicators" Relationship="Self.FK_Indicator_Strategy" FromRole="Strategy" ToRole="Indicator" />
           <NavigationProperty Name="User" Relationship="Self.FK_Strategy_User" FromRole="Strategy" ToRole="User" />
