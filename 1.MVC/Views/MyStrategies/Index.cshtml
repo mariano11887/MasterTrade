@@ -13,7 +13,7 @@
             <ul>
                 @foreach (DTOStrategy strategy in Model.UserStrategies)
                 {
-                    <li><b>@strategy.Name</b> <a href="#">Modificar</a> <a href="#">Eliminar</a></li>
+                    <li><b>@strategy.Name</b> @Html.ActionLink("Modificar", "NewStep1", "MyStrategies", new { id = strategy.Id }, new { }) @Html.ActionLink("Eliminar", "DeleteStrategy", "MyStrategies", new { id = strategy.Id }, new { })</li>
                 }
             </ul>
         }

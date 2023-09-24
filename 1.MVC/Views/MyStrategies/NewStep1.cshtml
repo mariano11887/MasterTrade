@@ -9,6 +9,7 @@
     @using (Html.BeginForm("NewStep1", "MyStrategies", FormMethod.Post, new { role = "form" }))
     {
         @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.StrategyId)
         <hr />
         @Html.ValidationSummary("", new { @class = "text-danger" })
         <div class="row">

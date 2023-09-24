@@ -5,6 +5,8 @@ namespace MasterTrade.Models
 {
     public class NewStrategyStep1Model
     {
+        public int StrategyId { get; set; }
+
         [DisplayName("Nombre de la estrategia")]
         [Required]
         [MaxLength(50)]

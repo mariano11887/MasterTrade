@@ -15,7 +15,8 @@ namespace MasterTrade.Controllers
     [Authorize]
     public class MyStrategiesController : BaseController
     {
-        // GET: MyStrategies
+        #region My Strategies
+
         public ActionResult Index()
         {
             MyStrategiesModel model = new MyStrategiesModel()
@@ -25,30 +26,74 @@ namespace MasterTrade.Controllers
             return View(model);
         }
 
+        public ActionResult DeleteStrategy(int id)
+        {
+            ServiceStrategy serviceStrategy = new ServiceStrategy();
+            DTOStrategy strategy = serviceStrategy.GetById(id, GetUserId());
+
+            strategy.IsComplete = false;
+
+            serviceStrategy.Save(strategy);
+
+            return RedirectToAction("Index", "MyStrategies");
+        }
+
+        #endregion
+
         #region Step 1
 
-        public ActionResult NewStep1()
+        public ActionResult NewStep1(int? id)
         {
-            return View();
+            if (id.HasValue)
+            {
+                ServiceStrategy serviceStrategy = new ServiceStrategy();
+                DTOStrategy strategy = serviceStrategy.GetById(id.Value, GetUserId());
+
+                NewStrategyStep1Model model = new NewStrategyStep1Model()
+                {
+                    StrategyId = id.Value,
+                    Name = strategy.Name
+                };
+
+                return View(model);
+            }
+            else
+            {
+                return View();
+            }
         }
 
         [HttpPost]
         public ActionResult NewStep1(NewStrategyStep1Model model)
         {
             ServiceStrategy service = new ServiceStrategy();
-            bool isNameValid = service.CheckStrategyName(GetUserId(), model.Name);
-            if (!isNameValid)
-            {
-                ViewBag.ErrorMsg = "El nombre elegido ya existe.";
-                return View(model);
-            }
+            DTOStrategy strategy;
 
-            DTOStrategy dto = new DTOStrategy()
+            if (model.StrategyId == 0)
             {
-                Name = model.Name,
-                UserId = GetUserId()
-            };
-            int strategyId = service.Save(dto);
+                bool isNameValid = service.CheckStrategyName(GetUserId(), model.Name);
+                if (!isNameValid)
+                {
+                    ViewBag.ErrorMsg = "El nombre elegido ya existe.";
+                    return View(model);
+                }
+
+                strategy = new DTOStrategy()
+                {
+                    Id = model.StrategyId,
+                    Name = model.Name,
+                    UserId = GetUserId()
+                };
+            }
+            else
+            {
+                ServiceStrategy serviceStrategy = new ServiceStrategy();
+                strategy = serviceStrategy.GetById(model.StrategyId, GetUserId());
+
+                strategy.Name = model.Name;
+            }
+            
+            int strategyId = service.Save(strategy);
 
             return RedirectToAction("NewStep2", "MyStrategies", new { id = strategyId });
         }
@@ -100,6 +145,11 @@ namespace MasterTrade.Controllers
             model.IndicatorStructure = new ServiceIndicator().GetIndicator(model.IndicatorId);
             foreach (var meta in model.IndicatorStructure.Configuration)
             {
+                if (meta.Type == IndicatorMetaDataType.Integer && Convert.ToInt32(Request[meta.HtmlName]) <= 0)
+                {
+                    ModelState.AddModelError(meta.Name, $"{meta.Name} debe ser mayor a 0");
+                }
+
                 indicator.Configurations.Add(new DTOIndicatorConfiguration
                 {
                     Name = meta.Name,
@@ -108,10 +158,27 @@ namespace MasterTrade.Controllers
                 });
             }
 
-            strategy.Indicators.Add(indicator);
-            model.StrategyId = serviceStrategy.Save(strategy);
+            if (ModelState.IsValid)
+            {
+                strategy.Indicators.Add(indicator);
+                model.StrategyId = serviceStrategy.Save(strategy);
 
-            return RedirectToAction("NewStep2", "MyStrategies", new { id = model.StrategyId });
+                return RedirectToAction("NewStep2", "MyStrategies", new { id = model.StrategyId });
+            }
+            else
+            {
+                List<DTOIndicatorType> indicatorTypes = new ServiceIndicator().GetIndicatorTypes();
+
+                model.AllIndicators = indicatorTypes.Select(it => new SelectListItem
+                {
+                    Value = it.Id.ToString(),
+                    Text = it.Description
+                }).ToList();
+                model.AddedIndicators = strategy.Indicators.Select(i => new Tuple<int, string>(i.Id, i.ToString())).ToList();
+                model.IndicatorStructure = new ServiceIndicator().GetIndicator(model.IndicatorId);
+
+                return View(model);
+            }
         }
 
         [HttpPost]
@@ -253,7 +320,7 @@ namespace MasterTrade.Controllers
             strategy = serviceStrategy.GetById(strategyId, GetUserId());
             NewStrategyStep3Model model = new NewStrategyStep3Model()
             {
-                AddedConditions = strategy.Conditions.Select(c => new Tuple<int, string>(c.Id, c.ToString())).ToList()
+                AddedConditions = strategy.Conditions.Where(c => c.IsOpenCondition).Select(c => new Tuple<int, string>(c.Id, c.ToString())).ToList()
             };
 
             return PartialView("NewStep3AddedConditions", model);
@@ -265,9 +332,15 @@ namespace MasterTrade.Controllers
 
         public ActionResult NewStep4(int id)
         {
+            ServiceStrategy serviceStrategy = new ServiceStrategy();
+            DTOStrategy strategy = serviceStrategy.GetById(id, GetUserId());
+
             NewStrategyStep4Model model = new NewStrategyStep4Model()
             {
                 StrategyId = id,
+                InvestAmount = strategy.InvestmentAmount,
+                InvestPercentage = strategy.InvestmentPercentage,
+                InvestOptionId = strategy.InvestmentAmount.HasValue ? (int)InvestmentOption.FixedAmount : (int)InvestmentOption.PortfolioPercentage,
                 AllInvestOptions = GetAllInvestOptions()
             };
             return View(model);
@@ -444,7 +517,7 @@ namespace MasterTrade.Controllers
             strategy = serviceStrategy.GetById(strategyId, GetUserId());
             NewStrategyStep5Model model = new NewStrategyStep5Model()
             {
-                AddedConditions = strategy.Conditions.Select(c => new Tuple<int, string>(c.Id, c.ToString())).ToList()
+                AddedConditions = strategy.Conditions.Where(c => !c.IsOpenCondition).Select(c => new Tuple<int, string>(c.Id, c.ToString())).ToList()
             };
 
             return PartialView("NewStep5AddedConditions", model);

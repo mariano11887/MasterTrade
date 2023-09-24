@@ -37,7 +37,10 @@
         <div class="row" style="margin-top: 0.5rem;">
             <div class="offset-md-9 col-md-3">
                 @Html.ActionLink("Cancelar", "Index", "MyStrategies", new { area = "" }, new { @class = "btn btn-outline-dark" })
-                @Html.ActionLink("Siguiente", "NewStep4", "MyStrategies", new { area = "", id = Model.StrategyId }, new { @class = "btn btn-outline-dark lightBrownBtn" })
+                @if (Model.AddedConditions.Any())
+                {
+                    @Html.ActionLink("Siguiente", "NewStep4", "MyStrategies", new { area = "", id = Model.StrategyId }, new { @class = "btn btn-outline-dark lightBrownBtn" });
+                }
             </div>
         </div>
     }

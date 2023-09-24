@@ -21,9 +21,4 @@ namespace MasterTrade.Models
 
         public List<Tuple<int, string>> AddedIndicators { get; set; }
     }
-
-    public class NewStrategyStep2IndicatorMetaModel
-    {
-        
-    }
 }

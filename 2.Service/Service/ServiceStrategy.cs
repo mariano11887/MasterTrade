@@ -11,6 +11,7 @@ namespace _2.Service.Service
         private readonly RepositoryStrategy repositoryStrategy;
         private readonly RepositoryIndicator repositoryIndicator;
         private readonly RepositoryIndicatorConfiguration repositoryIndicatorConfiguration;
+        private readonly RepositoryIndicatorMeta repositoryIndicatorMeta;
         private readonly RepositoryStrategyCondition repositoryStrategyCondition;
 
         public ServiceStrategy()
@@ -18,12 +19,13 @@ namespace _2.Service.Service
             repositoryStrategy = new RepositoryStrategy();
             repositoryIndicator = new RepositoryIndicator();
             repositoryIndicatorConfiguration = new RepositoryIndicatorConfiguration();
+            repositoryIndicatorMeta = new RepositoryIndicatorMeta();
             repositoryStrategyCondition = new RepositoryStrategyCondition();
         }
 
         public List<DTOStrategy> GetUserStrategies(int userId)
         {
-            List<DTOStrategy> strategies = repositoryStrategy.GetQuery().Where(s => s.UserId == userId).Select(s => new DTOStrategy
+            List<DTOStrategy> strategies = repositoryStrategy.GetQuery().Where(s => s.UserId == userId && s.IsComplete).Select(s => new DTOStrategy
             {
                 Id = s.Id,
                 Name = s.Name
@@ -34,7 +36,7 @@ namespace _2.Service.Service
 
         public bool CheckStrategyName(int userId, string strategyName)
         {
-            bool isAvailable = !repositoryStrategy.GetQuery().Any(s => s.UserId == userId && s.Name == strategyName);
+            bool isAvailable = !repositoryStrategy.GetQuery().Any(s => s.UserId == userId && s.IsComplete && s.Name == strategyName);
             return isAvailable;
         }
 
@@ -62,8 +64,7 @@ namespace _2.Service.Service
                 strategy.Name = dto.Name;
                 strategy.InvestmentAmount = dto.InvestmentAmount;
                 strategy.InvestmentPercentage = dto.InvestmentPercentage;
-                strategy.IsComplete = dto.IsComplete;
-
+                
                 foreach (DTOIndicator indicator in dto.Indicators.Where(i => i.Id == 0))
                 {
                     strategy.Indicators.Add(new _3.Repository.Indicator
@@ -80,12 +81,32 @@ namespace _2.Service.Service
 
                 foreach (DTOIndicator indicator in dto.Indicators.Where(i => i.Removed))
                 {
-                    List<IndicatorConfiguration> indicatorConfigurations = repositoryIndicatorConfiguration.GetQuery().Where(im => im.IndicatorId == indicator.Id).ToList();
+                    // Busco todos los IndicatorConfiguration y los borro.
+                    List<IndicatorConfiguration> indicatorConfigurations = repositoryIndicatorConfiguration.GetQuery().Where(ic => ic.IndicatorId == indicator.Id).ToList();
                     foreach (IndicatorConfiguration indicatorConfiguration in indicatorConfigurations)
                     {
                         repositoryIndicatorConfiguration.Remove(indicatorConfiguration);
                     }
                     repositoryIndicatorConfiguration.SaveChanges();
+
+                    // Busco todos los IndicatorMeta y los borro.
+                    List<IndicatorMeta> indicatorMetas = repositoryIndicatorMeta.GetQuery().Where(im => im.IndicatorId == indicator.Id).ToList();
+                    foreach (IndicatorMeta indicatorMeta in indicatorMetas)
+                    {
+                        // Por cada IndicatorMeta, borro los StrategyConditions relacionados.
+                        List<StrategyCondition> strategyConditions = repositoryStrategyCondition.GetQuery()
+                                                                                                .Where(sc => sc.FirstIndicatorMetaId == indicatorMeta.Id
+                                                                                                             || sc.SecondIndicatorMetaId == indicatorMeta.Id)
+                                                                                                .ToList();
+                        foreach (StrategyCondition strategyCondition in strategyConditions)
+                        {
+                            repositoryStrategyCondition.Remove(strategyCondition);
+                        }
+                        repositoryStrategyCondition.SaveChanges();
+
+                        repositoryIndicatorMeta.Remove(indicatorMeta);
+                    }
+                    repositoryIndicatorMeta.SaveChanges();
 
                     _3.Repository.Indicator strategyIndicator = repositoryIndicator.GetQuery("IndicatorConfigurations").First(i => i.Id == indicator.Id);
                     repositoryIndicator.Remove(strategyIndicator);
@@ -119,6 +140,12 @@ namespace _2.Service.Service
                 }
                 repositoryStrategyCondition.SaveChanges();
             }
+
+            strategy.IsComplete = dto.IsComplete
+                                  && (strategy.InvestmentAmount.HasValue || strategy.InvestmentPercentage.HasValue)
+                                  && strategy.Indicators.Any()
+                                  && strategy.StrategyConditions.Any(c => c.IsOpenCondition)
+                                  && strategy.StrategyConditions.Any(c => !c.IsOpenCondition);
 
             repositoryStrategy.SaveChanges();
 

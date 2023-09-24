@@ -5,7 +5,7 @@
     <div class="row">
         <h5>@Model.IndicatorStructure.ConfigurationTitle</h5>
     </div>
-    foreach (var meta in Model.IndicatorStructure.Meta)
+    foreach (var meta in Model.IndicatorStructure.Configuration)
     {
         <div class="row">
             @Html.Label(meta.Name, new { @class = "col-md-3 col-form-label" })
