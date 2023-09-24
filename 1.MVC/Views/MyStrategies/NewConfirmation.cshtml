@@ -5,16 +5,16 @@
 
 <main aria-labelledby="title">
     <h2 id="title">@ViewBag.Title</h2>
-    <h4>Resumen de la estrategia</h4>
     <hr />
     @using (Html.BeginForm("NewConfirmation", "MyStrategies", FormMethod.Post, new { role = "form" }))
     {
+        @Html.HiddenFor(m => m.StrategyId)
         <div class="row">
             <h5>Nombre</h5>
         </div>
         <div class="col-md-12">
             <ul>
-                <li>Prueba</li>
+                <li>@Model.Name</li>
             </ul>
         </div>
         <div class="row">
@@ -22,9 +22,10 @@
         </div>
         <div class="col-md-12">
             <ul>
-                <li>Media móvil (5)</li>
-                <li>Media móvil (10)</li>
-                <li>Media móvil (20)</li>
+                @foreach (var indicator in Model.Indicators)
+                {
+                    <li>@indicator</li>
+                }
             </ul>
         </div>
         <div class="row">
@@ -32,8 +33,10 @@
         </div>
         <div class="col-md-12">
             <ul>
-                <li>Valor de Media móvil (5) es mayor que Valor de Media móvil (10)</li>
-                <li>Valor de Media móvil (10) es mayor que Valor de Media móvil (20)</li>
+                @foreach (var condition in Model.OpenConditions)
+                {
+                    <li>@condition</li>
+                }
             </ul>
         </div>
         <div class="row">
@@ -41,22 +44,24 @@
         </div>
         <div class="col-md-12">
             <ul>
-                <li>Cantidad fija: 50 USD</li>
+                <li>@Model.Investment</li>
             </ul>
         </div>
         <div class="row">
-            <h5>Condiciones para cerrar operación</h5>
+            <h5>Condiciones para cerrar la operación</h5>
         </div>
         <div class="col-md-12">
             <ul>
-                <li>Valor de Media móvil (5) es menor que Valor de Media móvil (10)</li>
-                <li>Valor de Media móvil (10) es menor que Valor de Media móvil (20)</li>
+                @foreach (var condition in Model.CloseConditions)
+                {
+                    <li>@condition</li>
+                }
             </ul>
         </div>
         <div class="row" style="margin-top: 0.5rem;">
             <div class="offset-md-8 col-md-4">
                 @Html.ActionLink("Cancelar", "Index", "MyStrategies", new { area = "" }, new { @class = "btn btn-outline-dark" })
-                @Html.ActionLink("Modificar", "NewStep1", "MyStrategies", new { area = "" }, new { @class = "btn btn-outline-dark" })
+                @Html.ActionLink("Modificar", "NewStep1", "MyStrategies", new { area = "", id = Model.StrategyId }, new { @class = "btn btn-outline-dark" })
                 <input type="submit" value="Guardar" class="btn btn-outline-dark lightBrownBtn" />
             </div>
         </div>

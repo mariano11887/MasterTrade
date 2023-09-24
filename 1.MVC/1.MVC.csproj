@@ -289,7 +289,9 @@
     <Content Include="Views\MyStrategies\NewStep5.cshtml">
       <BrowseToURL>~/MyStrategies/NewStep5/3</BrowseToURL>
     </Content>
-    <Content Include="Views\MyStrategies\NewConfirmation.cshtml" />
+    <Content Include="Views\MyStrategies\NewConfirmation.cshtml">
+      <BrowseToURL>~/MyStrategies/NewConfirmation/3</BrowseToURL>
+    </Content>
     <Content Include="Views\Backtesting\Index.cshtml" />
     <Content Include="Views\Backtesting\Results.cshtml" />
     <Content Include="Views\BacktestingWithRanges\Step1.cshtml" />

@@ -1,18 +1,14 @@
-﻿using _2.Service.Indicator.Interface;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Web.Mvc;
+﻿using System.Collections.Generic;
 
 namespace MasterTrade.Models
 {
     public class NewStrategyModel
     {
-        [DisplayName("Modalidad")]
-        public int InvestOptionId { get; set; }
-
-        [DisplayName("Monto (USD)")]
-        public double InvestAmount { get; set; }
-
-        public List<SelectListItem> AllInvestOptions { get; set; }
+        public int StrategyId { get; set; }
+        public string Name { get; set; }
+        public List<string> Indicators { get; set; }
+        public List<string> OpenConditions { get; set; }
+        public string Investment { get; set; }
+        public List<string> CloseConditions { get; set; }
     }
 }

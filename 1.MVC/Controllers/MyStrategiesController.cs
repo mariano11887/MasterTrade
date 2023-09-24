@@ -454,14 +454,50 @@ namespace MasterTrade.Controllers
 
         #region Confirmation
 
-        public ActionResult NewConfirmation()
+        public ActionResult NewConfirmation(int id)
         {
-            return View();
+            ServiceStrategy serviceStrategy = new ServiceStrategy();
+            DTOStrategy strategy = serviceStrategy.GetById(id, GetUserId());
+
+            NewStrategyModel model = new NewStrategyModel()
+            {
+                StrategyId = id,
+                Name = strategy.Name,
+                Indicators = strategy.Indicators.Select(i => i.ToString()).ToList(),
+                OpenConditions = strategy.Conditions.Where(c => c.IsOpenCondition).Select(c => c.ToString()).ToList(),
+                Investment = GetInvestment(strategy.InvestmentAmount, strategy.InvestmentPercentage),
+                CloseConditions = strategy.Conditions.Where(c => !c.IsOpenCondition).Select(c => c.ToString()).ToList()
+            };
+
+            return View(model);
+        }
+
+        private string GetInvestment(decimal? investmentAmount, decimal? investmentPercentage)
+        {
+            if (investmentAmount.HasValue && !investmentPercentage.HasValue)
+            {
+                return $"Cantidad fija: {investmentAmount.Value} USD";
+            }
+            else if (!investmentAmount.HasValue && investmentPercentage.HasValue)
+            {
+                return $"{investmentPercentage.Value}% del portafolio";
+            }
+            else
+            {
+                return "";
+            }
         }
 
         [HttpPost]
         public ActionResult NewConfirmation(NewStrategyModel model)
         {
+            ServiceStrategy serviceStrategy = new ServiceStrategy();
+            DTOStrategy strategy = serviceStrategy.GetById(model.StrategyId, GetUserId());
+
+            strategy.IsComplete = true;
+
+            model.StrategyId = serviceStrategy.Save(strategy);
+
             return RedirectToAction("Index", "MyStrategies");
         }
 
