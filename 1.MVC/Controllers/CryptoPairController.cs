@@ -1,4 +1,5 @@
-﻿using MasterTrade.Controllers.Base;
+﻿using _2.Service.Service;
+using MasterTrade.Controllers.Base;
 using MasterTrade.Models;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,8 @@ namespace MasterTrade.Controllers
         // GET: CryptoPair
         public ActionResult Index()
         {
+            //new ServiceCryptoPair().ImportCandles();
+
             return View(new List<CryptoPairModel>
             {
                 new CryptoPairModel { Name = "BTC/USDT" }

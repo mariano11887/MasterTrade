@@ -50,10 +50,10 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CryptoPairId" Type="int" Nullable="false" />
           <Property Name="StartDate" Type="datetime" Nullable="false" />
-          <Property Name="Open" Type="numeric" Precision="10" Scale="10" Nullable="false" />
-          <Property Name="Close" Type="numeric" Precision="10" Scale="10" Nullable="false" />
-          <Property Name="High" Type="numeric" Precision="10" Scale="10" Nullable="false" />
-          <Property Name="Low" Type="numeric" Precision="10" Scale="10" Nullable="false" />
+          <Property Name="Open" Type="numeric" Precision="20" Scale="10" Nullable="false" />
+          <Property Name="Close" Type="numeric" Precision="20" Scale="10" Nullable="false" />
+          <Property Name="High" Type="numeric" Precision="20" Scale="10" Nullable="false" />
+          <Property Name="Low" Type="numeric" Precision="20" Scale="10" Nullable="false" />
         </EntityType>
         <EntityType Name="Comparer">
           <Key>
@@ -650,10 +650,10 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CryptoPairId" Type="Int32" Nullable="false" />
           <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Open" Type="Decimal" Precision="10" Scale="10" Nullable="false" />
-          <Property Name="Close" Type="Decimal" Precision="10" Scale="10" Nullable="false" />
-          <Property Name="High" Type="Decimal" Precision="10" Scale="10" Nullable="false" />
-          <Property Name="Low" Type="Decimal" Precision="10" Scale="10" Nullable="false" />
+          <Property Name="Open" Type="Decimal" Precision="20" Scale="10" Nullable="false" />
+          <Property Name="Close" Type="Decimal" Precision="20" Scale="10" Nullable="false" />
+          <Property Name="High" Type="Decimal" Precision="20" Scale="10" Nullable="false" />
+          <Property Name="Low" Type="Decimal" Precision="20" Scale="10" Nullable="false" />
           <NavigationProperty Name="CryptoPair" Relationship="Self.FK_Candle_CryptoPair" FromRole="Candle" ToRole="CryptoPair" />
         </EntityType>
         <EntityType Name="Comparer">
