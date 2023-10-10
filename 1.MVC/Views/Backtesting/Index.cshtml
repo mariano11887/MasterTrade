@@ -20,17 +20,7 @@
         <div class="row">
             @Html.LabelFor(m => m.CryptoPairId, new { @class = "col-md-3 col-form-label" })
             <div class="col-md-9">
-                @Html.DropDownListFor(m => m.CryptoPairId, Model.AllCryptoPairs, new { @class = "form-control" })
-            </div>
-        </div>
-        <div class="row">
-            @Html.LabelFor(m => m.DateFrom, new { @class = "col-md-3 col-form-label" })
-            <div class="col-md-3">
-                @Html.TextBoxFor(m => m.DateFrom, new { @class = "form-control" })
-            </div>
-            @Html.LabelFor(m => m.DateTo, new { @class = "col-md-3 col-form-label" })
-            <div class="col-md-3">
-                @Html.TextBoxFor(m => m.DateTo, new { @class = "form-control" })
+                @Html.DropDownListFor(m => m.CryptoPairId, Model.AllCryptoPairs, "Seleccione...", new { @class = "form-control" })
             </div>
         </div>
         <div class="row">
@@ -39,10 +29,31 @@
                 @Html.DropDownListFor(m => m.TemporalityId, Model.AllTemporalities, new { @class = "form-control" })
             </div>
         </div>
-        <div class="row" style="margin-top: 0.5rem;">
-            <div class="offset-md-9 col-md-3">
-                <input type="submit" value="Ejecutar" class="btn btn-outline-dark lightBrownBtn" />
-            </div>
+        <div id="dateRange">
+            @Html.Partial("IndexDates")
         </div>
     }
 </main>
+<link href="~/Content/jquery-ui.css" rel="stylesheet" />
+@section Scripts
+{
+    <script src="~/Scripts/jquery-ui.js"></script>
+    <script>
+        $(function () {
+            $('#@Html.IdFor(m => m.CryptoPairId)').change(function () {
+                $.ajax({
+                    url: '@Url.Action("LoadCryptoPairDates")',
+                    type: 'GET',
+                    data: {
+                        cryptoPairId: function () { return $('#@Html.IdFor(m => m.CryptoPairId)').val(); }
+                    }
+                }).done(function (result) {
+                    $('#dateRange').html(result);
+                    renderDatePickers();
+                });
+            });
+
+            
+        });
+    </script>
+}

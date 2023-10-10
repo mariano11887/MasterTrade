@@ -1,0 +1,38 @@
+﻿@model MasterTrade.Models.BacktestingModel
+@if (Model.DateFrom.HasValue && Model.DateTo.HasValue)
+{
+    <div class="row">
+        @Html.LabelFor(m => m.DateFrom, new { @class = "col-md-3 col-form-label" })
+        <div class="col-md-3">
+            @Html.TextBoxFor(m => m.DateFrom.Value, new { @class = "form-control datepicker" })
+        </div>
+        @Html.LabelFor(m => m.DateTo, new { @class = "col-md-3 col-form-label" })
+        <div class="col-md-3">
+            @Html.TextBoxFor(m => m.DateTo.Value, new { @class = "form-control datepicker" })
+        </div>
+    </div>
+    <div class="row" style="margin-top: 0.5rem;">
+        <div class="offset-md-9 col-md-3">
+            <input type="submit" value="Ejecutar" class="btn btn-outline-dark lightBrownBtn" />
+        </div>
+    </div>
+
+    <script>
+        function renderDatePickers() {
+            $(".datepicker").datepicker({
+                dateFormat: "d/m/yy",
+                changemonth: true,
+                changeyear: true,
+                minDate: new Date(@Model.DateFrom.Value.Year, @Model.DateFrom.Value.Month - 1, @Model.DateFrom.Value.Day),
+                maxDate: new Date(@Model.DateTo.Value.Year, @Model.DateTo.Value.Month - 1, @Model.DateTo.Value.Day),
+                onSelect: function (dateText) {
+                    $(this).val(dateText + " 00:00");
+                }
+            });
+
+            @*$('#@Html.IdFor(m => m.DateFrom)').change(function () {
+                $(this).val(this.value + " 00:00");
+            });*@
+        }
+    </script>
+}

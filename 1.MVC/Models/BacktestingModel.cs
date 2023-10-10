@@ -14,10 +14,10 @@ namespace MasterTrade.Models
         public int CryptoPairId { get; set; }
 
         [DisplayName("Fecha desde")]
-        public DateTime DateFrom { get; set; }
+        public DateTime? DateFrom { get; set; }
 
         [DisplayName("Fecha hasta")]
-        public DateTime DateTo { get; set; }
+        public DateTime? DateTo { get; set; }
 
         [DisplayName("Temporalidad")]
         public int TemporalityId { get; set; }

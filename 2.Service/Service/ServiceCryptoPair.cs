@@ -1,14 +1,12 @@
 ﻿using _3.Repository;
 using _3.Repository.Repository;
+using _4.DTO;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Security.Permissions;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace _2.Service.Service
 {
@@ -16,6 +14,7 @@ namespace _2.Service.Service
     {
         private readonly RepositoryCandle repositoryCandle;
         private readonly RepositorySupplier repositorySupplier;
+        private readonly RepositoryCryptoPair repositoryCryptoPair;
 
         private readonly HttpClient httpClient;
 
@@ -23,15 +22,10 @@ namespace _2.Service.Service
         {
             repositoryCandle = new RepositoryCandle();
             repositorySupplier = new RepositorySupplier();
+            repositoryCryptoPair = new RepositoryCryptoPair();
 
             httpClient = new HttpClient();
         }
-
-        //public void ImportCandles()
-        //{
-        //    Task task = Task.Run(async () => await ImportCandlesAsync());
-        //    task.Wait();
-        //}
 
         public void ImportCandles()
         {
@@ -92,6 +86,28 @@ namespace _2.Service.Service
             public decimal[] o { get; set; }
             public long[] t { get; set; }
             public string s { get; set; }
+        }
+
+        public List<DTOCryptoPair> GetCryptoPairs()
+        {
+            List<DTOCryptoPair> result = repositoryCryptoPair.GetQuery().Where(cp => !cp.IsDeleted).Select(cp => new DTOCryptoPair
+            {
+                Id = cp.Id,
+                Name = cp.Name
+            }).ToList();
+
+            return result;
+        }
+
+        public (DateTime, DateTime) GetDateRange(int cryptoPairId)
+        {
+            IQueryable<Candle> query = repositoryCandle.GetQuery().Where(c => c.CryptoPairId == cryptoPairId);
+
+            (DateTime, DateTime) result;
+            result.Item1 = query.Min(c => c.StartDate);
+            result.Item2 = query.Max(c => c.StartDate);
+
+            return result;
         }
     }
 }

@@ -218,6 +218,15 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\images\ui-icons_444444_256x240.png" />
+    <Content Include="Content\images\ui-icons_555555_256x240.png" />
+    <Content Include="Content\images\ui-icons_777620_256x240.png" />
+    <Content Include="Content\images\ui-icons_777777_256x240.png" />
+    <Content Include="Content\images\ui-icons_cc0000_256x240.png" />
+    <Content Include="Content\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\jquery-ui.css" />
+    <Content Include="Content\jquery-ui.structure.css" />
+    <Content Include="Content\jquery-ui.theme.css" />
     <Content Include="Content\LogoMasterTrade.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -236,6 +245,7 @@
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -294,7 +304,9 @@
     <Content Include="Views\MyStrategies\NewConfirmation.cshtml">
       <BrowseToURL>~/MyStrategies/NewConfirmation/3</BrowseToURL>
     </Content>
-    <Content Include="Views\Backtesting\Index.cshtml" />
+    <Content Include="Views\Backtesting\Index.cshtml">
+      <BrowseToURL>~/Backtesting</BrowseToURL>
+    </Content>
     <Content Include="Views\Backtesting\Results.cshtml" />
     <Content Include="Views\BacktestingWithRanges\Step1.cshtml" />
     <Content Include="Views\BacktestingWithRanges\Step2.cshtml" />
@@ -310,6 +322,7 @@
     <Content Include="Views\MyStrategies\NewStep5Conditions.cshtml" />
     <Content Include="Views\MyStrategies\NewStep5Conditions2.cshtml" />
     <Content Include="Views\MyStrategies\NewStep5AddedConditions.cshtml" />
+    <Content Include="Views\Backtesting\IndexDates.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
