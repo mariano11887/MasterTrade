@@ -1,4 +1,5 @@
 ﻿using _2.Service.Indicator.Interface;
+using _4.DTO;
 using _4.DTO.Enums;
 using System.Collections.Generic;
 
@@ -44,6 +45,11 @@ namespace _2.Service.Indicator
                     }
                 };
             }
+        }
+
+        public List<IndicatorMeta> GetCurrentValues(List<_3.Repository.Candle> candles, int currentCandleIndex, List<DTOIndicatorConfiguration> configurations)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

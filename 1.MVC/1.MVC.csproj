@@ -187,6 +187,7 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BacktestingModel.cs" />
+    <Compile Include="Models\BacktestingResultsModel.cs" />
     <Compile Include="Models\BacktestingWithRangesModel.cs" />
     <Compile Include="Models\CryptoPairModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />

@@ -51,6 +51,7 @@
     <Compile Include="Indicator\Interface\IndicatorMeta.cs" />
     <Compile Include="Indicator\MovingAverage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\ServiceBacktesting.cs" />
     <Compile Include="Service\ServiceCryptoPair.cs" />
     <Compile Include="Service\ServiceIndicator.cs" />
     <Compile Include="Service\ServiceStrategy.cs" />

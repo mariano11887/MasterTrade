@@ -41,6 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTOBacktestingOperation.cs" />
+    <Compile Include="DTOBacktestingParameters.cs" />
+    <Compile Include="DTOBacktestingResult.cs" />
     <Compile Include="DTOCryptoPair.cs" />
     <Compile Include="DTOIndicator.cs" />
     <Compile Include="DTOIndicatorConfiguration.cs" />
