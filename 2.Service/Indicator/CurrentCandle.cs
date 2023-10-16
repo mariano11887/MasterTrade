@@ -59,7 +59,33 @@ namespace _2.Service.Indicator
 
         public List<IndicatorMeta> GetCurrentValues(List<_3.Repository.Candle> candles, int currentCandleIndex, List<DTOIndicatorConfiguration> configurations)
         {
-            throw new System.NotImplementedException();
+            return new List<IndicatorMeta>
+            {
+                new IndicatorMeta
+                {
+                    Name = "Apertura",
+                    Value = candles[currentCandleIndex].Open.ToString(),
+                    Type = IndicatorMetaDataType.Double
+                },
+                new IndicatorMeta
+                {
+                    Name = "Cierre",
+                    Value = candles[currentCandleIndex].Close.ToString(),
+                    Type = IndicatorMetaDataType.Double
+                },
+                new IndicatorMeta
+                {
+                    Name = "Máximo",
+                    Value = candles[currentCandleIndex].High.ToString(),
+                    Type = IndicatorMetaDataType.Double
+                },
+                new IndicatorMeta
+                {
+                    Name = "Mínimo",
+                    Value = candles[currentCandleIndex].Low.ToString(),
+                    Type = IndicatorMetaDataType.Double
+                }
+            };
         }
     }
 }
