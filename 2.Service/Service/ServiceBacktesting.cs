@@ -50,21 +50,19 @@ namespace _2.Service.Service
                 counter++;
                 Candle lastGroupedCandle = groupedCandles.Last();
 
+                if (lastGroupedCandle.High < candle.High)
+                {
+                    lastGroupedCandle.High = candle.High;
+                }
+                if (lastGroupedCandle.Low > candle.Low)
+                {
+                    lastGroupedCandle.Low = candle.Low;
+                }
+
                 if (counter == parameters.CandlesGroupingAmount)
                 {
                     counter = 0;
                     lastGroupedCandle.Close = candle.Close;
-                }
-                else
-                {
-                    if (lastGroupedCandle.High < candle.High)
-                    {
-                        lastGroupedCandle.High = candle.High;
-                    }
-                    if (lastGroupedCandle.Low > candle.Low)
-                    {
-                        lastGroupedCandle.Low = candle.Low;
-                    }
                 }
             }
 
