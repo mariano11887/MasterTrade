@@ -1,0 +1,35 @@
+﻿@model MasterTrade.Models.BacktestingWithRangesStep1Model
+@if (Model.DateFrom > DateTime.MinValue && Model.DateTo > DateTime.MinValue)
+{
+    <div class="row">
+        @Html.LabelFor(m => m.DateFrom, new { @class = "col-md-3 col-form-label" })
+        <div class="col-md-3">
+            @Html.TextBoxFor(m => m.DateFrom, new { @class = "form-control datepicker" })
+        </div>
+        @Html.LabelFor(m => m.DateTo, new { @class = "col-md-3 col-form-label" })
+        <div class="col-md-3">
+            @Html.TextBoxFor(m => m.DateTo, new { @class = "form-control datepicker" })
+        </div>
+    </div>
+    <div class="row" style="margin-top: 0.5rem;">
+        <div class="offset-md-9 col-md-3">
+            <input type="submit" value="Siguiente" class="btn btn-outline-dark lightBrownBtn" />
+        </div>
+    </div>
+
+    <script>
+        function renderDatePickers() {
+            $(".datepicker").datepicker({
+                dateFormat: "d/m/yy",
+                changemonth: true,
+                changeyear: true,
+                minDate: new Date(@Model.DateFrom.Year, @Model.DateFrom.Month - 1, @Model.DateFrom.Day),
+                maxDate: new Date(@Model.DateTo.Year, @Model.DateTo.Month - 1, @Model.DateTo.Day),
+                onSelect: function (dateText) {
+                    let hour = $(this).attr('id') == "DateFrom" ? " 00:00:00" : " 23:30:00";
+                    $(this).val(dateText + hour);
+                }
+            });
+        }
+    </script>
+}

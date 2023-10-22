@@ -189,6 +189,8 @@
     <Compile Include="Models\BacktestingModel.cs" />
     <Compile Include="Models\BacktestingResultsModel.cs" />
     <Compile Include="Models\BacktestingWithRangesModel.cs" />
+    <Compile Include="Models\BacktestingWithRangesStep1Model.cs" />
+    <Compile Include="Models\BacktestingWithRangesStep2Model.cs" />
     <Compile Include="Models\CryptoPairModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -324,6 +326,7 @@
     <Content Include="Views\MyStrategies\NewStep5Conditions2.cshtml" />
     <Content Include="Views\MyStrategies\NewStep5AddedConditions.cshtml" />
     <Content Include="Views\Backtesting\IndexDates.cshtml" />
+    <Content Include="Views\BacktestingWithRanges\Step1Dates.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

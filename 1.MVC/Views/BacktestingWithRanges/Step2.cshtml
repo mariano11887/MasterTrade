@@ -1,4 +1,4 @@
-﻿@model MasterTrade.Models.BacktestingWithRangesModel
+﻿@model MasterTrade.Models.BacktestingWithRangesStep2Model
 @{
     ViewBag.Title = "Paso 2";
 }
@@ -9,60 +9,29 @@
     <hr />
     @using (Html.BeginForm("Step2", "BacktestingWithRanges", FormMethod.Post, new { role = "form" }))
     {
-        <div class="row">
-            <h5>Media móvil (5): Longitud</h5>
-        </div>
-        <div class="row">
-            @Html.LabelFor(m => m.MinValue, new { @class = "col-md-2 col-form-label" })
-            <div class="col-md-2">
-                @Html.TextBoxFor(m => m.MinValue, new { @class = "form-control" })
+        for (int i = 0; i < Model.Configurations.Count(); i++)
+        {
+            @Html.HiddenFor(m => m.Configurations[i].IndicatorId)
+            <div class="row">
+                <h5>@Model.Configurations[i].IndicatorName: @Model.Configurations[i].ConfigurationName</h5>
             </div>
-            @Html.LabelFor(m => m.MaxValue, new { @class = "col-md-2 col-form-label" })
-            <div class="col-md-2">
-                @Html.TextBoxFor(m => m.MaxValue, new { @class = "form-control" })
+            <div class="row">
+                @Html.LabelFor(m => m.Configurations[i].MinValue, new { @class = "col-md-2 col-form-label" })
+                <div class="col-md-2">
+                    @Html.TextBoxFor(m => m.Configurations[i].MinValue, new { @class = "form-control" })
+                </div>
+                @Html.LabelFor(m => m.Configurations[i].MaxValue, new { @class = "col-md-2 col-form-label" })
+                <div class="col-md-2">
+                    @Html.TextBoxFor(m => m.Configurations[i].MaxValue, new { @class = "form-control" })
+                </div>
+                @Html.LabelFor(m => m.Configurations[i].Increment, new { @class = "col-md-2 col-form-label" })
+                <div class="col-md-2">
+                    @Html.TextBoxFor(m => m.Configurations[i].Increment, new { @class = "form-control" })
+                </div>
             </div>
-            @Html.LabelFor(m => m.Increment, new { @class = "col-md-2 col-form-label" })
-            <div class="col-md-2">
-                @Html.TextBoxFor(m => m.Increment, new { @class = "form-control" })
-            </div>
-        </div>
-        <br />
-        <div class="row">
-            <h5>Media móvil (10): Longitud</h5>
-        </div>
-        <div class="row">
-            @Html.LabelFor(m => m.MinValue, new { @class = "col-md-2 col-form-label" })
-            <div class="col-md-2">
-                @Html.TextBoxFor(m => m.MinValue, new { @class = "form-control" })
-            </div>
-            @Html.LabelFor(m => m.MaxValue, new { @class = "col-md-2 col-form-label" })
-            <div class="col-md-2">
-                @Html.TextBoxFor(m => m.MaxValue, new { @class = "form-control" })
-            </div>
-            @Html.LabelFor(m => m.Increment, new { @class = "col-md-2 col-form-label" })
-            <div class="col-md-2">
-                @Html.TextBoxFor(m => m.Increment, new { @class = "form-control" })
-            </div>
-        </div>
-        <br />
-        <div class="row">
-            <h5>Media móvil (20): Longitud</h5>
-        </div>
-        <div class="row">
-            @Html.LabelFor(m => m.MinValue, new { @class = "col-md-2 col-form-label" })
-            <div class="col-md-2">
-                @Html.TextBoxFor(m => m.MinValue, new { @class = "form-control" })
-            </div>
-            @Html.LabelFor(m => m.MaxValue, new { @class = "col-md-2 col-form-label" })
-            <div class="col-md-2">
-                @Html.TextBoxFor(m => m.MaxValue, new { @class = "form-control" })
-            </div>
-            @Html.LabelFor(m => m.Increment, new { @class = "col-md-2 col-form-label" })
-            <div class="col-md-2">
-                @Html.TextBoxFor(m => m.Increment, new { @class = "form-control" })
-            </div>
-        </div>
-        <br />
+            <br />
+        }
+
         <div class="row" style="margin-top: 0.5rem;">
             <div class="offset-md-8 col-md-4">
                 @Html.ActionLink("Cancelar", "Index", "Home", new { area = "" }, new { @class = "btn btn-outline-dark" })

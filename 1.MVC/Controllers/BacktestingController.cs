@@ -2,7 +2,6 @@
 using _4.DTO;
 using MasterTrade.Controllers.Base;
 using MasterTrade.Models;
-using Microsoft.Owin.Security.Provider;
 using System;
 using System.Collections.Generic;
 using System.Linq;
