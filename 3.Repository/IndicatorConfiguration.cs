@@ -20,7 +20,7 @@ namespace _3.Repository
         public string Value { get; set; }
         public Nullable<int> DataTypeId { get; set; }
     
-        public virtual Indicator Indicator { get; set; }
         public virtual IndicatorMetaDataType IndicatorMetaDataType { get; set; }
+        public virtual Indicator Indicator { get; set; }
     }
 }

@@ -17,22 +17,22 @@ namespace _3.Repository
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Indicator()
         {
-            this.Backtestings = new HashSet<Backtesting>();
             this.IndicatorConfigurations = new HashSet<IndicatorConfiguration>();
             this.IndicatorMetas = new HashSet<IndicatorMeta>();
+            this.Backtestings = new HashSet<Backtesting>();
         }
     
         public int Id { get; set; }
-        public int StrategyId { get; set; }
+        public Nullable<int> StrategyId { get; set; }
         public int TypeId { get; set; }
     
         public virtual IndicatorType IndicatorType { get; set; }
         public virtual Strategy Strategy { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Backtesting> Backtestings { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<IndicatorConfiguration> IndicatorConfigurations { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<IndicatorMeta> IndicatorMetas { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Backtesting> Backtestings { get; set; }
     }
 }

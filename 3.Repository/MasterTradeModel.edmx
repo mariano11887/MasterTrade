@@ -84,7 +84,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="StrategyId" Type="int" Nullable="false" />
+          <Property Name="StrategyId" Type="int" />
           <Property Name="TypeId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="IndicatorConfiguration">
@@ -304,7 +304,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Indicator_Strategy">
-          <End Role="Strategy" Type="Self.Strategy" Multiplicity="1" />
+          <End Role="Strategy" Type="Self.Strategy" Multiplicity="0..1" />
           <End Role="Indicator" Type="Self.Indicator" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Strategy">
@@ -615,7 +615,7 @@
           <Property Name="BacktestingBatchId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="BacktestingBatch" Relationship="Self.FK_Backtesting_BacktestingBatch" FromRole="Backtesting" ToRole="BacktestingBatch" />
           <NavigationProperty Name="BacktestingOperations" Relationship="Self.FK_BacktestingOperation_Backtesting" FromRole="Backtesting" ToRole="BacktestingOperation" />
-          <NavigationProperty Name="Indicators" Relationship="Self.BacktestingIndicator" FromRole="Backtesting" ToRole="Indicator" />
+          <NavigationProperty Name="Indicators" Relationship="MasterTradeModel.BacktestingIndicator" FromRole="Backtesting" ToRole="Indicator" />
         </EntityType>
         <EntityType Name="BacktestingBatch">
           <Key>
@@ -677,19 +677,6 @@
           <NavigationProperty Name="Supplier" Relationship="Self.FK_CryptoPair_Supplier" FromRole="CryptoPair" ToRole="Supplier" />
           <NavigationProperty Name="Temporalities" Relationship="Self.FK_Temporality_CryptoPair" FromRole="CryptoPair" ToRole="Temporality" />
         </EntityType>
-        <EntityType Name="Indicator">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="StrategyId" Type="Int32" Nullable="false" />
-          <Property Name="TypeId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="IndicatorType" Relationship="Self.FK_Indicator_IndicatorType" FromRole="Indicator" ToRole="IndicatorType" />
-          <NavigationProperty Name="Strategy" Relationship="Self.FK_Indicator_Strategy" FromRole="Indicator" ToRole="Strategy" />
-          <NavigationProperty Name="Backtestings" Relationship="Self.BacktestingIndicator" FromRole="Indicator" ToRole="Backtesting" />
-          <NavigationProperty Name="IndicatorConfigurations" Relationship="MasterTradeModel.FK_IndicatorConfiguration_Indicator" FromRole="Indicator" ToRole="IndicatorConfiguration" />
-          <NavigationProperty Name="IndicatorMetas" Relationship="MasterTradeModel.FK_IndicatorMeta_Indicator" FromRole="Indicator" ToRole="IndicatorMeta" />
-        </EntityType>
         <EntityType Name="IndicatorMetaDataType">
           <Key>
             <PropertyRef Name="Id" />
@@ -705,7 +692,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Indicators" Relationship="Self.FK_Indicator_IndicatorType" FromRole="IndicatorType" ToRole="Indicator" />
+          <NavigationProperty Name="Indicators" Relationship="MasterTradeModel.FK_Indicator_IndicatorType" FromRole="IndicatorType" ToRole="Indicator" />
         </EntityType>
         <EntityType Name="Permission">
           <Key>
@@ -735,10 +722,10 @@
           <Property Name="InvestmentAmount" Type="Decimal" Precision="10" Scale="4" />
           <Property Name="InvestmentPercentage" Type="Decimal" Precision="5" Scale="2" />
           <NavigationProperty Name="BacktestingBatches" Relationship="Self.FK_BacktestingBatch_Strategy" FromRole="Strategy" ToRole="BacktestingBatch" />
-          <NavigationProperty Name="Indicators" Relationship="Self.FK_Indicator_Strategy" FromRole="Strategy" ToRole="Indicator" />
           <NavigationProperty Name="User" Relationship="Self.FK_Strategy_User" FromRole="Strategy" ToRole="User" />
           <NavigationProperty Name="StrategyConditions" Relationship="Self.FK_StrategyCondition_Strategy" FromRole="Strategy" ToRole="StrategyCondition" />
           <Property Name="IsComplete" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Indicators" Relationship="MasterTradeModel.FK_Indicator_Strategy" FromRole="Strategy" ToRole="Indicator" />
         </EntityType>
         <EntityType Name="StrategyCondition">
           <Key>
@@ -886,30 +873,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Indicator_IndicatorType">
-          <End Role="IndicatorType" Type="Self.IndicatorType" Multiplicity="1" />
-          <End Role="Indicator" Type="Self.Indicator" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="IndicatorType">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Indicator">
-              <PropertyRef Name="TypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Indicator_Strategy">
-          <End Role="Strategy" Type="Self.Strategy" Multiplicity="1" />
-          <End Role="Indicator" Type="Self.Indicator" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Strategy">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Indicator">
-              <PropertyRef Name="StrategyId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_User_Role">
           <End Role="Role" Type="Self.Role" Multiplicity="1" />
           <End Role="User" Type="Self.User" Multiplicity="*" />
@@ -946,10 +909,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="BacktestingIndicator">
-          <End Role="Backtesting" Type="Self.Backtesting" Multiplicity="*" />
-          <End Role="Indicator" Type="Self.Indicator" Multiplicity="*" />
-        </Association>
         <Association Name="RolePermission">
           <End Role="Permission" Type="Self.Permission" Multiplicity="*" />
           <End Role="Role" Type="Self.Role" Multiplicity="*" />
@@ -961,7 +920,6 @@
           <EntitySet Name="Candles" EntityType="Self.Candle" />
           <EntitySet Name="Comparers" EntityType="Self.Comparer" />
           <EntitySet Name="CryptoPairs" EntityType="Self.CryptoPair" />
-          <EntitySet Name="Indicators" EntityType="Self.Indicator" />
           <EntitySet Name="IndicatorMetaDataTypes" EntityType="Self.IndicatorMetaDataType" />
           <EntitySet Name="IndicatorTypes" EntityType="Self.IndicatorType" />
           <EntitySet Name="Permissions" EntityType="Self.Permission" />
@@ -1003,14 +961,6 @@
             <End Role="CryptoPair" EntitySet="CryptoPairs" />
             <End Role="Temporality" EntitySet="Temporalities" />
           </AssociationSet>
-          <AssociationSet Name="FK_Indicator_IndicatorType" Association="Self.FK_Indicator_IndicatorType">
-            <End Role="IndicatorType" EntitySet="IndicatorTypes" />
-            <End Role="Indicator" EntitySet="Indicators" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Indicator_Strategy" Association="Self.FK_Indicator_Strategy">
-            <End Role="Strategy" EntitySet="Strategies" />
-            <End Role="Indicator" EntitySet="Indicators" />
-          </AssociationSet>
           <AssociationSet Name="FK_User_Role" Association="Self.FK_User_Role">
             <End Role="Role" EntitySet="Roles" />
             <End Role="User" EntitySet="Users" />
@@ -1023,19 +973,11 @@
             <End Role="Strategy" EntitySet="Strategies" />
             <End Role="StrategyCondition" EntitySet="StrategyConditions" />
           </AssociationSet>
-          <AssociationSet Name="BacktestingIndicator" Association="Self.BacktestingIndicator">
-            <End Role="Backtesting" EntitySet="Backtestings" />
-            <End Role="Indicator" EntitySet="Indicators" />
-          </AssociationSet>
           <AssociationSet Name="RolePermission" Association="Self.RolePermission">
             <End Role="Permission" EntitySet="Permissions" />
             <End Role="Role" EntitySet="Roles" />
           </AssociationSet>
           <EntitySet Name="IndicatorConfigurations" EntityType="MasterTradeModel.IndicatorConfiguration" />
-          <AssociationSet Name="FK_IndicatorConfiguration_Indicator" Association="MasterTradeModel.FK_IndicatorConfiguration_Indicator">
-            <End Role="Indicator" EntitySet="Indicators" />
-            <End Role="IndicatorConfiguration" EntitySet="IndicatorConfigurations" />
-          </AssociationSet>
           <AssociationSet Name="FK_IndicatorConfiguration_IndicatorMetaDataType" Association="MasterTradeModel.FK_IndicatorConfiguration_IndicatorMetaDataType">
             <End Role="IndicatorMetaDataType" EntitySet="IndicatorMetaDataTypes" />
             <End Role="IndicatorConfiguration" EntitySet="IndicatorConfigurations" />
@@ -1046,10 +988,6 @@
             <End Role="StrategyCondition" EntitySet="StrategyConditions" />
           </AssociationSet>
           <EntitySet Name="IndicatorMetas" EntityType="MasterTradeModel.IndicatorMeta" />
-          <AssociationSet Name="FK_IndicatorMeta_Indicator" Association="MasterTradeModel.FK_IndicatorMeta_Indicator">
-            <End Role="Indicator" EntitySet="Indicators" />
-            <End Role="IndicatorMeta" EntitySet="IndicatorMetas" />
-          </AssociationSet>
           <AssociationSet Name="FK_IndicatorMeta_IndicatorMetaDataType" Association="MasterTradeModel.FK_IndicatorMeta_IndicatorMetaDataType">
             <End Role="IndicatorMetaDataType" EntitySet="IndicatorMetaDataTypes" />
             <End Role="IndicatorMeta" EntitySet="IndicatorMetas" />
@@ -1062,6 +1000,27 @@
             <End Role="IndicatorMeta" EntitySet="IndicatorMetas" />
             <End Role="StrategyCondition" EntitySet="StrategyConditions" />
           </AssociationSet>
+          <EntitySet Name="Indicators" EntityType="MasterTradeModel.Indicator" />
+          <AssociationSet Name="FK_Indicator_IndicatorType" Association="MasterTradeModel.FK_Indicator_IndicatorType">
+            <End Role="IndicatorType" EntitySet="IndicatorTypes" />
+            <End Role="Indicator" EntitySet="Indicators" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Indicator_Strategy" Association="MasterTradeModel.FK_Indicator_Strategy">
+            <End Role="Strategy" EntitySet="Strategies" />
+            <End Role="Indicator" EntitySet="Indicators" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IndicatorConfiguration_Indicator" Association="MasterTradeModel.FK_IndicatorConfiguration_Indicator">
+            <End Role="Indicator" EntitySet="Indicators" />
+            <End Role="IndicatorConfiguration" EntitySet="IndicatorConfigurations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IndicatorMeta_Indicator" Association="MasterTradeModel.FK_IndicatorMeta_Indicator">
+            <End Role="Indicator" EntitySet="Indicators" />
+            <End Role="IndicatorMeta" EntitySet="IndicatorMetas" />
+          </AssociationSet>
+          <AssociationSet Name="BacktestingIndicator" Association="MasterTradeModel.BacktestingIndicator">
+            <End Role="Backtesting" EntitySet="Backtestings" />
+            <End Role="Indicator" EntitySet="Indicators" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="IndicatorConfiguration">
           <Key>
@@ -1072,21 +1031,9 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Value" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="DataTypeId" Type="Int32" />
-          <NavigationProperty Name="Indicator" Relationship="MasterTradeModel.FK_IndicatorConfiguration_Indicator" FromRole="IndicatorConfiguration" ToRole="Indicator" />
           <NavigationProperty Name="IndicatorMetaDataType" Relationship="MasterTradeModel.FK_IndicatorConfiguration_IndicatorMetaDataType" FromRole="IndicatorConfiguration" ToRole="IndicatorMetaDataType" />
+          <NavigationProperty Name="Indicator" Relationship="MasterTradeModel.FK_IndicatorConfiguration_Indicator" FromRole="IndicatorConfiguration" ToRole="Indicator" />
         </EntityType>
-        <Association Name="FK_IndicatorConfiguration_Indicator">
-          <End Type="MasterTradeModel.Indicator" Role="Indicator" Multiplicity="1" />
-          <End Type="MasterTradeModel.IndicatorConfiguration" Role="IndicatorConfiguration" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Indicator">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="IndicatorConfiguration">
-              <PropertyRef Name="IndicatorId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_IndicatorConfiguration_IndicatorMetaDataType">
           <End Type="MasterTradeModel.IndicatorMetaDataType" Role="IndicatorMetaDataType" Multiplicity="0..1" />
           <End Type="MasterTradeModel.IndicatorConfiguration" Role="IndicatorConfiguration" Multiplicity="*" />
@@ -1128,23 +1075,11 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Value" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="IndicatorMetaDataTypeId" Type="Int32" />
-          <NavigationProperty Name="Indicator" Relationship="MasterTradeModel.FK_IndicatorMeta_Indicator" FromRole="IndicatorMeta" ToRole="Indicator" />
           <NavigationProperty Name="IndicatorMetaDataType" Relationship="MasterTradeModel.FK_IndicatorMeta_IndicatorMetaDataType" FromRole="IndicatorMeta" ToRole="IndicatorMetaDataType" />
           <NavigationProperty Name="StrategyConditions" Relationship="MasterTradeModel.FK_StrategyCondition_IndicatorMeta" FromRole="IndicatorMeta" ToRole="StrategyCondition" />
           <NavigationProperty Name="StrategyConditions1" Relationship="MasterTradeModel.FK_StrategyCondition_IndicatorMeta1" FromRole="IndicatorMeta" ToRole="StrategyCondition" />
+          <NavigationProperty Name="Indicator" Relationship="MasterTradeModel.FK_IndicatorMeta_Indicator" FromRole="IndicatorMeta" ToRole="Indicator" />
         </EntityType>
-        <Association Name="FK_IndicatorMeta_Indicator">
-          <End Type="MasterTradeModel.Indicator" Role="Indicator" Multiplicity="1" />
-          <End Type="MasterTradeModel.IndicatorMeta" Role="IndicatorMeta" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Indicator">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="IndicatorMeta">
-              <PropertyRef Name="IndicatorId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_IndicatorMeta_IndicatorMetaDataType">
           <End Type="MasterTradeModel.IndicatorMetaDataType" Role="IndicatorMetaDataType" Multiplicity="0..1" />
           <End Type="MasterTradeModel.IndicatorMeta" Role="IndicatorMeta" Multiplicity="*" />
@@ -1180,6 +1115,71 @@
               <PropertyRef Name="SecondIndicatorMetaId" />
             </Dependent>
           </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Indicator">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StrategyId" Type="Int32" />
+          <Property Name="TypeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="IndicatorType" Relationship="MasterTradeModel.FK_Indicator_IndicatorType" FromRole="Indicator" ToRole="IndicatorType" />
+          <NavigationProperty Name="Strategy" Relationship="MasterTradeModel.FK_Indicator_Strategy" FromRole="Indicator" ToRole="Strategy" />
+          <NavigationProperty Name="IndicatorConfigurations" Relationship="MasterTradeModel.FK_IndicatorConfiguration_Indicator" FromRole="Indicator" ToRole="IndicatorConfiguration" />
+          <NavigationProperty Name="IndicatorMetas" Relationship="MasterTradeModel.FK_IndicatorMeta_Indicator" FromRole="Indicator" ToRole="IndicatorMeta" />
+          <NavigationProperty Name="Backtestings" Relationship="MasterTradeModel.BacktestingIndicator" FromRole="Indicator" ToRole="Backtesting" />
+        </EntityType>
+        <Association Name="FK_Indicator_IndicatorType">
+          <End Type="MasterTradeModel.IndicatorType" Role="IndicatorType" Multiplicity="1" />
+          <End Type="MasterTradeModel.Indicator" Role="Indicator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IndicatorType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Indicator">
+              <PropertyRef Name="TypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Indicator_Strategy">
+          <End Type="MasterTradeModel.Strategy" Role="Strategy" Multiplicity="0..1" />
+          <End Type="MasterTradeModel.Indicator" Role="Indicator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Strategy">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Indicator">
+              <PropertyRef Name="StrategyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IndicatorConfiguration_Indicator">
+          <End Type="MasterTradeModel.Indicator" Role="Indicator" Multiplicity="1" />
+          <End Type="MasterTradeModel.IndicatorConfiguration" Role="IndicatorConfiguration" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Indicator">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="IndicatorConfiguration">
+              <PropertyRef Name="IndicatorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IndicatorMeta_Indicator">
+          <End Type="MasterTradeModel.Indicator" Role="Indicator" Multiplicity="1" />
+          <End Type="MasterTradeModel.IndicatorMeta" Role="IndicatorMeta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Indicator">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="IndicatorMeta">
+              <PropertyRef Name="IndicatorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="BacktestingIndicator">
+          <End Type="MasterTradeModel.Backtesting" Role="Backtesting" Multiplicity="*" />
+          <End Type="MasterTradeModel.Indicator" Role="Indicator" Multiplicity="*" />
         </Association>
         </Schema>
     </edmx:ConceptualModels>
@@ -1249,15 +1249,6 @@
                 <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
                 <ScalarProperty Name="SupplierPairName" ColumnName="SupplierPairName" />
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Indicators">
-            <EntityTypeMapping TypeName="MasterTradeModel.Indicator">
-              <MappingFragment StoreEntitySet="Indicator">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
-                <ScalarProperty Name="TypeId" ColumnName="TypeId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1350,14 +1341,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="BacktestingIndicator" TypeName="MasterTradeModel.BacktestingIndicator" StoreEntitySet="BacktestingIndicator">
-            <EndProperty Name="Backtesting">
-              <ScalarProperty Name="Id" ColumnName="BacktestingId" />
-            </EndProperty>
-            <EndProperty Name="Indicator">
-              <ScalarProperty Name="Id" ColumnName="IndicatorId" />
-            </EndProperty>
-          </AssociationSetMapping>
           <AssociationSetMapping Name="RolePermission" TypeName="MasterTradeModel.RolePermission" StoreEntitySet="RolePermission">
             <EndProperty Name="Permission">
               <ScalarProperty Name="Id" ColumnName="PermissionId" />
@@ -1396,6 +1379,23 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Indicators">
+            <EntityTypeMapping TypeName="MasterTradeModel.Indicator">
+              <MappingFragment StoreEntitySet="Indicator">
+                <ScalarProperty Name="TypeId" ColumnName="TypeId" />
+                <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="BacktestingIndicator" TypeName="MasterTradeModel.BacktestingIndicator" StoreEntitySet="BacktestingIndicator">
+            <EndProperty Name="Indicator">
+              <ScalarProperty Name="Id" ColumnName="IndicatorId" />
+            </EndProperty>
+            <EndProperty Name="Backtesting">
+              <ScalarProperty Name="Id" ColumnName="BacktestingId" />
+            </EndProperty>
+          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

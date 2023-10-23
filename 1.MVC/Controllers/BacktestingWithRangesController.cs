@@ -29,34 +29,31 @@ namespace MasterTrade.Controllers
                 {
                     Text = cp.Name,
                     Value = cp.Id.ToString()
-                }).ToList(),
-                AllTemporalities = new List<SelectListItem>
-                {
-                    new SelectListItem() { Text = GetTemporalityText(1), Value = "1" },
-                    new SelectListItem() { Text = GetTemporalityText(2), Value = "2" },
-                    new SelectListItem() { Text = GetTemporalityText(4), Value = "4" },
-                    new SelectListItem() { Text = GetTemporalityText(8), Value = "8" },
-                    new SelectListItem() { Text = GetTemporalityText(24), Value = "24" },
-                    new SelectListItem() { Text = GetTemporalityText(48), Value = "48" }
-                }
+                }).ToList()
             };
 
             return View(model);
         }
 
-        public ActionResult LoadCryptoPairDates(int? cryptoPairId)
+        public ActionResult LoadCryptoPairInfo(int? cryptoPairId)
         {
             BacktestingWithRangesStep1Model model = new BacktestingWithRangesStep1Model();
 
             if (cryptoPairId.HasValue)
             {
                 (DateTime, DateTime) dateRange = new ServiceCryptoPair().GetDateRange(cryptoPairId.Value);
-
                 model.DateFrom = dateRange.Item1;
                 model.DateTo = dateRange.Item2;
+
+                List<DTOTemporality> temporalities = new ServiceTemporality().GetAll(cryptoPairId.Value);
+                model.AllTemporalities = temporalities.Select(t => new SelectListItem()
+                {
+                    Text = t.Description,
+                    Value = t.Id.ToString()
+                }).ToList();
             }
 
-            return PartialView("Step1Dates", model);
+            return PartialView("Step1CryptoPairInfo", model);
         }
 
         [HttpPost]
@@ -127,27 +124,6 @@ namespace MasterTrade.Controllers
         public ActionResult Results()
         {
             return View();
-        }
-
-        private string GetTemporalityText(int temporalityId)
-        {
-            switch (temporalityId)
-            {
-                case 1:
-                    return "30 min";
-                case 2:
-                    return "1 hr";
-                case 4:
-                    return "2 hs";
-                case 8:
-                    return "4 hs";
-                case 24:
-                    return "12 hs";
-                case 48:
-                    return "1 día";
-                default:
-                    return "";
-            }
         }
     }
 }

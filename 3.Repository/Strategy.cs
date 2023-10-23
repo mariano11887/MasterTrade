@@ -18,8 +18,8 @@ namespace _3.Repository
         public Strategy()
         {
             this.BacktestingBatches = new HashSet<BacktestingBatch>();
-            this.Indicators = new HashSet<Indicator>();
             this.StrategyConditions = new HashSet<StrategyCondition>();
+            this.Indicators = new HashSet<Indicator>();
         }
     
         public int Id { get; set; }
@@ -31,10 +31,10 @@ namespace _3.Repository
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BacktestingBatch> BacktestingBatches { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Indicator> Indicators { get; set; }
         public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StrategyCondition> StrategyConditions { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Indicator> Indicators { get; set; }
     }
 }

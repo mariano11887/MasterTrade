@@ -11,7 +11,6 @@
         <EntityTypeShape EntityType="MasterTradeModel.Candle" Width="1.5" PointX="5.25" PointY="3.25" IsExpanded="true" />
         <EntityTypeShape EntityType="MasterTradeModel.Comparer" Width="1.5" PointX="17.25" PointY="3.875" IsExpanded="true" />
         <EntityTypeShape EntityType="MasterTradeModel.CryptoPair" Width="1.5" PointX="3" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="MasterTradeModel.Indicator" Width="1.5" PointX="15" PointY="6.5" IsExpanded="true" />
         <EntityTypeShape EntityType="MasterTradeModel.IndicatorMetaDataType" Width="1.5" PointX="15" PointY="3.875" IsExpanded="true" />
         <EntityTypeShape EntityType="MasterTradeModel.IndicatorType" Width="1.5" PointX="12.75" PointY="3.875" IsExpanded="true" />
         <EntityTypeShape EntityType="MasterTradeModel.Permission" Width="1.5" PointX="1.5" PointY="13.75" IsExpanded="true" />
@@ -29,23 +28,24 @@
         <AssociationConnector Association="MasterTradeModel.FK_StrategyCondition_Comparer" ManuallyRouted="false" />
         <AssociationConnector Association="MasterTradeModel.FK_CryptoPair_Supplier" ManuallyRouted="false" />
         <AssociationConnector Association="MasterTradeModel.FK_Temporality_CryptoPair" ManuallyRouted="false" />
-        <AssociationConnector Association="MasterTradeModel.FK_Indicator_IndicatorType" ManuallyRouted="false" />
-        <AssociationConnector Association="MasterTradeModel.FK_Indicator_Strategy" ManuallyRouted="false" />
         <AssociationConnector Association="MasterTradeModel.FK_User_Role" ManuallyRouted="false" />
         <AssociationConnector Association="MasterTradeModel.FK_Strategy_User" ManuallyRouted="false" />
         <AssociationConnector Association="MasterTradeModel.FK_StrategyCondition_Strategy" ManuallyRouted="false" />
-        <AssociationConnector Association="MasterTradeModel.BacktestingIndicator" ManuallyRouted="false" />
         <AssociationConnector Association="MasterTradeModel.RolePermission" ManuallyRouted="false" />
         <EntityTypeShape EntityType="MasterTradeModel.IndicatorConfiguration" Width="1.5" PointX="20.25" PointY="2.25" />
-        <AssociationConnector Association="MasterTradeModel.FK_IndicatorConfiguration_Indicator" />
         <AssociationConnector Association="MasterTradeModel.FK_IndicatorConfiguration_IndicatorMetaDataType" />
         <EntityTypeShape EntityType="MasterTradeModel.ExecutionMoment" Width="1.5" PointX="0.75" PointY="0.875" />
         <AssociationConnector Association="MasterTradeModel.FK_StrategyCondition_ExecutionMoment" />
         <EntityTypeShape EntityType="MasterTradeModel.IndicatorMeta" Width="1.5" PointX="17.25" PointY="7.125" />
-        <AssociationConnector Association="MasterTradeModel.FK_IndicatorMeta_Indicator" />
         <AssociationConnector Association="MasterTradeModel.FK_IndicatorMeta_IndicatorMetaDataType" />
         <AssociationConnector Association="MasterTradeModel.FK_StrategyCondition_IndicatorMeta" />
         <AssociationConnector Association="MasterTradeModel.FK_StrategyCondition_IndicatorMeta1" />
+        <EntityTypeShape EntityType="MasterTradeModel.Indicator" Width="1.5" PointX="15" PointY="7.25" />
+        <AssociationConnector Association="MasterTradeModel.FK_Indicator_IndicatorType" />
+        <AssociationConnector Association="MasterTradeModel.FK_Indicator_Strategy" />
+        <AssociationConnector Association="MasterTradeModel.FK_IndicatorConfiguration_Indicator" />
+        <AssociationConnector Association="MasterTradeModel.FK_IndicatorMeta_Indicator" />
+        <AssociationConnector Association="MasterTradeModel.BacktestingIndicator" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

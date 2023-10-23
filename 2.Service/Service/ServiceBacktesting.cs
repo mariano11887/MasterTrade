@@ -132,6 +132,26 @@ namespace _2.Service.Service
                 Date = DateTime.Now
             };
 
+            foreach (DTOIndicator indicatorDTO in parameters.Strategy.Indicators)
+            {
+                _3.Repository.Indicator indicator = new _3.Repository.Indicator
+                {
+                    TypeId = indicatorDTO.TypeId
+                };
+
+                foreach (DTOIndicatorConfiguration configuration in indicatorDTO.Configurations)
+                {
+                    indicator.IndicatorMetas.Add(new _3.Repository.IndicatorMeta
+                    {
+                        Name = configuration.Name,
+                        Value = configuration.Value,
+                        IndicatorMetaDataTypeId = (int)configuration.Type
+                    });
+                }
+
+                backtesting.Indicators.Add(indicator);
+            }
+
             // Calculo los resultados
             decimal currentCapital = 1000;
             DTOBacktestingResult result = new DTOBacktestingResult

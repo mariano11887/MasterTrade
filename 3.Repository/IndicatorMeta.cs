@@ -27,11 +27,11 @@ namespace _3.Repository
         public string Value { get; set; }
         public Nullable<int> IndicatorMetaDataTypeId { get; set; }
     
-        public virtual Indicator Indicator { get; set; }
         public virtual IndicatorMetaDataType IndicatorMetaDataType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StrategyCondition> StrategyConditions { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StrategyCondition> StrategyConditions1 { get; set; }
+        public virtual Indicator Indicator { get; set; }
     }
 }
