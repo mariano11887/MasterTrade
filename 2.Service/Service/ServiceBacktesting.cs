@@ -2,6 +2,7 @@
 using _3.Repository;
 using _3.Repository.Repository;
 using _4.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using IndicatorMeta = _2.Service.Indicator.Interface.IndicatorMeta;
@@ -12,6 +13,8 @@ namespace _2.Service.Service
     {
         private readonly RepositoryCandle repositoryCandle;
         private readonly RepositoryCryptoPair repositoryCryptoPair;
+        private readonly RepositoryTemporality repositoryTemporality;
+        private readonly RepositoryBacktestingBatch repositoryBacktestingBatch;
 
         private readonly ServiceIndicator serviceIndicator;
 
@@ -19,6 +22,8 @@ namespace _2.Service.Service
         {
             repositoryCandle = new RepositoryCandle();
             repositoryCryptoPair = new RepositoryCryptoPair();
+            repositoryTemporality = new RepositoryTemporality();
+            repositoryBacktestingBatch = new RepositoryBacktestingBatch();
 
             serviceIndicator = new ServiceIndicator();
         }
@@ -32,6 +37,7 @@ namespace _2.Service.Service
                                                    .ToList();
 
             // Las agrupo según la temporalidad elegida
+            Temporality temporality = repositoryTemporality.GetQuery().First(t => t.Id == parameters.TemporalityId);
             List<Candle> groupedCandles = new List<Candle>();
             int counter = 0;
             foreach (Candle candle in candles)
@@ -59,7 +65,7 @@ namespace _2.Service.Service
                     lastGroupedCandle.Low = candle.Low;
                 }
 
-                if (counter == parameters.CandlesGroupingAmount)
+                if (counter == temporality.CandlesGroupingAmount)
                 {
                     counter = 0;
                     lastGroupedCandle.Close = candle.Close;
@@ -113,13 +119,27 @@ namespace _2.Service.Service
                 }
             }
 
+            BacktestingBatch backtestingBatch = new BacktestingBatch
+            {
+                Date = DateTime.Now,
+                StrategyId = parameters.Strategy.Id,
+                TemporalityId = parameters.TemporalityId,
+                DateFrom = parameters.DateFrom,
+                DateTo = parameters.DateTo
+            };
+            Backtesting backtesting = new Backtesting
+            {
+                Date = DateTime.Now
+            };
+
             // Calculo los resultados
             decimal currentCapital = 1000;
             DTOBacktestingResult result = new DTOBacktestingResult
             {
                 InitialCapital = currentCapital,
                 StrategyName = parameters.Strategy.Name,
-                CryptoPair = repositoryCryptoPair.GetQuery().Where(cp => cp.Id == parameters.CryptoPairId).Select(cp => cp.Name).FirstOrDefault()
+                CryptoPair = repositoryCryptoPair.GetQuery().Where(cp => cp.Id == parameters.CryptoPairId).Select(cp => cp.Name).FirstOrDefault(),
+                Temporality = temporality.Description
             };
 
             decimal peakCapital = currentCapital;
@@ -144,6 +164,14 @@ namespace _2.Service.Service
 
                 winOperations += finalCapital > currentCapital ? 1 : 0;
 
+                backtesting.BacktestingOperations.Add(new BacktestingOperation
+                {
+                    OpenDate = operation.OpenCandle.StartDate,
+                    CloseDate = operation.CloseCandle.StartDate,
+                    InitialCapital = currentCapital,
+                    Revenue = finalCapital - currentCapital
+                });
+
                 result.Operations.Add(new DTOBacktestingOperation
                 {
                     OpenDate = operation.OpenCandle.StartDate,
@@ -154,6 +182,14 @@ namespace _2.Service.Service
 
                 currentCapital = finalCapital;
             }
+
+            backtestingBatch.Backtestings.Add(backtesting);
+            try
+            {
+                repositoryBacktestingBatch.Insert(backtestingBatch);
+                repositoryBacktestingBatch.SaveChanges();
+            }
+            catch { }
 
             result.FinalCapital = currentCapital;
             result.MaxDrawdown = troughCapital.HasValue ? (troughCapital.Value - peakCapital) / peakCapital : 0;

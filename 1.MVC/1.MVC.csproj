@@ -325,8 +325,8 @@
     <Content Include="Views\MyStrategies\NewStep5Conditions.cshtml" />
     <Content Include="Views\MyStrategies\NewStep5Conditions2.cshtml" />
     <Content Include="Views\MyStrategies\NewStep5AddedConditions.cshtml" />
-    <Content Include="Views\Backtesting\IndexDates.cshtml" />
     <Content Include="Views\BacktestingWithRanges\Step1Dates.cshtml" />
+    <Content Include="Views\Backtesting\IndexCryptoPairInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

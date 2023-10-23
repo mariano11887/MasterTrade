@@ -23,7 +23,7 @@ namespace _3.Repository
         public int Id { get; set; }
         public string Description { get; set; }
         public int CryptoPairId { get; set; }
-        public int Minutes { get; set; }
+        public int CandlesGroupingAmount { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BacktestingBatch> BacktestingBatches { get; set; }

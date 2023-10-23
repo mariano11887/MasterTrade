@@ -23,14 +23,8 @@
                 @Html.DropDownListFor(m => m.CryptoPairId, Model.AllCryptoPairs, "Seleccione...", new { @class = "form-control" })
             </div>
         </div>
-        <div class="row">
-            @Html.LabelFor(m => m.TemporalityId, new { @class = "col-md-3 col-form-label" })
-            <div class="col-md-9">
-                @Html.DropDownListFor(m => m.TemporalityId, Model.AllTemporalities, new { @class = "form-control" })
-            </div>
-        </div>
-        <div id="dateRange">
-            @Html.Partial("IndexDates")
+        <div id="cryptoPairInfo">
+            @Html.Partial("IndexCryptoPairInfo")
         </div>
     }
 </main>
@@ -42,13 +36,13 @@
         $(function () {
             $('#@Html.IdFor(m => m.CryptoPairId)').change(function () {
                 $.ajax({
-                    url: '@Url.Action("LoadCryptoPairDates")',
+                    url: '@Url.Action("LoadCryptoPairInfo")',
                     type: 'GET',
                     data: {
                         cryptoPairId: function () { return $('#@Html.IdFor(m => m.CryptoPairId)').val(); }
                     }
                 }).done(function (result) {
-                    $('#dateRange').html(result);
+                    $('#cryptoPairInfo').html(result);
                     renderDatePickers();
                 });
             });

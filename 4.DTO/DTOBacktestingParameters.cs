@@ -8,6 +8,6 @@ namespace _4.DTO
         public int CryptoPairId { get; set; }
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
-        public int CandlesGroupingAmount { get; set; }
+        public int TemporalityId { get; set; }
     }
 }

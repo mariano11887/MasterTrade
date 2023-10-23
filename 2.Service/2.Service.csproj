@@ -55,6 +55,7 @@
     <Compile Include="Service\ServiceCryptoPair.cs" />
     <Compile Include="Service\ServiceIndicator.cs" />
     <Compile Include="Service\ServiceStrategy.cs" />
+    <Compile Include="Service\ServiceTemporality.cs" />
     <Compile Include="Service\ServiceUser.cs" />
   </ItemGroup>
   <ItemGroup>

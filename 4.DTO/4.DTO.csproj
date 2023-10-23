@@ -52,6 +52,7 @@
     <Compile Include="DTORole.cs" />
     <Compile Include="DTOStrategy.cs" />
     <Compile Include="DTOStrategyCondition.cs" />
+    <Compile Include="DTOTemporality.cs" />
     <Compile Include="DTOUser.cs" />
     <Compile Include="Enums\Comparer.cs" />
     <Compile Include="Enums\ExecutionMoment.cs" />
