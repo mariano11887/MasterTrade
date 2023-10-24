@@ -12,6 +12,8 @@
         for (int i = 0; i < Model.Configurations.Count(); i++)
         {
             @Html.HiddenFor(m => m.Configurations[i].IndicatorId)
+            @Html.HiddenFor(m => m.Configurations[i].IndicatorName)
+            @Html.HiddenFor(m => m.Configurations[i].ConfigurationName)
             <div class="row">
                 <h5>@Model.Configurations[i].IndicatorName: @Model.Configurations[i].ConfigurationName</h5>
             </div>

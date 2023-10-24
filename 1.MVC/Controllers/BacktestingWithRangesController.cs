@@ -107,16 +107,35 @@ namespace MasterTrade.Controllers
         [HttpPost]
         public ActionResult Step2(BacktestingWithRangesStep2Model model)
         {
+            Session["BacktestingWithRangesStep2"] = model;
             return RedirectToAction("Confirmation", "BacktestingWithRanges");
         }
 
         public ActionResult Confirmation()
         {
-            return View();
+            BacktestingWithRangesStep1Model modelStep1 = (BacktestingWithRangesStep1Model)Session["BacktestingWithRangesStep1"];
+            BacktestingWithRangesStep2Model modelStep2 = (BacktestingWithRangesStep2Model)Session["BacktestingWithRangesStep2"];
+
+            BacktestingWithRangesConfirmationModel model = new BacktestingWithRangesConfirmationModel
+            {
+                StrategyName = new ServiceStrategy().GetById(modelStep1.StrategyId, GetUserId()).Name,
+                CryptoPairName = new ServiceCryptoPair().GetById(modelStep1.CryptoPairId).Name,
+                DateRange = $"{modelStep1.DateFrom:dd/MM/yyyy HH:mm} - {modelStep1.DateTo:dd/MM/yyyy HH:mm}",
+                Temporality = new ServiceTemporality().GetById(modelStep1.TemporalityId).Description,
+                Indicators = modelStep2.Configurations.Select(c => new BacktestingWithRangesConfirmationIndicator
+                {
+                    IndicatorName = c.IndicatorName,
+                    ConfigurationName = c.ConfigurationName,
+                    Range = $"{c.MinValue} - {c.MaxValue}",
+                    Increment = c.Increment.ToString()
+                }).ToList()
+            };
+
+            return View(model);
         }
 
         [HttpPost]
-        public ActionResult Confirmation(BacktestingWithRangesModel model)
+        public ActionResult Confirmation(BacktestingWithRangesConfirmationModel model)
         {
             return RedirectToAction("Results", "BacktestingWithRanges");
         }

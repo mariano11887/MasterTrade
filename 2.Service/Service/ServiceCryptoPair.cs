@@ -109,5 +109,16 @@ namespace _2.Service.Service
 
             return result;
         }
+
+        public DTOCryptoPair GetById(int cryptoPairId)
+        {
+            DTOCryptoPair result = repositoryCryptoPair.GetQuery().Where(cp => cp.Id == cryptoPairId).Select(cp => new DTOCryptoPair
+            {
+                Id = cp.Id,
+                Name = cp.Name
+            }).FirstOrDefault();
+
+            return result;
+        }
     }
 }

@@ -119,6 +119,7 @@ namespace _2.Service.Service
                 }
             }
 
+            // Preparo las entidades de Backtesting para su guardado
             BacktestingBatch backtestingBatch = new BacktestingBatch
             {
                 Date = DateTime.Now,
