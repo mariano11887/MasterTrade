@@ -28,49 +28,16 @@ namespace _2.Service.Service
             serviceIndicator = new ServiceIndicator();
         }
 
+        public DTOBacktestingWithRangesResult ExecuteWithRanges(DTOBacktestingWithRangesParameters parameters)
+        {
+            List<Candle> groupedCandles = GetGroupedCandles(parameters);
+
+            return new DTOBacktestingWithRangesResult();
+        }
+
         public DTOBacktestingResult Execute(DTOBacktestingParameters parameters)
         {
-            // Obtengo los datos de las velas del rango de fechas
-            List<Candle> candles = repositoryCandle.GetQuery()
-                                                   .Where(c => c.CryptoPairId == parameters.CryptoPairId && c.StartDate >= parameters.DateFrom && c.StartDate <= parameters.DateTo)
-                                                   .OrderBy(c => c.StartDate)
-                                                   .ToList();
-
-            // Las agrupo según la temporalidad elegida
-            Temporality temporality = repositoryTemporality.GetQuery().First(t => t.Id == parameters.TemporalityId);
-            List<Candle> groupedCandles = new List<Candle>();
-            int counter = 0;
-            foreach (Candle candle in candles)
-            {
-                if (counter == 0)
-                {
-                    groupedCandles.Add(new Candle
-                    {
-                        StartDate = candle.StartDate,
-                        High = candle.High,
-                        Low = candle.Low,
-                        Open = candle.Open,
-                        Close = candle.Close
-                    });
-                }
-                counter++;
-                Candle lastGroupedCandle = groupedCandles.Last();
-
-                if (lastGroupedCandle.High < candle.High)
-                {
-                    lastGroupedCandle.High = candle.High;
-                }
-                if (lastGroupedCandle.Low > candle.Low)
-                {
-                    lastGroupedCandle.Low = candle.Low;
-                }
-
-                if (counter == temporality.CandlesGroupingAmount)
-                {
-                    counter = 0;
-                    lastGroupedCandle.Close = candle.Close;
-                }
-            }
+            List<Candle> groupedCandles = GetGroupedCandles(parameters);
 
             List<Operation> operations = new List<Operation>();
             Operation currentOperation = null;
@@ -160,7 +127,7 @@ namespace _2.Service.Service
                 InitialCapital = currentCapital,
                 StrategyName = parameters.Strategy.Name,
                 CryptoPair = repositoryCryptoPair.GetQuery().Where(cp => cp.Id == parameters.CryptoPairId).Select(cp => cp.Name).FirstOrDefault(),
-                Temporality = temporality.Description
+                Temporality = repositoryTemporality.GetQuery().First(t => t.Id == parameters.TemporalityId).Description
             };
 
             decimal peakCapital = currentCapital;
@@ -217,6 +184,53 @@ namespace _2.Service.Service
             result.WinRate = (decimal)winOperations / operations.Count;
 
             return result;
+        }
+
+        private List<Candle> GetGroupedCandles(DTOBacktestingParameters parameters)
+        {
+            // Obtengo los datos de las velas del rango de fechas
+            List<Candle> candles = repositoryCandle.GetQuery()
+                                                   .Where(c => c.CryptoPairId == parameters.CryptoPairId && c.StartDate >= parameters.DateFrom && c.StartDate <= parameters.DateTo)
+                                                   .OrderBy(c => c.StartDate)
+                                                   .ToList();
+
+            // Las agrupo según la temporalidad elegida
+            Temporality temporality = repositoryTemporality.GetQuery().First(t => t.Id == parameters.TemporalityId);
+            List<Candle> groupedCandles = new List<Candle>();
+            int counter = 0;
+            foreach (Candle candle in candles)
+            {
+                if (counter == 0)
+                {
+                    groupedCandles.Add(new Candle
+                    {
+                        StartDate = candle.StartDate,
+                        High = candle.High,
+                        Low = candle.Low,
+                        Open = candle.Open,
+                        Close = candle.Close
+                    });
+                }
+                counter++;
+                Candle lastGroupedCandle = groupedCandles.Last();
+
+                if (lastGroupedCandle.High < candle.High)
+                {
+                    lastGroupedCandle.High = candle.High;
+                }
+                if (lastGroupedCandle.Low > candle.Low)
+                {
+                    lastGroupedCandle.Low = candle.Low;
+                }
+
+                if (counter == temporality.CandlesGroupingAmount)
+                {
+                    counter = 0;
+                    lastGroupedCandle.Close = candle.Close;
+                }
+            }
+
+            return groupedCandles;
         }
 
         private bool ConditionMatches(DTOStrategyCondition condition, List<Candle> groupedCandles, int candleIndex)

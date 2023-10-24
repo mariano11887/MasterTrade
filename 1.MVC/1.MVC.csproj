@@ -190,6 +190,7 @@
     <Compile Include="Models\BacktestingResultsModel.cs" />
     <Compile Include="Models\BacktestingWithRangesConfirmationModel.cs" />
     <Compile Include="Models\BacktestingWithRangesModel.cs" />
+    <Compile Include="Models\BacktestingWithRangesResultModel.cs" />
     <Compile Include="Models\BacktestingWithRangesStep1Model.cs" />
     <Compile Include="Models\BacktestingWithRangesStep2Model.cs" />
     <Compile Include="Models\CryptoPairModel.cs" />

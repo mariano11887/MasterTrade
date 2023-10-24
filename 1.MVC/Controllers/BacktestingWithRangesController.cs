@@ -137,6 +137,27 @@ namespace MasterTrade.Controllers
         [HttpPost]
         public ActionResult Confirmation(BacktestingWithRangesConfirmationModel model)
         {
+            BacktestingWithRangesStep1Model modelStep1 = (BacktestingWithRangesStep1Model)Session["BacktestingWithRangesStep1"];
+            BacktestingWithRangesStep2Model modelStep2 = (BacktestingWithRangesStep2Model)Session["BacktestingWithRangesStep2"];
+
+            DTOBacktestingWithRangesParameters parameters = new DTOBacktestingWithRangesParameters
+            {
+                Strategy = new ServiceStrategy().GetById(modelStep1.StrategyId, GetUserId()),
+                CryptoPairId = modelStep1.CryptoPairId,
+                DateFrom = modelStep1.DateFrom,
+                DateTo = modelStep1.DateTo,
+                TemporalityId = modelStep1.TemporalityId,
+                IndicatorConfigurations = modelStep2.Configurations.Select(c => new DTOBacktestingWithRangesIndicatorConfiguration
+                {
+                    IndicatorId = c.IndicatorId,
+                    MinValue = c.MinValue,
+                    MaxValue = c.MaxValue,
+                    Increment = c.Increment
+                }).ToList()
+            };
+
+            DTOBacktestingWithRangesResult result = new ServiceBacktesting().ExecuteWithRanges(parameters);
+
             return RedirectToAction("Results", "BacktestingWithRanges");
         }
 

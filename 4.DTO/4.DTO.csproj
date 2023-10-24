@@ -44,6 +44,8 @@
     <Compile Include="DTOBacktestingOperation.cs" />
     <Compile Include="DTOBacktestingParameters.cs" />
     <Compile Include="DTOBacktestingResult.cs" />
+    <Compile Include="DTOBacktestingWithRangesParameters.cs" />
+    <Compile Include="DTOBacktestingWithRangesResult.cs" />
     <Compile Include="DTOCryptoPair.cs" />
     <Compile Include="DTOIndicator.cs" />
     <Compile Include="DTOIndicatorConfiguration.cs" />
