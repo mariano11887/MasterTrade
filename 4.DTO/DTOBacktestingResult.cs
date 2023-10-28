@@ -16,11 +16,11 @@ namespace _4.DTO
         }
         public decimal MaxDrawdown { get; set; }
         public decimal WinRate { get; set; }
-
         public string StrategyName { get; set; }
         public string CryptoPair { get; set; }
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
         public string Temporality { get; set; }
+        public int BacktestingId { get; set; }
     }
 }

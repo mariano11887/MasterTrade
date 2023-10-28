@@ -10,7 +10,7 @@ namespace _4.DTO
 
     public class DTOBacktestingWithRangesIndicatorConfiguration
     {
-        public int IndicatorId { get; set; }
+        public int IndicatorConfigurationId { get; set; }
         public decimal MinValue { get; set; }
         public decimal MaxValue { get; set; }
         public decimal Increment { get; set; }

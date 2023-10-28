@@ -91,7 +91,7 @@ namespace MasterTrade.Controllers
 
                     model.Configurations.Add(new BacktestingWithRangesIndicatorConfiguration
                     {
-                        IndicatorId = indicator.Id,
+                        IndicatorConfigurationId = configuration.Id,
                         IndicatorName = indicator.ToString(),
                         ConfigurationName = configuration.Name,
                         MinValue = minValue,
@@ -149,7 +149,7 @@ namespace MasterTrade.Controllers
                 TemporalityId = modelStep1.TemporalityId,
                 IndicatorConfigurations = modelStep2.Configurations.Select(c => new DTOBacktestingWithRangesIndicatorConfiguration
                 {
-                    IndicatorId = c.IndicatorId,
+                    IndicatorConfigurationId = c.IndicatorConfigurationId,
                     MinValue = c.MinValue,
                     MaxValue = c.MaxValue,
                     Increment = c.Increment
@@ -157,13 +157,32 @@ namespace MasterTrade.Controllers
             };
 
             DTOBacktestingWithRangesResult result = new ServiceBacktesting().ExecuteWithRanges(parameters);
+            Session["BacktestingWithRangesResult"] = result;
 
             return RedirectToAction("Results", "BacktestingWithRanges");
         }
 
         public ActionResult Results()
         {
-            return View();
+            DTOBacktestingWithRangesResult result = (DTOBacktestingWithRangesResult)Session["BacktestingWithRangesResult"];
+            BacktestingWithRangesResultModel model = new BacktestingWithRangesResultModel
+            {
+                OptimalIndicators = result.OptimalIndicators.Select(oi => new BacktestingWithRangesResultOptimalIndicator
+                {
+                    IndicatorName = oi.IndicatorName,
+                    ConfigurationName = oi.ConfigurationName,
+                    ConfigurationValue = oi.ConfigurationValue
+                }).ToList(),
+                Backtestings = result.Backtestings.Select(b => new BacktestingWithRangesResultBacktesting
+                {
+                    BacktestingId = b.BacktestingId,
+                    InitialCapital= b.InitialCapital,
+                    FinalCapital = b.FinalCapital,
+                    Revenue = b.Revenue
+                }).ToList()
+            };
+
+            return View(model);
         }
     }
 }

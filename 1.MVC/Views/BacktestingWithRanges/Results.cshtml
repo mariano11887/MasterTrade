@@ -1,4 +1,5 @@
-﻿@{
+﻿@model MasterTrade.Models.BacktestingWithRangesResultModel
+@{
     ViewBag.Title = "Backtesting con rangos - Resultado";
 }
 
@@ -23,9 +24,10 @@
             </div>
             <div class="col-md-12">
                 <ul>
-                    <li><b>Media móvil (5), longitud:</b> 4</li>
-                    <li><b>Media móvil (10), longitud:</b> 11</li>
-                    <li><b>Media móvil (20), longitud:</b> 20</li>
+                    @foreach (var indicator in Model.OptimalIndicators)
+                    {
+                        <li><b>@indicator.IndicatorName, @indicator.ConfigurationName:</b> @indicator.ConfigurationValue</li>
+                    }
                 </ul>
             </div>
             <div class="row">

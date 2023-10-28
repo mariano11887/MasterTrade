@@ -15,8 +15,10 @@ namespace _2.Service.Service
         private readonly RepositoryCryptoPair repositoryCryptoPair;
         private readonly RepositoryTemporality repositoryTemporality;
         private readonly RepositoryBacktestingBatch repositoryBacktestingBatch;
+        private readonly RepositoryBacktesting repositoryBacktesting;
 
         private readonly ServiceIndicator serviceIndicator;
+        private readonly ServiceStrategy serviceStrategy;
 
         public ServiceBacktesting()
         {
@@ -24,21 +26,154 @@ namespace _2.Service.Service
             repositoryCryptoPair = new RepositoryCryptoPair();
             repositoryTemporality = new RepositoryTemporality();
             repositoryBacktestingBatch = new RepositoryBacktestingBatch();
+            repositoryBacktesting = new RepositoryBacktesting();
 
             serviceIndicator = new ServiceIndicator();
+            serviceStrategy = new ServiceStrategy();
         }
 
         public DTOBacktestingWithRangesResult ExecuteWithRanges(DTOBacktestingWithRangesParameters parameters)
         {
-            List<Candle> groupedCandles = GetGroupedCandles(parameters);
+            // Creo una iteración de cada combinación de los rangos elegidos, los ejecuto todos y obtengo el mejor resultado
+            List<List<decimal>> configurationsValues = new List<List<decimal>>();
+            foreach (DTOBacktestingWithRangesIndicatorConfiguration indicatorConfiguration in parameters.IndicatorConfigurations)
+            {
+                List<decimal> indicatorValues = new List<decimal>();
+                for (decimal value = indicatorConfiguration.MinValue; value <= indicatorConfiguration.MaxValue; value += indicatorConfiguration.Increment)
+                {
+                    indicatorValues.Add(value);
+                }
+                configurationsValues.Add(indicatorValues);
+            }
 
-            return new DTOBacktestingWithRangesResult();
+            List<Candle> groupedCandles = GetGroupedCandles(parameters);
+            List<DTOBacktestingResult> backtestingsResults = new List<DTOBacktestingResult>();
+            List<List<decimal>> combinations = GenerateCombinations(configurationsValues);
+
+            BacktestingBatch backtestingBatch = new BacktestingBatch
+            {
+                Date = DateTime.Now,
+                StrategyId = parameters.Strategy.Id,
+                TemporalityId = parameters.TemporalityId,
+                DateFrom = parameters.DateFrom,
+                DateTo = parameters.DateTo
+            };
+
+            foreach (List<decimal> combination in combinations)
+            {
+                DTOBacktestingParameters combinationParameters = new DTOBacktestingParameters
+                {
+                    CryptoPairId = parameters.CryptoPairId,
+                    DateFrom = parameters.DateFrom,
+                    DateTo = parameters.DateTo,
+                    TemporalityId = parameters.TemporalityId,
+                    Strategy = parameters.Strategy
+                };
+
+                foreach (var condition in combinationParameters.Strategy.Conditions)
+                {
+                    condition.FirstIndicatorMeta.Indicator.Configurations.First().Value = combination[0].ToString();
+                    condition.SecondIndicatorMeta.Indicator.Configurations.First().Value = combination[1].ToString();
+                }
+
+                combinationParameters.Strategy.Indicators[0].Configurations.First().Value = combination[0].ToString();
+                combinationParameters.Strategy.Indicators[1].Configurations.First().Value = combination[1].ToString();
+
+                DTOBacktestingResult combinationResult = Execute(combinationParameters, groupedCandles, backtestingBatch);
+                backtestingsResults.Add(combinationResult);
+            }
+
+            try
+            {
+                repositoryBacktestingBatch.Insert(backtestingBatch);
+                repositoryBacktestingBatch.SaveChanges();
+            }
+            catch { }
+
+            // De los backtestings, obtengo el que mejor rendimiento tuvo
+            decimal bestRevenue = decimal.MinValue;
+            Backtesting bestBacktesting = null;
+            foreach (Backtesting backtesting in backtestingBatch.Backtestings)
+            {
+                decimal revenue = backtesting.BacktestingOperations.OrderBy(bo => bo.OpenDate).Last().Revenue;
+                if (revenue > bestRevenue)
+                {
+                    bestRevenue = revenue;
+                    bestBacktesting = backtesting;
+                }
+            }
+
+            bestBacktesting = repositoryBacktesting.GetQuery().First(b => b.Id == bestBacktesting.Id); // Para cargar todos los datos del backtesting
+            DTOStrategy strategyDTO = serviceStrategy.GetById(parameters.Strategy.Id, parameters.Strategy.UserId);
+            int c = 0;
+            DTOBacktestingWithRangesResult result = new DTOBacktestingWithRangesResult
+            {
+                OptimalIndicators = bestBacktesting.Indicators.Select(i => new DTOBacktestingWithRangesResultOptimalIndicator
+                {
+                    IndicatorName = strategyDTO.Indicators[c++].ToString(),
+                    ConfigurationName = i.IndicatorMetas.First().Name,
+                    ConfigurationValue = decimal.Parse(i.IndicatorMetas.First().Value)
+                }).ToList(),
+                Backtestings = backtestingBatch.Backtestings.Select(b => new DTOBacktestingWithRangesResultBacktesting
+                {
+                    BacktestingId = b.Id,
+                    InitialCapital = b.BacktestingOperations.OrderBy(bo => bo.OpenDate).First().InitialCapital,
+                    FinalCapital = b.BacktestingOperations.OrderBy(bo => bo.OpenDate).First().InitialCapital + b.BacktestingOperations.OrderBy(bo => bo.OpenDate).Last().Revenue,
+                    Revenue = b.BacktestingOperations.OrderBy(bo => bo.OpenDate).Last().Revenue
+                }).ToList()
+            };
+
+            return result;
+        }
+
+        private List<List<decimal>> GenerateCombinations(List<List<decimal>> configurationsValues)
+        {
+            List<List<decimal>> results = new List<List<decimal>>();
+            GenerateCominationsRecursive(configurationsValues, results, new List<decimal>(), 0);
+            return results;
+        }
+
+        private void GenerateCominationsRecursive(List<List<decimal>> configurationsValues, List<List<decimal>> results, List<decimal> currentCombination, int currentList)
+        {
+            if (currentList == configurationsValues.Count)
+            {
+                results.Add(currentCombination.ToList());
+                return;
+            }
+
+            foreach (decimal value in configurationsValues[currentList])
+            {
+                currentCombination.Add(value);
+                GenerateCominationsRecursive(configurationsValues, results, currentCombination, currentList + 1);
+                currentCombination.RemoveAt(currentCombination.Count - 1);
+            }
         }
 
         public DTOBacktestingResult Execute(DTOBacktestingParameters parameters)
         {
-            List<Candle> groupedCandles = GetGroupedCandles(parameters);
+            BacktestingBatch backtestingBatch = new BacktestingBatch
+            {
+                Date = DateTime.Now,
+                StrategyId = parameters.Strategy.Id,
+                TemporalityId = parameters.TemporalityId,
+                DateFrom = parameters.DateFrom,
+                DateTo = parameters.DateTo
+            };
 
+            DTOBacktestingResult result = Execute(parameters, GetGroupedCandles(parameters), backtestingBatch);
+
+            try
+            {
+                repositoryBacktestingBatch.Insert(backtestingBatch);
+                repositoryBacktestingBatch.SaveChanges();
+            }
+            catch { }
+
+            return result;
+        }
+
+        public DTOBacktestingResult Execute(DTOBacktestingParameters parameters, List<Candle> groupedCandles, BacktestingBatch backtestingBatch)
+        {
             List<Operation> operations = new List<Operation>();
             Operation currentOperation = null;
 
@@ -87,14 +222,6 @@ namespace _2.Service.Service
             }
 
             // Preparo las entidades de Backtesting para su guardado
-            BacktestingBatch backtestingBatch = new BacktestingBatch
-            {
-                Date = DateTime.Now,
-                StrategyId = parameters.Strategy.Id,
-                TemporalityId = parameters.TemporalityId,
-                DateFrom = parameters.DateFrom,
-                DateTo = parameters.DateTo
-            };
             Backtesting backtesting = new Backtesting
             {
                 Date = DateTime.Now
@@ -172,13 +299,7 @@ namespace _2.Service.Service
             }
 
             backtestingBatch.Backtestings.Add(backtesting);
-            try
-            {
-                repositoryBacktestingBatch.Insert(backtestingBatch);
-                repositoryBacktestingBatch.SaveChanges();
-            }
-            catch { }
-
+            
             result.FinalCapital = currentCapital;
             result.MaxDrawdown = troughCapital.HasValue ? (troughCapital.Value - peakCapital) / peakCapital : 0;
             result.WinRate = (decimal)winOperations / operations.Count;

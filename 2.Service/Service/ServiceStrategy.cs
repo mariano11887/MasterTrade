@@ -167,11 +167,12 @@ namespace _2.Service.Service
                     Id = i.Id,
                     Name = i.IndicatorType.Description,
                     TypeId = i.TypeId,
-                    Configurations = i.IndicatorConfigurations.Select(im => new DTOIndicatorConfiguration
+                    Configurations = i.IndicatorConfigurations.Select(ic => new DTOIndicatorConfiguration
                     {
-                        Name = im.Name,
-                        Value = im.Value,
-                        Type = (_4.DTO.Enums.IndicatorMetaDataType)im.DataTypeId
+                        Id = ic.Id,
+                        Name = ic.Name,
+                        Value = ic.Value,
+                        Type = (_4.DTO.Enums.IndicatorMetaDataType)ic.DataTypeId
                     }).ToList()
                 }).ToList(),
                 Conditions = s.StrategyConditions.Select(sc => new DTOStrategyCondition
@@ -187,6 +188,7 @@ namespace _2.Service.Service
                             TypeId = sc.FirstIndicatorMeta.Indicator.TypeId,
                             Configurations = sc.FirstIndicatorMeta.Indicator.IndicatorConfigurations.Select(im => new DTOIndicatorConfiguration
                             {
+                                Id = im.Id,
                                 Name = im.Name,
                                 Value = im.Value,
                                 Type = (_4.DTO.Enums.IndicatorMetaDataType)im.DataTypeId
@@ -203,6 +205,7 @@ namespace _2.Service.Service
                             TypeId = sc.SecondIndicatorMeta.Indicator.TypeId,
                             Configurations = sc.SecondIndicatorMeta.Indicator.IndicatorConfigurations.Select(im => new DTOIndicatorConfiguration
                             {
+                                Id = im.Id,
                                 Name = im.Name,
                                 Value = im.Value,
                                 Type = (_4.DTO.Enums.IndicatorMetaDataType)im.DataTypeId

@@ -11,7 +11,7 @@ namespace MasterTrade.Models
 
     public class BacktestingWithRangesIndicatorConfiguration
     {
-        public int IndicatorId { get; set; }
+        public int IndicatorConfigurationId { get; set; }
         public string IndicatorName { get; set; }
         public string ConfigurationName { get; set; }
 
