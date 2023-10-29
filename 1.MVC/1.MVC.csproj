@@ -329,6 +329,7 @@
     <Content Include="Views\MyStrategies\NewStep5AddedConditions.cshtml" />
     <Content Include="Views\Backtesting\IndexCryptoPairInfo.cshtml" />
     <Content Include="Views\BacktestingWithRanges\Step1CryptoPairInfo.cshtml" />
+    <Content Include="Views\BacktestingWithRanges\ResultsBacktest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -24,6 +24,11 @@ namespace _4.DTO
         public int BacktestingId { get; set; }
         public decimal InitialCapital { get; set; }
         public decimal FinalCapital { get; set; }
-        public decimal Revenue { get; set; }
+        public decimal Revenue { 
+            get
+            {
+                return FinalCapital - InitialCapital;
+            }
+        }
     }
 }

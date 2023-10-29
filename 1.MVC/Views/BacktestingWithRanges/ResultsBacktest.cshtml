@@ -1,0 +1,97 @@
+﻿@model MasterTrade.Models.BacktestingWithRangesResultModel
+@if (Model.BacktestingDetail != null)
+{
+    var backtesting = Model.BacktestingDetail;
+    <div class="row">
+        <h4>Detalle de prueba</h4>
+    </div>
+    <div class="row">
+        <h5>Configuración</h5>
+    </div>
+    <div class="col-md-12">
+        <ul>
+            @foreach (var indicator in backtesting.IndicatorsConfig)
+            {
+                <li><b>@indicator.IndicatorName, @indicator.ConfigurationName:</b> @indicator.ConfigurationValue</li>
+            }
+        </ul>
+    </div>
+    <div class="row">
+        <h5>Cantidad de operaciones realizadas</h5>
+    </div>
+    <div class="col-md-12">
+        <ul>
+            <li>@backtesting.Operations.Count</li>
+        </ul>
+    </div>
+    <div class="row">
+        <h5>Capital inicial</h5>
+    </div>
+    <div class="col-md-12">
+        <ul>
+            <li>$@string.Format("{0:0.00}", backtesting.InitialCapital)</li>
+        </ul>
+    </div>
+    <div class="row">
+        <h5>Capital final</h5>
+    </div>
+    <div class="col-md-12">
+        <ul>
+            <li>$@string.Format("{0:0.00}", backtesting.FinalCapital)</li>
+        </ul>
+    </div>
+    <div class="row">
+        <h5>Porcentaje de ganancias/pérdidas</h5>
+    </div>
+    <div class="col-md-12">
+        <ul>
+            <li>@string.Format("{0:0.00}", backtesting.RevenuePercentage)%</li>
+        </ul>
+    </div>
+    <div class="row">
+        <h5>Máximo drawdown</h5>
+    </div>
+    <div class="col-md-12">
+        <ul>
+            <li>@string.Format("{0:0.00}", backtesting.MaxDrawdownPercentage)%</li>
+        </ul>
+    </div>
+    <div class="row">
+        <h5>Tasa de acierto</h5>
+    </div>
+    <div class="col-md-12">
+        <ul>
+            <li>@string.Format("{0:0.00}", backtesting.WinRatePercentage)%</li>
+        </ul>
+    </div>
+    <div class="row">
+        <h5>Detalle de operaciones</h5>
+    </div>
+    <div class="col-md-12">
+        <table>
+            <thead>
+                <tr>
+                    <td>Número de operación</td>
+                    <td>Apertura</td>
+                    <td>Cierre</td>
+                    <td>Capital inicial</td>
+                    <td>Capital final</td>
+                    <td>Ganancia/pérdida</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var operation in backtesting.Operations)
+                {
+                    <tr>
+                        <td>@operation.OperationNumber</td>
+                        <td>@operation.StartDate</td>
+                        <td>@operation.EndDate</td>
+                        <td>$@string.Format("{0:0.00}", operation.InitialCapital)</td>
+                        <td>$@string.Format("{0:0.00}", operation.FinalCapital)</td>
+                        <td style="color:@(operation.Revenue >= 0 ? "green" : "red");">$@string.Format("{0:0.00}", operation.Revenue)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

@@ -44,159 +44,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>$1000</td>
-                            <td>$1113</td>
-                            <td style="color:green;">+$113</td>
-                            <td><a href="#">Detalle</a></td>
-                        </tr>
-                        <tr>
-                            <td>$1000</td>
-                            <td>$1098</td>
-                            <td style="color:green;">+$98</td>
-                            <td><a href="#">Detalle</a></td>
-                        </tr>
-                        <tr>
-                            <td>$1000</td>
-                            <td>$1075</td>
-                            <td style="color:green;">+$75</td>
-                            <td><a href="#">Detalle</a></td>
-                        </tr>
-                        <tr>
-                            <td>$1000</td>
-                            <td>$1056</td>
-                            <td style="color:green;">+$56</td>
-                            <td><a href="#">Detalle</a></td>
-                        </tr>
-                        <tr>
-                            <td>$1000</td>
-                            <td>$1026</td>
-                            <td style="color:green;">+$26</td>
-                            <td><a href="#">Detalle</a></td>
-                        </tr>
-                        <tr>
-                            <td>$1000</td>
-                            <td>$986</td>
-                            <td style="color:red;">-$14</td>
-                            <td><a href="#">Detalle</a></td>
-                        </tr>
+                        @foreach (var backtesting in Model.Backtestings)
+                        {
+                            <tr>
+                                <td>$@string.Format("{0:0.00}", backtesting.InitialCapital)</td>
+                                <td>$@string.Format("{0:0.00}", backtesting.FinalCapital)</td>
+                                <td style="color:@(backtesting.Revenue >= 0 ? "green" : "red");">$@string.Format("{0:0.00}", backtesting.Revenue)</td>
+                                <td><a href="#" onclick="loadBacktestingDetails(@backtesting.BacktestingId);">Detalle</a></td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="row">
-                <h4>Detalle de prueba</h4>
-            </div>
-            <div class="row">
-                <h5>Configuración</h5>
-            </div>
-            <div class="col-md-12">
-                <ul>
-                    <li><b>Media móvil (5), longitud:</b> 4</li>
-                    <li><b>Media móvil (10), longitud:</b> 11</li>
-                    <li><b>Media móvil (20), longitud:</b> 20</li>
-                </ul>
-            </div>
-            <div class="row">
-                <h5>Cantidad de operaciones realizadas</h5>
-            </div>
-            <div class="col-md-12">
-                <ul>
-                    <li>4</li>
-                </ul>
-            </div>
-            <div class="row">
-                <h5>Detalle de operaciones</h5>
-            </div>
-            <div class="col-md-12">
-                <table>
-                    <thead>
-                        <tr>
-                            <td>Número de operación</td>
-                            <td>Apertura</td>
-                            <td>Cierre</td>
-                            <td>Capital inicial</td>
-                            <td>Capital final</td>
-                            <td>Ganancia/pérdida</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>1/7/2023 4:55</td>
-                            <td>1/7/2023 6:00</td>
-                            <td>$1000</td>
-                            <td>$1026</td>
-                            <td style="color:green;">+$26</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>1/7/2023 8:10</td>
-                            <td>1/7/2023 11:35</td>
-                            <td>$1026</td>
-                            <td>$1069</td>
-                            <td style="color:green;">+$43</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>1/7/2023 17:30</td>
-                            <td>1/7/2023 19:05</td>
-                            <td>$1069</td>
-                            <td>$1055</td>
-                            <td style="color:red;">-$14</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>1/7/2023 19:25</td>
-                            <td>1/7/2023 22:05</td>
-                            <td>$1055</td>
-                            <td>$1113</td>
-                            <td style="color:green;">+$58</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="row">
-                <h5>Capital inicial</h5>
-            </div>
-            <div class="col-md-12">
-                <ul>
-                    <li>$1000</li>
-                </ul>
-            </div>
-            <div class="row">
-                <h5>Capital final</h5>
-            </div>
-            <div class="col-md-12">
-                <ul>
-                    <li>$1113</li>
-                </ul>
-            </div>
-            <div class="row">
-                <h5>Porcentaje de ganancias/pérdidas</h5>
-            </div>
-            <div class="col-md-12">
-                <ul>
-                    <li>+11.3%</li>
-                </ul>
-            </div>
-            <div class="row">
-                <h5>Máximo drawdown</h5>
-            </div>
-            <div class="col-md-12">
-                <ul>
-                    <li>-1.31%</li>
-                </ul>
-            </div>
-            <div class="row">
-                <h5>Tasa de acierto</h5>
-            </div>
-            <div class="col-md-12">
-                <ul>
-                    <li>75%</li>
-                </ul>
-            </div>
+        <div class="col-md-6" id="backtestDetails">
+            @Html.Partial("ResultsBacktest")
         </div>
         <div class="row" style="margin-top: 0.5rem;">
             <div class="offset-md-8 col-md-4">
@@ -205,3 +67,28 @@
         </div>
     </div>
 </main>
+@section Scripts
+{
+    <script>
+        function loadBacktestingDetails(id) {
+            $.ajax({
+                url: '@Url.Action("LoadBacktestingDetails")',
+                type: 'GET',
+                data: {
+                    backtestingId: id
+                }
+            }).done(function (result) {
+                $('#backtestDetails').html(result);
+            });
+        }
+
+        $(function () {
+            @if (Model.Backtestings.Any())
+            {
+                <text>
+                    loadBacktestingDetails(@Model.Backtestings[0].BacktestingId);
+                </text>
+            }
+        });
+    </script>
+}

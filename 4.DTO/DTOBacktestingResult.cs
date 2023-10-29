@@ -21,6 +21,14 @@ namespace _4.DTO
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
         public string Temporality { get; set; }
-        public int BacktestingId { get; set; }
+
+        public List<DTOBacktestingResultIndicatorConfig> IndicatorsConfig { get; set; }
+    }
+
+    public class DTOBacktestingResultIndicatorConfig
+    {
+        public string IndicatorName { get; set; }
+        public string ConfigurationName { get; set; }
+        public decimal ConfigurationValue { get; set; }
     }
 }

@@ -167,7 +167,7 @@ namespace MasterTrade.Controllers
             DTOBacktestingWithRangesResult result = (DTOBacktestingWithRangesResult)Session["BacktestingWithRangesResult"];
             BacktestingWithRangesResultModel model = new BacktestingWithRangesResultModel
             {
-                OptimalIndicators = result.OptimalIndicators.Select(oi => new BacktestingWithRangesResultOptimalIndicator
+                OptimalIndicators = result.OptimalIndicators.Select(oi => new BacktestingWithRangesResultIndicatorConfig
                 {
                     IndicatorName = oi.IndicatorName,
                     ConfigurationName = oi.ConfigurationName,
@@ -183,6 +183,41 @@ namespace MasterTrade.Controllers
             };
 
             return View(model);
+        }
+
+        public ActionResult LoadBacktestingDetails(int backtestingId)
+        {
+            DTOBacktestingResult result = new ServiceBacktesting().GetById(backtestingId, GetUserId());
+
+            int operationNumber = 0;
+            BacktestingWithRangesResultModel model = new BacktestingWithRangesResultModel
+            {
+                BacktestingDetail = new BacktestingWithRangesResultDetail
+                {
+                    IndicatorsConfig = result.IndicatorsConfig.Select(ic => new BacktestingWithRangesResultIndicatorConfig
+                    {
+                        ConfigurationName = ic.ConfigurationName,
+                        ConfigurationValue = ic.ConfigurationValue,
+                        IndicatorName = ic.IndicatorName
+                    }).ToList(),
+                    InitialCapital = result.InitialCapital,
+                    FinalCapital = result.FinalCapital,
+                    RevenuePercentage = result.ProfitPercentage,
+                    MaxDrawdownPercentage = result.MaxDrawdown * 100,
+                    WinRatePercentage = result.WinRate * 100,
+                    Operations = result.Operations.Select(o => new BacktestingWithRangesResultDetailOperation
+                    {
+                        OperationNumber = ++operationNumber,
+                        StartDate = o.OpenDate,
+                        EndDate = o.CloseDate,
+                        InitialCapital = o.InitialCapital,
+                        FinalCapital = o.FinalCapital,
+                        Revenue = o.Profit
+                    }).ToList()
+                }
+            };
+
+            return PartialView("ResultsBacktest", model);
         }
     }
 }

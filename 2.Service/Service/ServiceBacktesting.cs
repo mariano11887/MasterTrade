@@ -5,6 +5,7 @@ using _4.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using IndicatorMeta = _2.Service.Indicator.Interface.IndicatorMeta;
 
 namespace _2.Service.Service
@@ -95,7 +96,8 @@ namespace _2.Service.Service
             Backtesting bestBacktesting = null;
             foreach (Backtesting backtesting in backtestingBatch.Backtestings)
             {
-                decimal revenue = backtesting.BacktestingOperations.OrderBy(bo => bo.OpenDate).Last().Revenue;
+                BacktestingOperation lastOperation = backtesting.BacktestingOperations.OrderBy(bo => bo.OpenDate).Last();
+                decimal revenue = lastOperation.InitialCapital + lastOperation.Revenue;
                 if (revenue > bestRevenue)
                 {
                     bestRevenue = revenue;
@@ -114,12 +116,11 @@ namespace _2.Service.Service
                     ConfigurationName = i.IndicatorMetas.First().Name,
                     ConfigurationValue = decimal.Parse(i.IndicatorMetas.First().Value)
                 }).ToList(),
-                Backtestings = backtestingBatch.Backtestings.Select(b => new DTOBacktestingWithRangesResultBacktesting
+                Backtestings = backtestingBatch.Backtestings.OrderByDescending(b => b.BacktestingOperations.OrderBy(bo => bo.OpenDate).Last().InitialCapital + b.BacktestingOperations.OrderBy(bo => bo.OpenDate).Last().Revenue).Select(b => new DTOBacktestingWithRangesResultBacktesting
                 {
                     BacktestingId = b.Id,
                     InitialCapital = b.BacktestingOperations.OrderBy(bo => bo.OpenDate).First().InitialCapital,
-                    FinalCapital = b.BacktestingOperations.OrderBy(bo => bo.OpenDate).First().InitialCapital + b.BacktestingOperations.OrderBy(bo => bo.OpenDate).Last().Revenue,
-                    Revenue = b.BacktestingOperations.OrderBy(bo => bo.OpenDate).Last().Revenue
+                    FinalCapital = b.BacktestingOperations.OrderBy(bo => bo.OpenDate).Last().InitialCapital + b.BacktestingOperations.OrderBy(bo => bo.OpenDate).Last().Revenue
                 }).ToList()
             };
 
@@ -410,6 +411,61 @@ namespace _2.Service.Service
                     CloseCandle = CloseCandle
                 };
             }
+        }
+
+        public DTOBacktestingResult GetById(int backtestingId, int userId)
+        {
+            Backtesting backtesting = repositoryBacktesting.GetQuery().FirstOrDefault(b => b.Id == backtestingId);
+            if (backtesting == null)
+            {
+                return null;
+            }
+            DTOStrategy strategyDTO = serviceStrategy.GetById(backtesting.BacktestingBatch.StrategyId, userId);
+            int c = 0;
+
+            DTOBacktestingResult result = new DTOBacktestingResult
+            {
+                IndicatorsConfig = backtesting.Indicators.Select(i => new DTOBacktestingResultIndicatorConfig
+                {
+                    IndicatorName = strategyDTO.Indicators[c++].ToString(),
+                    ConfigurationName = i.IndicatorMetas.First().Name,
+                    ConfigurationValue = decimal.Parse(i.IndicatorMetas.First().Value)
+                }).ToList(),
+                InitialCapital = backtesting.BacktestingOperations.OrderBy(bo => bo.OpenDate).First().InitialCapital,
+                FinalCapital = backtesting.BacktestingOperations.OrderBy(bo => bo.OpenDate).Last().InitialCapital + backtesting.BacktestingOperations.OrderBy(bo => bo.OpenDate).Last().Revenue,
+            };
+
+            decimal peakCapital = result.InitialCapital;
+            decimal? troughCapital = null;
+            int winOperations = 0;
+            foreach (BacktestingOperation operation in backtesting.BacktestingOperations)
+            {
+                decimal finalCapital = operation.InitialCapital + operation.Revenue;
+                peakCapital = finalCapital > peakCapital ? finalCapital : peakCapital;
+
+                if (!troughCapital.HasValue)
+                {
+                    troughCapital = finalCapital;
+                }
+                else
+                {
+                    troughCapital = finalCapital < troughCapital ? finalCapital : troughCapital;
+                }
+
+                winOperations += finalCapital > operation.InitialCapital ? 1 : 0;
+
+                result.Operations.Add(new DTOBacktestingOperation
+                {
+                    OpenDate = operation.OpenDate,
+                    CloseDate = operation.CloseDate,
+                    InitialCapital = operation.InitialCapital,
+                    FinalCapital = finalCapital
+                });
+            }
+            result.MaxDrawdown = troughCapital.HasValue ? (troughCapital.Value - peakCapital) / peakCapital : 0;
+            result.WinRate = (decimal)winOperations / backtesting.BacktestingOperations.Count;
+
+            return result;
         }
     }
 }
