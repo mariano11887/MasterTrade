@@ -59,22 +59,57 @@ namespace MasterTrade.Controllers
         [HttpPost]
         public ActionResult Index(BacktestingModel model)
         {
-            DTOBacktestingParameters parameters = new DTOBacktestingParameters
+            if (ModelState.IsValid && model.DateTo < model.DateFrom)
             {
-                Strategy = new ServiceStrategy().GetById(model.StrategyId, GetUserId()),
-                CryptoPairId = model.CryptoPairId,
-                DateFrom = model.DateFrom,
-                DateTo = model.DateTo,
-                TemporalityId = model.TemporalityId
-            };
+                ModelState.AddModelError("DateTo", $"La Fecha Hasta debe ser mayor a la Fecha Desde");
+            }
 
-            DTOBacktestingResult backtestingResult = new ServiceBacktesting().Execute(parameters);
-            backtestingResult.DateFrom = model.DateFrom;
-            backtestingResult.DateTo = model.DateTo;
+            if (ModelState.IsValid)
+            {
+                DTOBacktestingParameters parameters = new DTOBacktestingParameters
+                {
+                    Strategy = new ServiceStrategy().GetById(model.StrategyId, GetUserId()),
+                    CryptoPairId = model.CryptoPairId,
+                    DateFrom = model.DateFrom,
+                    DateTo = model.DateTo,
+                    TemporalityId = model.TemporalityId
+                };
 
-            Session["BacktestingResult"] = backtestingResult;
+                DTOBacktestingResult backtestingResult = new ServiceBacktesting().Execute(parameters);
+                backtestingResult.DateFrom = model.DateFrom;
+                backtestingResult.DateTo = model.DateTo;
 
-            return RedirectToAction("Results", "Backtesting");
+                Session["BacktestingResult"] = backtestingResult;
+
+                return RedirectToAction("Results", "Backtesting");
+            }
+            else
+            {
+                List<DTOStrategy> strategies = new ServiceStrategy().GetUserStrategies(GetUserId());
+                List<DTOCryptoPair> cryptoPairs = new ServiceCryptoPair().GetCryptoPairs();
+                List<DTOTemporality> temporalities = new ServiceTemporality().GetAll(model.CryptoPairId);
+                (DateTime, DateTime) dateRange = new ServiceCryptoPair().GetDateRange(model.CryptoPairId);
+
+                model.AllStrategies = strategies.Select(s => new SelectListItem()
+                {
+                    Text = s.Name,
+                    Value = s.Id.ToString()
+                }).ToList();
+                model.AllCryptoPairs = cryptoPairs.Select(cp => new SelectListItem()
+                {
+                    Text = cp.Name,
+                    Value = cp.Id.ToString()
+                }).ToList();
+                model.AllTemporalities = temporalities.Select(t => new SelectListItem()
+                {
+                    Text = t.Description,
+                    Value = t.Id.ToString()
+                }).ToList();
+                model.DateFrom = dateRange.Item1;
+                model.DateTo = dateRange.Item2;
+
+                return View(model);
+            }
         }
 
         public ActionResult Results()

@@ -71,14 +71,30 @@ namespace _2.Service.Service
                     Strategy = parameters.Strategy
                 };
 
-                foreach (var condition in combinationParameters.Strategy.Conditions)
+                int index = 0;
+
+                foreach (DTOStrategyCondition condition in combinationParameters.Strategy.Conditions)
                 {
-                    condition.FirstIndicatorMeta.Indicator.Configurations.First().Value = combination[0].ToString();
-                    condition.SecondIndicatorMeta.Indicator.Configurations.First().Value = combination[1].ToString();
+                    index = 0;
+                    if (condition.FirstIndicatorMeta.Indicator.Configurations.Any())
+                    {
+                        condition.FirstIndicatorMeta.Indicator.Configurations.First().Value = combination[index++].ToString();
+                    }
+                    if (condition.SecondIndicatorMeta.Indicator.Configurations.Any())
+                    {
+                        condition.SecondIndicatorMeta.Indicator.Configurations.First().Value = combination[index].ToString();
+                    }
                 }
 
-                combinationParameters.Strategy.Indicators[0].Configurations.First().Value = combination[0].ToString();
-                combinationParameters.Strategy.Indicators[1].Configurations.First().Value = combination[1].ToString();
+                index = 0;
+                if (combinationParameters.Strategy.Indicators[0].Configurations.Any())
+                {
+                    combinationParameters.Strategy.Indicators[0].Configurations.First().Value = combination[index++].ToString();
+                }
+                if (combinationParameters.Strategy.Indicators.Count > 1 && combinationParameters.Strategy.Indicators[1].Configurations.Any())
+                {
+                    combinationParameters.Strategy.Indicators[1].Configurations.First().Value = combination[index].ToString();
+                }
 
                 DTOBacktestingResult combinationResult = Execute(combinationParameters, groupedCandles, backtestingBatch);
                 backtestingsResults.Add(combinationResult);
@@ -110,7 +126,7 @@ namespace _2.Service.Service
             int c = 0;
             DTOBacktestingWithRangesResult result = new DTOBacktestingWithRangesResult
             {
-                OptimalIndicators = bestBacktesting.Indicators.Select(i => new DTOBacktestingWithRangesResultOptimalIndicator
+                OptimalIndicators = bestBacktesting.Indicators.Where(i => i.IndicatorMetas.Any()).Select(i => new DTOBacktestingWithRangesResultOptimalIndicator
                 {
                     IndicatorName = strategyDTO.Indicators[c++].ToString(),
                     ConfigurationName = i.IndicatorMetas.First().Name,
@@ -425,7 +441,7 @@ namespace _2.Service.Service
 
             DTOBacktestingResult result = new DTOBacktestingResult
             {
-                IndicatorsConfig = backtesting.Indicators.Select(i => new DTOBacktestingResultIndicatorConfig
+                IndicatorsConfig = backtesting.Indicators.Where(i => i.IndicatorMetas.Any()).Select(i => new DTOBacktestingResultIndicatorConfig
                 {
                     IndicatorName = strategyDTO.Indicators[c++].ToString(),
                     ConfigurationName = i.IndicatorMetas.First().Name,
