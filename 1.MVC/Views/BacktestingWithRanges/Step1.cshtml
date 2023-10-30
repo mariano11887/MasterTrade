@@ -46,6 +46,10 @@
                     renderDatePickers();
                 });
             });
+
+            if ($.trim($('#cryptoPairInfo').html()).length) {
+                renderDatePickers();
+            }
         });
     </script>
 }

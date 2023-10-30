@@ -59,8 +59,43 @@ namespace MasterTrade.Controllers
         [HttpPost]
         public ActionResult Step1(BacktestingWithRangesStep1Model model)
         {
-            Session["BacktestingWithRangesStep1"] = model;
-            return RedirectToAction("Step2", "BacktestingWithRanges");
+            if (ModelState.IsValid && model.DateTo < model.DateFrom)
+            {
+                ModelState.AddModelError("DateTo", $"La Fecha Hasta debe ser mayor a la Fecha Desde");
+            }
+
+            if (ModelState.IsValid)
+            {
+                Session["BacktestingWithRangesStep1"] = model;
+                return RedirectToAction("Step2", "BacktestingWithRanges");
+            }
+            else
+            {
+                List<DTOStrategy> strategies = new ServiceStrategy().GetUserStrategies(GetUserId());
+                List<DTOCryptoPair> cryptoPairs = new ServiceCryptoPair().GetCryptoPairs();
+                (DateTime, DateTime) dateRange = new ServiceCryptoPair().GetDateRange(model.CryptoPairId);
+                List<DTOTemporality> temporalities = new ServiceTemporality().GetAll(model.CryptoPairId);
+
+                model.AllStrategies = strategies.Select(s => new SelectListItem()
+                {
+                    Text = s.Name,
+                    Value = s.Id.ToString()
+                }).ToList();
+                model.AllCryptoPairs = cryptoPairs.Select(cp => new SelectListItem()
+                {
+                    Text = cp.Name,
+                    Value = cp.Id.ToString()
+                }).ToList();
+                model.DateFrom = dateRange.Item1;
+                model.DateTo = dateRange.Item2;
+                model.AllTemporalities = temporalities.Select(t => new SelectListItem()
+                {
+                    Text = t.Description,
+                    Value = t.Id.ToString()
+                }).ToList();
+
+                return View(model);
+            }
         }
 
         public ActionResult Step2()
@@ -96,7 +131,9 @@ namespace MasterTrade.Controllers
                         ConfigurationName = configuration.Name,
                         MinValue = minValue,
                         MaxValue = maxValue,
-                        Increment = increment
+                        Increment = increment,
+                        CurrentValue = value,
+                        TypeId = (int)configuration.Type
                     });
                 }
             }
@@ -107,8 +144,36 @@ namespace MasterTrade.Controllers
         [HttpPost]
         public ActionResult Step2(BacktestingWithRangesStep2Model model)
         {
-            Session["BacktestingWithRangesStep2"] = model;
-            return RedirectToAction("Confirmation", "BacktestingWithRanges");
+            if (ModelState.IsValid)
+            {
+                foreach (BacktestingWithRangesIndicatorConfiguration configuration in model.Configurations)
+                {
+                    if (configuration.TypeId == (int)IndicatorMetaDataType.Integer
+                        && ((configuration.MinValue % 1) != 0 || (configuration.MaxValue % 1) != 0 || (configuration.Increment % 1) != 0))
+                    {
+                        ModelState.AddModelError("MinValue", "Los valores Mínimo, Máximo e Incremento deben ser números enteros");
+                    }
+
+                    if (configuration.MinValue > configuration.CurrentValue)
+                    {
+                        ModelState.AddModelError("MinValue", "El valor Mínimo no puede ser mayor al valor actual");
+                    }
+                    if (configuration.MaxValue < configuration.CurrentValue)
+                    {
+                        ModelState.AddModelError("MaxValue", "El valor Máximo no puede ser menor al valor actual");
+                    }
+                }
+            }
+
+            if (ModelState.IsValid)
+            {
+                Session["BacktestingWithRangesStep2"] = model;
+                return RedirectToAction("Confirmation", "BacktestingWithRanges");
+            }
+            else
+            {
+                return View(model);
+            }
         }
 
         public ActionResult Confirmation()

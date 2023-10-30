@@ -6,14 +6,19 @@
 <main aria-labelledby="title">
     <h2 id="title">@ViewBag.Title</h2>
     <h4>Indique los rangos</h4>
-    <hr />
     @using (Html.BeginForm("Step2", "BacktestingWithRanges", FormMethod.Post, new { role = "form" }))
     {
+        @Html.AntiForgeryToken()
+        <hr />
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+
         for (int i = 0; i < Model.Configurations.Count(); i++)
         {
             @Html.HiddenFor(m => m.Configurations[i].IndicatorConfigurationId)
             @Html.HiddenFor(m => m.Configurations[i].IndicatorName)
             @Html.HiddenFor(m => m.Configurations[i].ConfigurationName)
+            @Html.HiddenFor(m => m.Configurations[i].CurrentValue)
+            @Html.HiddenFor(m => m.Configurations[i].TypeId)
             <div class="row">
                 <h5>@Model.Configurations[i].IndicatorName: @Model.Configurations[i].ConfigurationName</h5>
             </div>
