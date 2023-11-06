@@ -1,6 +1,6 @@
-﻿using MasterTrade.Authentication;
-using Microsoft.AspNet.Identity;
-using System;
+﻿using _4.DTO.Enums;
+using MasterTrade.Authentication;
+using System.Linq;
 using System.Web.Mvc;
 using System.Web.Security;
 
@@ -19,6 +19,26 @@ namespace MasterTrade.Controllers.Base
                     string fullName = $"{user.FirstName} {user.LastName}";
 
                     ViewData.Add("FullName", fullName);
+
+                    if (user.Permissions.Any(p => p == Permission.ManageStrategies))
+                    {
+                        ViewData.Add("MyStrategies", true);
+                    }
+
+                    if (user.Permissions.Any(p => p == Permission.Backtesting))
+                    {
+                        ViewData.Add("Backtesting", true);
+                    }
+
+                    if (user.Permissions.Any(p => p == Permission.BacktestingWithRanges))
+                    {
+                        ViewData.Add("BacktestingWithRanges", true);
+                    }
+
+                    if (user.Permissions.Any(p => p == Permission.ManageCryptoPairs))
+                    {
+                        ViewData.Add("CryptoPairs", true);
+                    }
                 }
             }
 

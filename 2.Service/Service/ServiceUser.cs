@@ -18,7 +18,7 @@ namespace _2.Service.Service
 
         public bool Authenticate(string email, string password)
         {
-            User user = repositoryUser.GetQuery().FirstOrDefault(u => u.Email == email);
+            User user = repositoryUser.GetQuery().FirstOrDefault(u => u.Email == email && u.Role.Permissions.Any(p => p.Name == Enums.Permission.Login));
             if (user == null)
             {
                 return false;
@@ -38,7 +38,8 @@ namespace _2.Service.Service
                 Role = new DTORole
                 {
                     Id = u.RoleId,
-                    Description = u.Role.Description
+                    Description = u.Role.Description,
+                    PermissionsSet = u.Role.Permissions.Select(p => p.Name)
                 }
             }).FirstOrDefault();
 
@@ -53,7 +54,7 @@ namespace _2.Service.Service
                 FirstName = userDTO.FirstName,
                 LastName = userDTO.LastName,
                 Password = EncryptPassword(userDTO.Password),
-                RoleId = (int)Enums.Role.RegularUser
+                RoleId = (int)Enums.Role.FreeUser
             };
 
             repositoryUser.Insert(user);

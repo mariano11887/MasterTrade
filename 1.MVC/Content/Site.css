@@ -35,6 +35,12 @@ body {
     background-color: #881b1b3d;
 }
 
+.lightBrownBtnDisabled, .lightBrownBtnDisabled:hover {
+    background-color: lightgray;
+    color: #212529;
+    cursor: default;
+}
+
 .lightBrownBtn:hover {
     background-color: green;
 }
@@ -43,4 +49,57 @@ body {
     background-color: red;
     color: white;
     text-align: center;
+}
+
+.blink:not(:hover) {
+    animation-name: blinking;
+    animation-duration: 2s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    -webkit-animation-name: blinking;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+}
+
+@-moz-keyframes blinking {
+    0% {
+        background-color: #881b1b3d;
+    }
+
+    50% {
+        background-color: green;
+    }
+
+    100% {
+        background-color: #881b1b3d;
+    }
+}
+
+@-webkit-keyframes blinking {
+    0% {
+        background-color: #881b1b3d;
+    }
+
+    50% {
+        background-color: green;
+    }
+
+    100% {
+        background-color: #881b1b3d;
+    }
+}
+
+@keyframes blinking {
+    0% {
+        background-color: #881b1b3d;
+    }
+
+    50% {
+        background-color: green;
+    }
+
+    100% {
+        background-color: #881b1b3d;
+    }
 }

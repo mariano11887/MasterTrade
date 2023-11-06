@@ -1,8 +1,7 @@
-﻿using MasterTrade.Controllers.Base;
-using System;
-using System.Collections.Generic;
+﻿using _2.Service.Service;
+using MasterTrade.Controllers.Base;
+using MasterTrade.Models;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace MasterTrade.Controllers
@@ -11,7 +10,12 @@ namespace MasterTrade.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            HomeModel model = new HomeModel
+            {
+                UserHasStrategies = new ServiceStrategy().GetUserStrategies(GetUserId()).Any()
+            };
+
+            return View(model);
         }
 
         public ActionResult About()

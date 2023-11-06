@@ -46,42 +46,44 @@ namespace MasterTrade.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginViewModel model, string returnUrl)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && Membership.ValidateUser(model.Email, model.Password))
             {
-                if (Membership.ValidateUser(model.Email, model.Password))
+                PerformLogin(model.Email);
+
+                if (Url.IsLocalUrl(returnUrl))
                 {
-                    CustomMembershipUser user = (CustomMembershipUser)Membership.GetUser(model.Email, false);
-                    if (user != null)
-                    {
-                        CustomSerializeModel userModel = new CustomSerializeModel
-                        {
-                            UserId = user.UserId,
-                            Email = user.Email,
-                            FirstName = user.FirstName,
-                            LastName = user.LastName,
-                            RoleName = user.RoleName
-                        };
-
-                        string userData = JsonConvert.SerializeObject(userModel);
-                        FormsAuthenticationTicket authenticationTicket = new FormsAuthenticationTicket(1, model.Email, DateTime.Now, DateTime.Now.AddYears(1), false, userData);
-                        string encTicket = FormsAuthentication.Encrypt(authenticationTicket);
-                        HttpCookie authCookie = new HttpCookie("AuthCookie", encTicket);
-                        Response.Cookies.Add(authCookie);
-                    }
-
-                    if (Url.IsLocalUrl(returnUrl))
-                    {
-                        return Redirect(returnUrl);
-                    }
-                    else
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
+                    return Redirect(returnUrl);
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Home");
                 }
             }
 
             ModelState.AddModelError("", "Intento de inicio de sesión no válido.");
             return View(model);
+        }
+
+        private void PerformLogin(string userEmail)
+        {
+            CustomMembershipUser user = (CustomMembershipUser)Membership.GetUser(userEmail, false);
+            if (user != null)
+            {
+                CustomSerializeModel userModel = new CustomSerializeModel
+                {
+                    UserId = user.UserId,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    RoleName = user.RoleName
+                };
+
+                string userData = JsonConvert.SerializeObject(userModel);
+                FormsAuthenticationTicket authenticationTicket = new FormsAuthenticationTicket(1, userEmail, DateTime.Now, DateTime.Now.AddYears(1), false, userData);
+                string encTicket = FormsAuthentication.Encrypt(authenticationTicket);
+                HttpCookie authCookie = new HttpCookie("AuthCookie", encTicket);
+                Response.Cookies.Add(authCookie);
+            }
         }
 
         //
@@ -99,9 +101,6 @@ namespace MasterTrade.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Register(RegisterViewModel model)
         {
-            bool statusRegistration = false;
-            string messageRegistration;
-
             if (ModelState.IsValid)
             {
                 string userName = Membership.GetUserNameByEmail(model.Email);
@@ -120,18 +119,10 @@ namespace MasterTrade.Controllers
                     Password = model.Password
                 });
 
-                messageRegistration = "Tu cuenta fue creada satisfactoriamente";
-                statusRegistration = true;
-            }
-            else
-            {
-                messageRegistration = "Hubo un error";
+                PerformLogin(model.Email);
             }
 
-            ViewBag.Message = messageRegistration;
-            ViewBag.Status = statusRegistration;
-
-            return RedirectToAction("Index", "Login");
+            return RedirectToAction("Index", "Home");
         }
 
         //

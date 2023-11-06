@@ -194,6 +194,7 @@
     <Compile Include="Models\BacktestingWithRangesStep1Model.cs" />
     <Compile Include="Models\BacktestingWithRangesStep2Model.cs" />
     <Compile Include="Models\CryptoPairModel.cs" />
+    <Compile Include="Models\HomeModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MyStrategiesModel.cs" />

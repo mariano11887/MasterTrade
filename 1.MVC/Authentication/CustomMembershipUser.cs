@@ -12,6 +12,7 @@ namespace MasterTrade.Authentication
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string RoleName { get; set; }
+        public string[] Permissions { get; set; }
 
         #endregion
 
@@ -21,6 +22,7 @@ namespace MasterTrade.Authentication
             FirstName = user.FirstName;
             LastName = user.LastName;
             RoleName = user.Role.Description;
+            Permissions = user.Role.Permissions;
         }
     }
 }

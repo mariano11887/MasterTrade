@@ -1,4 +1,5 @@
-﻿@{
+﻿@model MasterTrade.Models.HomeModel
+@{
     ViewBag.Title = "Inicio";
 }
 
@@ -24,17 +25,41 @@
             <p>
                 Configura tus estrategias de trading en MasterTrade, con sus indicadores, sus reglas para entrar a una operación, sus reglas para salir de la operación y la configuración del riesgo que quieres asumir con cada una de ellas.
             </p>
-            <p><a class="btn btn-outline-dark lightBrownBtn" href="/MyStrategies">Mis estrategias &raquo;</a></p>
+            @if (ViewData["MyStrategies"] != null)
+            {
+                string blinkClass = !Model.UserHasStrategies ? "blink" : "";
+                <p><a class="btn btn-outline-dark lightBrownBtn @blinkClass" href="/MyStrategies">Mis estrategias &raquo;</a></p>
+            }
+            else
+            {
+                <p><a class="btn btn-outline-dark lightBrownBtnDisabled" disabled="disabled" href="#">No tiene permiso para esto</a></p>
+            }
         </section>
         <section class="col-md-4" aria-labelledby="librariesTitle">
             <h2 id="librariesTitle" class="greenText">Realiza un backtesting</h2>
             <p>Pon a prueba la rentabilidad real de tu estrategia de trading realizando un backtesting en el par de criptomonedas y la temporalidad que elijas, y conoce los resultados en pocos segundos.</p>
-            <p><a class="btn btn-outline-dark lightBrownBtn" href="/Backtesting">Backtesting &raquo;</a></p>
+            @if (ViewData["Backtesting"] != null)
+            {
+                string blinkClass = Model.UserHasStrategies ? "blink" : "";
+                <p><a class="btn btn-outline-dark lightBrownBtn @blinkClass" href="/Backtesting">Backtesting &raquo;</a></p>
+            }
+            else
+            {
+                <p><a class="btn btn-outline-dark lightBrownBtnDisabled" disabled="disabled" href="#">No tiene permiso para esto</a></p>
+            }
         </section>
         <section class="col-md-4" aria-labelledby="hostingTitle">
             <h2 id="hostingTitle" class="greenText">Backtesting con rangos</h2>
             <p>¿Piensas que tu estrategia de trading puede mejorar? Configura rangos para los valores de tus indicadores y deja que MasterTrade descubra por ti la configuración más rentable.</p>
-            <p><a class="btn btn-outline-dark lightBrownBtn" href="/BacktestingWithRanges/Step1">Backtesting con rangos &raquo;</a></p>
+            @if (ViewData["BacktestingWithRanges"] != null)
+            {
+                string blinkClass = Model.UserHasStrategies ? "blink" : "";
+                <p><a class="btn btn-outline-dark lightBrownBtn @blinkClass" href="/BacktestingWithRanges/Step1">Backtesting con rangos &raquo;</a></p>
+            }
+            else
+            {
+                <p><a class="btn btn-outline-dark lightBrownBtnDisabled" disabled="disabled" href="#">Solo para usuarios premium</a></p>
+            }
         </section>
     </div>
 </main>

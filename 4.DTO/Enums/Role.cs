@@ -3,6 +3,7 @@
     public enum Role
     {
         Administrator = 1,
-        RegularUser = 2
+        PremiumUser = 2,
+        FreeUser = 3
     }
 }
