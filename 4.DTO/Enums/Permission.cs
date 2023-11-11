@@ -7,5 +7,6 @@
         public const string Backtesting = "Backtesting";
         public const string BacktestingWithRanges = "BacktestingWithRanges";
         public const string ManageCryptoPairs = "ManageCryptoPairs";
+        public const string ManageUsers = "ManageUsers";
     }
 }

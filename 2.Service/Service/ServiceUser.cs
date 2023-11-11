@@ -5,6 +5,7 @@ using _4.DTO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Collections.Generic;
 
 namespace _2.Service.Service
 {
@@ -44,6 +45,44 @@ namespace _2.Service.Service
             }).FirstOrDefault();
 
             return user;
+        }
+
+        public DTOUser GetUser(int id)
+        {
+            DTOUser user = repositoryUser.GetQuery().Where(u => u.Id == id).Select(u => new DTOUser
+            {
+                Id = u.Id,
+                Email = u.Email,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                Role = new DTORole
+                {
+                    Id = u.RoleId,
+                    Description = u.Role.Description,
+                    PermissionsSet = u.Role.Permissions.Select(p => p.Name)
+                }
+            }).FirstOrDefault();
+
+            return user;
+        }
+
+        public List<DTOUser> GetAllUsers()
+        {
+            List<DTOUser> users = repositoryUser.GetQuery().Select(u => new DTOUser
+            {
+                Id = u.Id,
+                Email = u.Email,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                Role = new DTORole
+                {
+                    Id = u.RoleId,
+                    Description = u.Role.Description,
+                    PermissionsSet = u.Role.Permissions.Select(p => p.Name)
+                }
+            }).ToList();
+
+            return users;
         }
 
         public void SaveUser(DTOUser userDTO)

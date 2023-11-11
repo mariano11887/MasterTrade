@@ -39,6 +39,11 @@ namespace MasterTrade.Controllers.Base
                     {
                         ViewData.Add("CryptoPairs", true);
                     }
+
+                    if (user.Permissions.Any(p => p == Permission.ManageUsers))
+                    {
+                        ViewData.Add("Users", true);
+                    }
                 }
             }
 

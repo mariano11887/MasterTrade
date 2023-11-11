@@ -40,6 +40,11 @@
                     {
                         <li>@Html.ActionLink("Pares de criptomonedas", "Index", "CryptoPair", new { area = "" }, new { @class = "nav-link" })</li>
                     }
+
+                    @if (ViewData["Users"] != null)
+                    {
+                        <li>@Html.ActionLink("Usuarios", "Index", "User", new { area = "" }, new { @class = "nav-link" })</li>
+                    }
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
