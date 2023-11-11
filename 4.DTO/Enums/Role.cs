@@ -4,6 +4,7 @@
     {
         Administrator = 1,
         PremiumUser = 2,
-        FreeUser = 3
+        FreeUser = 3,
+        Disabled = 4
     }
 }

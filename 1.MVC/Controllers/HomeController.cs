@@ -12,7 +12,8 @@ namespace MasterTrade.Controllers
         {
             HomeModel model = new HomeModel
             {
-                UserHasStrategies = new ServiceStrategy().GetUserStrategies(GetUserId()).Any()
+                UserHasStrategies = new ServiceStrategy().GetUserStrategies(GetUserId()).Any(),
+                UserLoggedIn = GetUserId() > 0,
             };
 
             return View(model);
