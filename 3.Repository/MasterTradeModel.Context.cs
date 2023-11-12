@@ -44,5 +44,6 @@ namespace _3.Repository
         public virtual DbSet<ExecutionMoment> ExecutionMoments { get; set; }
         public virtual DbSet<IndicatorMeta> IndicatorMetas { get; set; }
         public virtual DbSet<Indicator> Indicators { get; set; }
+        public virtual DbSet<UserComment> UserComments { get; set; }
     }
 }

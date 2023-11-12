@@ -121,6 +121,7 @@
     <Compile Include="Repository\RepositoryRole.cs" />
     <Compile Include="Repository\RepositoryTemporality.cs" />
     <Compile Include="Repository\RepositoryUser.cs" />
+    <Compile Include="Repository\RepositoryUserComment.cs" />
     <Compile Include="Role.cs">
       <DependentUpon>MasterTradeModel.tt</DependentUpon>
     </Compile>
@@ -137,6 +138,9 @@
       <DependentUpon>MasterTradeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="User.cs">
+      <DependentUpon>MasterTradeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserComment.cs">
       <DependentUpon>MasterTradeModel.tt</DependentUpon>
     </Compile>
   </ItemGroup>

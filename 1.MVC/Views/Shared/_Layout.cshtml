@@ -58,7 +58,14 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - MasterTrade</p>
+            @if (Request.IsAuthenticated)
+            {
+                <p>&copy; @DateTime.Now.Year - MasterTrade - @Html.ActionLink("Déjenos sus comentarios", "Index", "UserComments")</p>
+            }
+            else
+            {
+                <p>&copy; @DateTime.Now.Year - MasterTrade</p>
+            }
         </footer>
     </div>
 

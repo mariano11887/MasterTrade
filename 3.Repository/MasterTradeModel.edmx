@@ -195,6 +195,15 @@
           <Property Name="FirstName" Type="varchar" MaxLength="50" />
           <Property Name="LastName" Type="varchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="UserComments">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="Comments" Type="varchar" MaxLength="2000" Nullable="false" />
+        </EntityType>
         <Association Name="FK_Backtesting_BacktestingBatch">
           <End Role="BacktestingBatch" Type="Self.BacktestingBatch" Multiplicity="1" />
           <End Role="Backtesting" Type="Self.Backtesting" Multiplicity="*" />
@@ -483,6 +492,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_UserComments_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="UserComments" Type="Self.UserComments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserComments">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="MasterTradeModelStoreContainer">
           <EntitySet Name="Backtesting" EntityType="Self.Backtesting" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BacktestingBatch" EntityType="Self.BacktestingBatch" Schema="dbo" store:Type="Tables" />
@@ -505,6 +526,7 @@
           <EntitySet Name="Supplier" EntityType="Self.Supplier" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Temporality" EntityType="Self.Temporality" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserComments" EntityType="Self.UserComments" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Backtesting_BacktestingBatch" Association="Self.FK_Backtesting_BacktestingBatch">
             <End Role="BacktestingBatch" EntitySet="BacktestingBatch" />
             <End Role="Backtesting" EntitySet="Backtesting" />
@@ -600,6 +622,10 @@
           <AssociationSet Name="FK_User_Role" Association="Self.FK_User_Role">
             <End Role="Role" EntitySet="Role" />
             <End Role="User" EntitySet="User" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserComments_User" Association="Self.FK_UserComments_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserComments" EntitySet="UserComments" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -776,6 +802,7 @@
           <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Role" Relationship="Self.FK_User_Role" FromRole="User" ToRole="Role" />
           <NavigationProperty Name="Strategies" Relationship="Self.FK_Strategy_User" FromRole="User" ToRole="Strategy" />
+          <NavigationProperty Name="UserComments" Relationship="MasterTradeModel.FK_UserComments_User" FromRole="User" ToRole="UserComment" />
         </EntityType>
         <Association Name="FK_Backtesting_BacktestingBatch">
           <End Role="BacktestingBatch" Type="Self.BacktestingBatch" Multiplicity="1" />
@@ -1021,6 +1048,11 @@
             <End Role="Backtesting" EntitySet="Backtestings" />
             <End Role="Indicator" EntitySet="Indicators" />
           </AssociationSet>
+          <EntitySet Name="UserComments" EntityType="MasterTradeModel.UserComment" />
+          <AssociationSet Name="FK_UserComments_User" Association="MasterTradeModel.FK_UserComments_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="UserComment" EntitySet="UserComments" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="IndicatorConfiguration">
           <Key>
@@ -1180,6 +1212,28 @@
         <Association Name="BacktestingIndicator">
           <End Type="MasterTradeModel.Backtesting" Role="Backtesting" Multiplicity="*" />
           <End Type="MasterTradeModel.Indicator" Role="Indicator" Multiplicity="*" />
+        </Association>
+        <EntityType Name="UserComment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="Comments" Type="String" Nullable="false" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="User" Relationship="MasterTradeModel.FK_UserComments_User" FromRole="UserComment" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_UserComments_User">
+          <End Type="MasterTradeModel.User" Role="User" Multiplicity="1" />
+          <End Type="MasterTradeModel.UserComment" Role="UserComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserComment">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         </Schema>
     </edmx:ConceptualModels>
@@ -1396,6 +1450,16 @@
               <ScalarProperty Name="Id" ColumnName="BacktestingId" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="UserComments">
+            <EntityTypeMapping TypeName="MasterTradeModel.UserComment">
+              <MappingFragment StoreEntitySet="UserComments">
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

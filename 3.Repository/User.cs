@@ -18,6 +18,7 @@ namespace _3.Repository
         public User()
         {
             this.Strategies = new HashSet<Strategy>();
+            this.UserComments = new HashSet<UserComment>();
         }
     
         public int Id { get; set; }
@@ -30,5 +31,7 @@ namespace _3.Repository
         public virtual Role Role { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Strategy> Strategies { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserComment> UserComments { get; set; }
     }
 }

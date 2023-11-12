@@ -46,6 +46,8 @@
         <AssociationConnector Association="MasterTradeModel.FK_IndicatorConfiguration_Indicator" />
         <AssociationConnector Association="MasterTradeModel.FK_IndicatorMeta_Indicator" />
         <AssociationConnector Association="MasterTradeModel.BacktestingIndicator" />
+        <EntityTypeShape EntityType="MasterTradeModel.UserComment" Width="1.5" PointX="5.25" PointY="14.75" />
+        <AssociationConnector Association="MasterTradeModel.FK_UserComments_User" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

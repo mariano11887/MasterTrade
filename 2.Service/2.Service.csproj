@@ -57,6 +57,7 @@
     <Compile Include="Service\ServiceStrategy.cs" />
     <Compile Include="Service\ServiceTemporality.cs" />
     <Compile Include="Service\ServiceUser.cs" />
+    <Compile Include="Service\ServiceUserComments.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\3.Repository\3.Repository.csproj">
