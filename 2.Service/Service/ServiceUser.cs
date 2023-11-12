@@ -87,16 +87,32 @@ namespace _2.Service.Service
 
         public void SaveUser(DTOUser userDTO)
         {
-            User user = new User
+            if (userDTO.Id > 0)
             {
-                Email = userDTO.Email,
-                FirstName = userDTO.FirstName,
-                LastName = userDTO.LastName,
-                Password = EncryptPassword(userDTO.Password),
-                RoleId = (int)Enums.Role.FreeUser
-            };
+                User user = repositoryUser.GetQuery().FirstOrDefault(u => u.Id == userDTO.Id);
+                if (user == null)
+                {
+                    return;
+                }
 
-            repositoryUser.Insert(user);
+                user.FirstName = userDTO.FirstName;
+                user.LastName = userDTO.LastName;
+                user.RoleId = userDTO.Role.Id;
+            }
+            else
+            {
+                User user = new User
+                {
+                    Email = userDTO.Email,
+                    FirstName = userDTO.FirstName,
+                    LastName = userDTO.LastName,
+                    Password = EncryptPassword(userDTO.Password),
+                    RoleId = (int)Enums.Role.FreeUser
+                };
+
+                repositoryUser.Insert(user);
+            }
+
             repositoryUser.SaveChanges();
         }
 

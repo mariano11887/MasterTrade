@@ -53,17 +53,28 @@ namespace MasterTrade.Controllers
 
         // POST: User/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(UserModel model)
         {
             try
             {
-                // TODO: Add update logic here
+                DTOUser userDTO = new DTOUser
+                {
+                    Id = model.Id,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Role = new DTORole
+                    {
+                        Id = model.RoleId
+                    }
+                };
+                
+                new ServiceUser().SaveUser(userDTO);
 
                 return RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                return View(model);
             }
         }
     }
